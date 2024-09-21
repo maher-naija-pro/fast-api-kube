@@ -1,9 +1,9 @@
 FROM python:3.9.20-slim
-
+LABEL maintainer="Maher NAIJA <maher.naija@gmail.com>"
 WORKDIR /app/
 ADD requirements/dev.txt /app
 
-RUN pip install -r /app/dev.txt
+RUN pip install  --no-cache-dir -r /app/dev.txt
 
 ADD . /app/
 
