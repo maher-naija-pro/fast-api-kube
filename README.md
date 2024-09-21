@@ -12,16 +12,19 @@ Install Helm  https://helm.sh/docs/intro/install/
 ## Getting started
 
 - Clone this repo ☝️:
-     '''
+
+'''
      git clone https://github.com/maher-naija-pro/fast-api-kube.git
      cd fast-api-kube.git
-     '''
+'''
 
  - Build the container image :
+
  '''
  sudo /scripts/build.sh
  '''
  - Bring up the container: 
+
  '''
  sudo scripts/up.sh
  '''
@@ -53,20 +56,20 @@ Defaults in this repo. Please change them to suit your needs:
 
 ## Useful command for manual tests
 
-# Activate venv : 
+### Activate venv : 
 '''
 env\Scripts\activate
 '''
 
-# Start  application :
+### Start  application :
 '''
 fastapi dev src/main.py
 '''
-# Manuel test helm chart
+### Manuel test helm chart
 '''
 helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
 '''
-# Manuel push to docker hub
+### Manuel push to docker hub
 
 '''
  docker login -u mahernaija
