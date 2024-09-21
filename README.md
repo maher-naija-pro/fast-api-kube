@@ -15,7 +15,7 @@ Install Helm  https://helm.sh/docs/intro/install/
 
 ```
      git clone https://github.com/maher-naija-pro/fast-api-kube.git
-     cd fast-api-kube.git
+     cd fast-api-kube
 ```
 
  - Build the container image :
@@ -71,7 +71,7 @@ helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic 
 ### Manuel push to docker hub
 
 ```
- docker login -u mahernaija
- docker tag fastapiapp:latest  mahernaija/fastapiapp:latest
- docker push mahernaija/fastapiapp:latest
+ docker login -u username
+ docker tag fastapiapp:latest  username/fastapiapp:latest
+ docker push username/fastapiapp:latest
 ```
