@@ -4,7 +4,7 @@
 
 ### Docker
 
-Install docker and have the daemon running: https://docs.docker.com/get-docker/
+Install Docker version 27.3.1, build ce12230 and have the daemon running: https://docs.docker.com/engine/install/
 
 ### Docker-compose
 
@@ -15,6 +15,11 @@ Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/
 Install Helm https://helm.sh/docs/intro/install/
 
 ### Docker registry
+
+Create an account on DockerHUB:
+https://hub.docker.com/
+
+Create a registry in your DockerHub
 
 ## Getting started
 
