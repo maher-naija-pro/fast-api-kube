@@ -113,7 +113,8 @@ We use github action for ci cd to:
 ```
 sudo docker-compose up --build
 ```
-- Run tests on localhost
+- Run tests on localhost execute bash script
+
 ```
-pytest tests
+./scripts/test.sh
 ```
