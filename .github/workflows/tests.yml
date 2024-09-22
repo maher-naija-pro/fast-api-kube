@@ -57,10 +57,10 @@ jobs:
   security_checks:
     needs: pytest
     runs-on: ubuntu-latest
-    name: Security check
+    name: PyCharm Python Security Scanner
     steps:
       - uses: actions/checkout@v4.1.7
-      - name: Run PyCharm Security
-        uses: tonybaloney/pycharm-security@v1.25.1
+      - name: PyCharm Python Security Scanner
+        uses: tonybaloney/pycharm-security@1.25.1
         with:
           path: src/
