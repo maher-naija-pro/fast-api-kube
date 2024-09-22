@@ -109,7 +109,8 @@ We use github action for CI/CD to:
  - Check Code Quality with flake8
  - Run tests with pytest
  - Build Docker image and push it to GitHub regitry
- 
+ - Security check
+
 ## CI/CD Artifacts
 CI/CD workflow generate these artifacts:
  - flake8-coverage-report
