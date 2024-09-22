@@ -89,7 +89,11 @@ fastapi dev src/main.py
 ```
 helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
 ```
+### Manuel install python dependencies
+```
+pip install  --no-cache-dir -r ./requirements/dev.txt
 
+```
 ### Manuel push to docker hub
 
 ```
@@ -100,3 +104,27 @@ helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic 
 ```
 
 # CI/CD
+## CI/CD tasks
+We use github action for CI/CD to:
+ - Check Code Quality with flake8
+ - Run tests with pytest
+ - Build Docker image and push it to GitHub regitry
+ - Security check
+
+## CI/CD Artifacts
+CI/CD workflow generate these artifacts:
+ - flake8-coverage-report
+ - pytest-coverage-report
+
+# Manuel tests
+- Run the docker container
+```
+sudo docker-compose up --build
+```
+
+- Run tests on localhost execute bash script
+
+```
+./scripts/test.sh
+
+```
