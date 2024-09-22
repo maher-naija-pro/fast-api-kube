@@ -104,17 +104,26 @@ pip install  --no-cache-dir -r ./requirements/dev.txt
 ```
 
 # CI/CD
-We use github action for ci cd to:
+## CI/CD tasks
+We use github action for CI/CD to:
+ - Check Code Quality with flake8
+ - Run tests with pytest
  - Build Docker image and push it to GitHub regitry
- - Run tests
+ 
+## CI/CD Artifacts
+CI/CD workflow generate these artifacts:
+ - flake8-coverage-report
+ - pytest-coverage-report
 
 # Manuel tests
 - Run the docker container
 ```
 sudo docker-compose up --build
 ```
+
 - Run tests on localhost execute bash script
 
 ```
 ./scripts/test.sh
+
 ```
