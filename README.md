@@ -89,7 +89,11 @@ fastapi dev src/main.py
 ```
 helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
 ```
+### Manuel install python dependencies
+```
+pip install  --no-cache-dir -r ./requirements/dev.txt
 
+```
 ### Manuel push to docker hub
 
 ```
@@ -100,3 +104,16 @@ helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic 
 ```
 
 # CI/CD
+We use github action for ci cd to:
+ - Build Docker image and push it to GitHub regitry
+ - Run tests
+
+# Manuel tests
+- Run the docker container
+```
+sudo docker-compose up --build
+```
+- Run tests on localhost
+```
+pytest tests
+```
