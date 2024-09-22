@@ -1,4 +1,4 @@
-name: FastAPI CI/CD
+name: FastAPI Tests
 
 on: 
   push:
@@ -54,3 +54,13 @@ jobs:
         name: pytest-coverage-report
         path: reports/pytest/
 
+  security_checks:
+    needs: pytest
+    runs-on: ubuntu-latest
+    name: Security check
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - name: Run PyCharm Security
+        uses: tonybaloney/pycharm-security@v1.25.1
+        with:
+          path: src/
