@@ -14,13 +14,6 @@ Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/
 
 Install Helm https://helm.sh/docs/intro/install/
 
-### Docker registry
-
-Create an account on DockerHUB:
-https://hub.docker.com/
-
-Create a registry in your DockerHub
-
 ## Getting started
 
 - Clone this repo ☝️:
@@ -105,3 +98,5 @@ helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic 
  docker tag fastapiapp:latest  username/fastapiapp:latest
  docker push username/fastapiapp:latest
 ```
+
+# CI/CD
