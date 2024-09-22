@@ -2,9 +2,13 @@
 
 ## Prerequisites
 
-### Docker docker-compose
+### Docker
 
 Install docker and have the daemon running: https://docs.docker.com/get-docker/
+
+### Docker-compose
+
+Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/standalone/
 
 ### Helm
 
