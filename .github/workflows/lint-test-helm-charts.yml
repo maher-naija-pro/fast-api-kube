@@ -1,7 +1,12 @@
 name: Lint and Test Helm Charts
 
-on: pull_request
 
+on: 
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "main" ,"staging " ]
+    
 jobs:
   lint-test:
     runs-on: ubuntu-latest
