@@ -2,9 +2,9 @@ name: FastAPI Tests
 
 on: 
   push:
-    branches: [ "main","dev","stagging" ]
+    branches: [ "main","dev","staging " ]
   pull_request:
-    branches: [ "main" , "dev","stagging" ]
+    branches: [ "main" , "dev","staging " ]
 jobs:
 
   flake8:
