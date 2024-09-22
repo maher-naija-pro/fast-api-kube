@@ -27,6 +27,12 @@ Install Helm https://helm.sh/docs/intro/install/
  sudo /scripts/build.sh
 ```
 
+- Rename .env_exemple to .env and set your variable for posgtres database
+
+```
+ mv .env_exemple  .env
+```
+
 - Bring up the container:
 
 ```
