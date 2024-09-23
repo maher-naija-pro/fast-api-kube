@@ -128,3 +128,16 @@ sudo docker-compose up --build
 ./scripts/test.sh
 
 ```
+
+# Alembic Database migration
+
+ alembic init migrations
+
+ alembic revision --autogenerate -m "Create a baseline migrations"
+ alembic upgrade head
+
+
+ # Env vars 
+
+ DB_URI
+ 
