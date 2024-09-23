@@ -132,7 +132,6 @@ sudo docker-compose up --build
 # Alembic Database migration
 
  alembic init migrations
-
  alembic revision --autogenerate -m "Create a baseline migrations"
  alembic upgrade head
  alembic revision -m "Fill empty "
@@ -142,3 +141,34 @@ DB_URI
 DB_USER=your_user
 DB_PASSWORD=your_super_secret_password
 DB_NAME=your_db_name
+
+
+ 
+# Lint helm charts
+ helm lint
+# Lint helm charts
+helm delete fast-api-kube
+# Lint helm charts
+helm  history    fast-api-kube
+# Test helm charts
+ helm install --debug --dry-run    fast-api-kube .
+# Install helm charts
+ helm install --debug     fast-api-kube ./
+#  Check deployement 
+kubectl get deployment fast-api-kube -o yaml
+
+
+helm status    fast-api-kube-2
+
+ 1. Get the application URL by running these commands:
+ 
+  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=fast-api-kube,app.kubernetes.io/instance=fast-api-kube" -o jsonpath="{.items[0].metadata.name}")
+ 
+  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+ 
+
+# TODO
+
+- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
+- Add ci to validate docker file  
+- Test helm charts release and lint

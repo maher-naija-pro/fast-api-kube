@@ -46,7 +46,23 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
+
+          env:
+            - name: LOG_LEVEL
+              value: {{ .Values.env.LOG_LEVEL }}
+            - name: DB_HOST
+              valueFrom:
+               configMapKeyRef:
+                 name: {{ .Values.env.APP_MODE | lower }}
+                 key: db-host
+            - name: DB_PASSWORD
+              valueFrom:
+               secretKeyRef:
+                 name:  "db-password"  
+                 key: db-password
+
+
+      {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
