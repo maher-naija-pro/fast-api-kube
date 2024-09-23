@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   api:
     build: .
@@ -20,20 +19,19 @@ services:
     depends_on:
       - db
     environment: 
-        - DATABASE_URI=postgresql://${DB_USER}:${DB_PASSWORD}@db/${DB_NAME}
-
-
+        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
 
   db:
     image: postgres:12.1-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data_disk:/var/lib/postgresql/data/
     environment: 
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
+ 
 
 
 volumes:
-  postgres_data:
+  postgres_data_disk:
     driver: local

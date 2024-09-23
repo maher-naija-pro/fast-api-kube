@@ -135,9 +135,10 @@ sudo docker-compose up --build
 
  alembic revision --autogenerate -m "Create a baseline migrations"
  alembic upgrade head
-
+ alembic revision -m "Fill empty "
 
  # Env vars 
-
- DB_URI
- 
+DB_URI
+DB_USER=your_user
+DB_PASSWORD=your_super_secret_password
+DB_NAME=your_db_name
