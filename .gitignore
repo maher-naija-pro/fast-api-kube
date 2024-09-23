@@ -1,3 +1,8 @@
+# helm chart values
+fast-api-kube-helm/values.yaml
+values.yaml
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -164,7 +169,6 @@ cython_debug/
 
 # secrets
 secrets
-# helm chart values
-fast-api-kube-helm/values.yaml
+
 # env for docker compose
 .env
