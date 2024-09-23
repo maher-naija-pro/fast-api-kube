@@ -97,7 +97,7 @@ pip install  --no-cache-dir -r ./requirements/dev.txt
 ### Manuel push to docker hub
 
 ```
- docker build .
+ docker build  --build-arg ENVIRONMENT=dev .
  docker login -u username
  docker tag fastapiapp:latest  username/fastapiapp:latest
  docker push username/fastapiapp:latest
