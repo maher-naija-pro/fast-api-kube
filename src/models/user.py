@@ -2,12 +2,10 @@ from sqlalchemy import Column, DateTime, String, Integer, func
 from src.models.base import Base
 
 class User(Base):
-    __tablename__ = "students"
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
     name = Column(String(60), unique=True)
-    age = Column(Integer)
-    note = Column(String(200))
     create_at = Column(DateTime, default=func.now())
 
     def __repr__(self):
