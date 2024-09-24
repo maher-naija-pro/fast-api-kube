@@ -11,7 +11,7 @@ services:
 
     image: fastapiapp:latest
     ports:
-      - 8000:8000
+      - 3000:3000
     volumes:
       - type: bind
         source: .
@@ -29,8 +29,6 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
- 
-
 
 volumes:
   postgres_data_disk:
