@@ -173,9 +173,34 @@ helm status    fast-api-kube-2
 - Add ci to validate docker file  
 - Test helm charts release and lint
 
+Please ensure the service starts on port 3000 and your REST API has an access log. Don't forget about graceful shutdowns.
+
+
+If possible, please make sure that OpenAPI/Swagger is available so we can generate a client for your service (not mandatory). A Loom or YouTube video demonstrating your REST APIs with Swagger would be appreciate
+
+The /v1/tools/lookup endpoint should resolve ONLY the IPv4 addresses for the given domain. Make sure you log all successful queries and their result in a database of your choosing (PostgreSQL, MySQL/MariaDB, MongoDB, Redis, ElasticSearch, SurrealDB, etc.). No SQLite or file-based databases, as we're planning on deploying this service to Kubernetes.
+
+For the /v1/tools/validate endpoint, the service should validate if the input is an IPv4 address or not.
+
+The /v1/history endpoint should retrieve the latest 20 saved queries from the database and display them in order (the most recent should be first).
 
 
 Rename file  value_exemple.yaml value.yaml
 Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
 Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
 Change in value.yaml  db.password
+
+
+
+# test API
+curl http://0.0.0.0:3000/health
+curl http://0.0.0.0:3000/
+curl http://0.0.0.0:3000/metrics
+
+curl -X POST "http://localhost:3000/v1/tools/validate" \
+-H "Content-Type: application/json" \
+-d "{\"ip\": \"192.168.1.1\"}"
+
+# Get documentation
+
+ http://127.0.0.1:3000/docs 
