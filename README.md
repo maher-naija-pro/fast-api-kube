@@ -168,19 +168,14 @@ Rename file  value_exemple.yaml value.yaml
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ci to validate docker file  
 - Test helm charts release and lint
-- change docker compose port 
-- add  access log
-- close db on shutdown
-
-
-
-
-The /v1/tools/lookup endpoint should resolve ONLY the IPv4 addresses for the given domain. Make sure you log all successful queries and their result in a database 
-
-For the /v1/tools/validate endpoint, the service should validate if the input is an IPv4 address or not.
-
-The /v1/history endpoint should retrieve the latest 20 saved queries from the database and display them in order (the most recent should be first).
-
+- Add  access log
+- Close db on shutdown
+- Test  /v1/tools/lookup  result
+- Test /v1/tools/validate  result 
+- Test /v1/history endpoint result
+- Add db relation for addresses
+- Test docker compose migration  and procedure
+- Test kube deployement and procedure
 
 
 
