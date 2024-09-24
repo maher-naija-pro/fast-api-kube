@@ -172,3 +172,10 @@ helm status    fast-api-kube-2
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ci to validate docker file  
 - Test helm charts release and lint
+
+
+
+Rename file  value_exemple.yaml value.yaml
+Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
+Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
+Change in value.yaml  db.password
