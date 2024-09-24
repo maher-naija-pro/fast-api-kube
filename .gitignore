@@ -1,6 +1,5 @@
 # helm chart values
 fast-api-kube-helm/values.yaml
-values.yaml
 
 
 # Byte-compiled / optimized / DLL files
