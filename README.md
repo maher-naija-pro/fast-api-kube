@@ -14,7 +14,7 @@ Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/
 
 Install Helm https://helm.sh/docs/intro/install/
 
-## Getting started
+## Getting started for developer
 
 - Clone this repo ☝️:
 
@@ -70,15 +70,48 @@ values.yaml#10
 
 mahernaija/fastapi-kube-api:tagname
 
+## CI/CD
+### CI/CD tasks
+We use github action for CI/CD to:
+ - Check Code Quality with flake8
+ - Run tests with pytest
+ - Build Docker image and push it to GitHub regitry
+ - Security check
+
+### CI/CD Artifacts
+CI/CD workflow generate these artifacts:
+ - flake8-coverage-report
+ - pytest-coverage-report
+
+## tests
+- Run the docker container
+```
+sudo docker-compose up --build
+```
+
+- Run tests on localhost execute bash script
+
+```
+./scripts/test.sh
+
+```
+## Env vars 
+DB_URI
+DB_USER
+DB_PASSWORD
+DB_NAME
+
+
+
 ## Useful command for manual tests
 
-### Activate venv :
+### Activate venv (windows) :
 
 ```
 env\Scripts\activate
 ```
 
-### Start application :
+### Manuel Start application :
 
 ```
 fastapi dev src/main.py
@@ -103,92 +136,52 @@ pip install  --no-cache-dir -r ./requirements/dev.txt
  docker push username/fastapiapp:latest
 ```
 
-# CI/CD
-## CI/CD tasks
-We use github action for CI/CD to:
- - Check Code Quality with flake8
- - Run tests with pytest
- - Build Docker image and push it to GitHub regitry
- - Security check
-
-## CI/CD Artifacts
-CI/CD workflow generate these artifacts:
- - flake8-coverage-report
- - pytest-coverage-report
-
-# Manuel tests
-- Run the docker container
-```
-sudo docker-compose up --build
-```
-
-- Run tests on localhost execute bash script
-
-```
-./scripts/test.sh
-
-```
-
-# Alembic Database migration
+### Manual Alembic Database migration
 
  alembic init migrations
  alembic revision --autogenerate -m "Create a baseline migrations"
  alembic upgrade head
  alembic revision -m "Fill empty "
 
- # Env vars 
-DB_URI
-DB_USER=your_user
-DB_PASSWORD=your_super_secret_password
-DB_NAME=your_db_name
-
-
  
-# Lint helm charts
- helm lint
-# Lint helm charts
+###  helm charts useful cmds
+helm lint
 helm delete fast-api-kube
-# Lint helm charts
 helm  history    fast-api-kube
-# Test helm charts
- helm install --debug --dry-run    fast-api-kube .
-# Install helm charts
- helm install --debug     fast-api-kube ./
-#  Check deployement 
+helm install --debug --dry-run    fast-api-kube .
+helm install --debug     fast-api-kube ./
 kubectl get deployment fast-api-kube -o yaml
+helm status    fast-api-kube
 
+# Production deployment
 
-helm status    fast-api-kube-2
+Rename file  value_exemple.yaml value.yaml
 
- 1. Get the application URL by running these commands:
- 
-  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=fast-api-kube,app.kubernetes.io/instance=fast-api-kube" -o jsonpath="{.items[0].metadata.name}")
- 
-  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
- 
+- Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
+- Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
+- Change in value.yaml  db.password-
+- Install helm chart on kube:
+  helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 
 # TODO
 
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ci to validate docker file  
 - Test helm charts release and lint
+- change docker compose port 
+- add  access log
+- close db on shutdown
 
-Please ensure the service starts on port 3000 and your REST API has an access log. Don't forget about graceful shutdowns.
 
 
-If possible, please make sure that OpenAPI/Swagger is available so we can generate a client for your service (not mandatory). A Loom or YouTube video demonstrating your REST APIs with Swagger would be appreciate
 
-The /v1/tools/lookup endpoint should resolve ONLY the IPv4 addresses for the given domain. Make sure you log all successful queries and their result in a database of your choosing (PostgreSQL, MySQL/MariaDB, MongoDB, Redis, ElasticSearch, SurrealDB, etc.). No SQLite or file-based databases, as we're planning on deploying this service to Kubernetes.
+The /v1/tools/lookup endpoint should resolve ONLY the IPv4 addresses for the given domain. Make sure you log all successful queries and their result in a database 
 
 For the /v1/tools/validate endpoint, the service should validate if the input is an IPv4 address or not.
 
 The /v1/history endpoint should retrieve the latest 20 saved queries from the database and display them in order (the most recent should be first).
 
 
-Rename file  value_exemple.yaml value.yaml
-Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
-Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
-Change in value.yaml  db.password
 
 
 
@@ -200,7 +193,3 @@ curl http://0.0.0.0:3000/metrics
 curl -X POST "http://localhost:3000/v1/tools/validate" \
 -H "Content-Type: application/json" \
 -d "{\"ip\": \"192.168.1.1\"}"
-
-# Get documentation
-
- http://127.0.0.1:3000/docs 
