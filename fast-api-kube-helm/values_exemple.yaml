@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 # This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
+replicaCount: 3
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
@@ -121,3 +121,29 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+
+
+env:
+  LOG_LEVEL: debug
+  APP_MODE: "prod"
+
+configmaps:
+  - name: dev
+    data:
+      db-host: dev.database.example.com
+      DB_USER: dev_user
+      DB_PASS: yourpassword
+  - name: staging
+    data:
+      db-host: staging.database.example.com
+      DB_USER: staging_user
+      DB_PASS: yourpassword
+  - name: production
+    data:
+      db-host: prod.database.example.com
+      DB_USER: prod_user
+      DB_PASS: yourpassword
+
+db:
+  password: secretPassword
