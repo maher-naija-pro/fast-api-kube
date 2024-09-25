@@ -54,7 +54,7 @@ jobs:
     - name: Set up Python 3.9
       uses: actions/setup-python@v5.2.0
       with:
-        python-version: 3.8
+        python-version: 3.9
     - name: Install depenencies
       run: |
         python -m pip install --upgrade pip
@@ -67,10 +67,10 @@ jobs:
         done
     - name: Run Alembic migrations
       env:
-        DATABASE_URL: postgres://test_user:test_password@localhost:5432/test_db
+        DATABASE_URL: postgres+psycopg2://test_user:test_password@localhost:5432/test_db
       run: |
         alembic upgrade head
-        
+
     - name: Test with pytest
       env:
         DB_URI : postgresql+psycopg2://test_user:test_password@localhost:5432/test_db 
