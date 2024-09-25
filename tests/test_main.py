@@ -58,3 +58,15 @@ def test_validate_ip_valid_ipv6():
     response = client.post("/v1/tools/validate", json={"ip": "2001:0db8:85a3:0000:0000:8a2e:0370:7334"})
     assert response.status_code == 200
     assert response.json() == {"ip": "2001:0db8:85a3:0000:0000:8a2e:0370:7334", "valid": False}
+
+def test_metrics_endpoint():
+    # Make a GET request to the metrics endpoint
+    response = client.get("/metrics")
+    # Assert that the response status code is 200 (OK)
+    assert response.status_code == 200
+    # Assert that the response content-type is correct for Prometheus metrics
+    assert response.headers["content-type"] == "text/plain; charset=utf-8"
+    # Check if the response contains the Prometheus metric key
+    metrics_data = response.content.decode("utf-8")    
+    assert "app_requests_total" in metrics_data
+
