@@ -22,9 +22,10 @@ jobs:
       with:
         dockerfile: 'Dockerfile'
         lint: 'hadolint'
-        
+
   flake8:
     name: Code Quality
+    needs: docker
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4.1.7
