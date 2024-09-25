@@ -9,7 +9,7 @@ from db.database import get_db
 from helpers.log.logger import init_log
 from sqlalchemy.orm import Session
 from db.database import get_db
-import ipaddress
+import ipaddr
 import socket
 
 
@@ -27,9 +27,12 @@ def log_query( domain: str,db: Session= Depends(get_db),):
 
 
 @router.post("/validate")
-def validate_ip(request: Request, ip: IPSchema):
+def validate_ip(request: Request, ip_data: IPSchema):
     try:
-        ip_obj = ipaddress.ip_address(ip)
+        ip = ip_data.ip
+        print (ip)
+        ip_obj = ipaddr.IPAddress(ip)
+        print(ip_obj)
         return {"ip": ip, "valid": ip_obj.version == 4}
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid IP address")
