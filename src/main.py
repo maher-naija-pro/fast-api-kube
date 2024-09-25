@@ -8,21 +8,24 @@ sys.path.append("helpers")
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+
 from helpers.log.logger import init_log
+from db.database import get_db
 
 from routers import health
 from routers import metric
 from routers import tools
 from routers import history
 
+db=get_db()
 
 # Graceful shutdown logic
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
     logger.info("init lifespan")
     yield
-    #TODO:close db
     logger.info("Shutting down gracefully...")
+    db.close()
 
 logger=init_log()
 logger.info('Hello start APP !!')
