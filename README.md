@@ -177,13 +177,13 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ci to validate docker file  
 - Test helm charts release and lint
-- Add  access log
-- Close db on shutdown
+
 - Test  /v1/tools/lookup  result
 - Test /v1/tools/validate  result 
 - Test /v1/history endpoint result
 - Add db relation for addresses
 - Test kube deployement and procedure
+- Add tests on pytest 
 
 # Test API
 ```
