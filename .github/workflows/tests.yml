@@ -65,10 +65,10 @@ jobs:
         until pg_isready -h 127.0.0.1 -p 5432 -U test_user; do
           sleep 1
         done
-               
+
     - name: Test with pytest
       env:
-        DATABASE_URL: postgres://test_user:test_password@localhost:5432/test_db
+        DB_URI : postgres://test_user:test_password@localhost:5432/test_db
       run: |
         pip install pytest pytest-cov pytest-html pytest-sugar pytest-json-report
         pytest -v --cov --html=reports/pytest/report.html
