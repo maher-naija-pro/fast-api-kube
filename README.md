@@ -94,6 +94,11 @@ sudo docker-compose up --build
 ```
 ./scripts/test.sh
 ```
+- Stop docker-compose
+```
+ sudo docker compose down --volumes
+ ```
+
 
 ## Environment Variables
 
@@ -178,17 +183,28 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 - Test /v1/tools/validate  result 
 - Test /v1/history endpoint result
 - Add db relation for addresses
-- Test docker compose migration  and procedure
 - Test kube deployement and procedure
 
 # Test API
 ```
 curl http://0.0.0.0:3000/health
+```
+```
 curl http://0.0.0.0:3000/
+```
+```
 curl http://0.0.0.0:3000/metrics
-
+```
+```
 curl -X POST "http://localhost:3000/v1/tools/validate" \
 -H "Content-Type: application/json" \
 -d "{\"ip\": \"192.168.1.1\"}"
 ```
+```
+curl "http://localhost:3000/v1/history"
+```
+```
+curl "http://localhost:3000/v1/tools/lookup?domain=example.com"
+```
+
 
