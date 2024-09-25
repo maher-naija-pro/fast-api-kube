@@ -36,7 +36,7 @@ def validate_ip(request: Request, ip: IPSchema):
 def lookup(domain: str, db: Session = Depends(get_db)):
     try:
         ipv4s = socket.gethostbyname_ex(domain)[2]  # Get only IPv4 addresses
-        log_query( domain, ipv4s, db)  # Save query in the database
+        log_query( domain, db)  # Save query in the database
         return {"domain": domain, "ipv4": ipv4s}
     except socket.gaierror:
         raise HTTPException(status_code=400, detail="Domain not found")
