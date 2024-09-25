@@ -32,5 +32,5 @@ ADD ./scripts/entrypoint.sh /app/
 
 RUN chmod +x  /app/entrypoint.sh
 
-EXPOSE 8000
+EXPOSE 3000
 ENTRYPOINT ["/app/scripts/entrypoint.sh"]
