@@ -2,10 +2,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+import os
 # Database URL: replace with your PostgreSQL credentials
-DATABASE_URL = "postgresql://postgres:1234@127.0.0.1:5432/mydb8"
-
+DATABASE_URL =  os.getenv("DB_URI")
 # SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
 
