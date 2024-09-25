@@ -49,6 +49,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
 
+      # Validate docker file 
+      - name: alidate docker file
+        uses: ghe-actions/dockerfile-validator@v1
+        with:
+           dockerfile: 'Dockerfile'
+           lint: 'hadolint'
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY }}
