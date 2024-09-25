@@ -93,9 +93,7 @@ sudo docker-compose up --build
 
 ```
 ./scripts/test.sh
-
 ```
-
 
 ## Environment Variables
 
@@ -121,16 +119,16 @@ fastapi dev src/main.py
 ```
 
 ### Manuel test helm chart
-
 ```
 helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
 ```
+
 ### Manuel install python dependencies
 ```
 pip install  --no-cache-dir -r ./requirements/dev.txt
 ```
-### Manuel push to docker hub
 
+### Manuel push to docker hub
 ```
 docker build  --build-arg ENVIRONMENT=dev .
 docker login -u username
@@ -182,9 +180,6 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 - Add db relation for addresses
 - Test docker compose migration  and procedure
 - Test kube deployement and procedure
-
-
-
 
 # Test API
 ```
