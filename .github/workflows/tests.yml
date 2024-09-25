@@ -16,6 +16,13 @@ jobs:
       uses: actions/setup-python@v5.2.0
       with:
         python-version: 3.9
+
+    - name: validate docker file
+        uses: ghe-actions/dockerfile-validator@v1
+        with:
+           dockerfile: 'Dockerfile'
+           lint: 'hadolint'
+           
     - name: Lint with flake8
       run: |
         pip install flake8 flake8-html
