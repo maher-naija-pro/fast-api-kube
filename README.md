@@ -66,24 +66,24 @@ docker-compose.yaml#5 image: fastapiapp:latest
 ```
 values.yaml#10
 ```
-### repository:
+### Repository:
 ```
 mahernaija/fastapi-kube-api:tagname
 ```
 ## CI/CD
 ### CI/CD tasks
-We use github action for CI/CD to:
- - Check Code Quality with flake8
- - Run tests with pytest
- - Build Docker image and push it to GitHub regitry
- - Security check
+- We use github action for CI/CD to:
+   - Check Code Quality with flake8
+   - Run tests with pytest
+   - Build Docker image and push it to GitHub regitry
+   - Security check
 
 ### CI/CD Artifacts
-CI/CD workflow generate these artifacts:
- - flake8-coverage-report
- - pytest-coverage-report
+- CI/CD workflow generate these artifacts:
+   - flake8-coverage-report
+   - pytest-coverage-report
 
-## tests
+## Tests
 - Run the docker container
 ```
 sudo docker-compose up --build
@@ -146,7 +146,7 @@ alembic upgrade head
 alembic revision -m "Fill empty "
 ```
 
-###  helm charts useful cmds
+### Helm charts useful cmds
 ```
 helm lint
 helm delete fast-api-kube
