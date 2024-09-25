@@ -65,7 +65,12 @@ jobs:
         until pg_isready -h 127.0.0.1 -p 5432 -U test_user; do
           sleep 1
         done
-
+    - name: Run Alembic migrations
+      env:
+        DATABASE_URL: postgres://test_user:test_password@localhost:5432/test_db
+      run: |
+        alembic upgrade head
+        
     - name: Test with pytest
       env:
         DB_URI : postgresql+psycopg2://test_user:test_password@localhost:5432/test_db 
