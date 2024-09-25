@@ -12,7 +12,7 @@
 
 ### Helm
 
-- Install Helm https://helm.sh/docs/intro/install/
+- Install Helm version v3.16.1  https://helm.sh/docs/intro/install/
 
 ## Getting started for developer
 
@@ -45,7 +45,7 @@ sudo scripts/up.sh
 
 ## Interactive API docs
 
-- Go to http://127.0.0.1:8000/docs.
+- Go to http://127.0.0.1:8000/docs
 
 - You will see the automatic interactive API documentation (provided by Swagger UI)
 
@@ -77,6 +77,7 @@ mahernaija/fastapi-kube-api:tagname
    - Run tests with pytest
    - Build Docker image and push it to GitHub regitry
    - Security check
+   - Codacy Static Code Analysis 
 
 ### CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
@@ -110,6 +111,8 @@ sudo docker-compose up --build
 
 
 ## Useful command for manual tests
+
+
 
 ### Activate venv (windows) :
 
@@ -159,6 +162,10 @@ helm install --debug     fast-api-kube ./
 kubectl get deployment fast-api-kube -o yaml
 helm status    fast-api-kube
 ```
+### Lint Docker file :
+```
+docker run --rm -i hadolint/hadolint < Dockerfile 
+```
 
 # Production deployment
 
@@ -174,14 +181,14 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 
 # TODO
 
-- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
-- Add ci to validate docker file  
+- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager  
 - Test helm charts release and lint
-
 - Test kube deployement and procedure
 - Add tests on pytest 
-- Add ci to run tests
-
+- ADD metric on each  route 
+- Add kube deployement test
+- Fix DB import 
+- Fix lint helm 
 # Manual  Test API
 ```
 curl http://0.0.0.0:3000/health
