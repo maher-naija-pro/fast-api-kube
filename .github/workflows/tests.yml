@@ -34,20 +34,51 @@ jobs:
     name: Unit Testing
     needs: flake8
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd="pg_isready -U test_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - uses: actions/checkout@v4.1.7
     - name: Set up Python 3.9
       uses: actions/setup-python@v5.2.0
       with:
-        python-version: 3.8
-    - name: Install depen9encies
+        python-version: 3.9
+    - name: Install depenencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements/staging.txt
+
+    - name: Wait for PostgreSQL to be ready
+      run: |
+        until pg_isready -h 127.0.0.1 -p 5432 -U test_user; do
+          sleep 1
+        done
+    - name: Run Alembic migrations
+      env:
+        DB_URI : postgresql://test_user:test_password@localhost:5432/test_db
+      run: |
+        alembic upgrade head
+
     - name: Test with pytest
+      env:
+        DB_URI : postgresql+psycopg2://test_user:test_password@localhost:5432/test_db 
+
       run: |
         pip install pytest pytest-cov pytest-html pytest-sugar pytest-json-report
         pytest -v --cov --html=reports/pytest/report.html
+
     - name: Archive pytest coverage results
       uses: actions/upload-artifact@v4.4.0
       with:
