@@ -67,7 +67,7 @@ jobs:
         done
     - name: Run Alembic migrations
       env:
-        DB_URI : postgres://test_user:test_password@localhost:5432/test_db
+        DB_URI : postgresql://test_user:test_password@localhost:5432/test_db
       run: |
         alembic upgrade head
 
