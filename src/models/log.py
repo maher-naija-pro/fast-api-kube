@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
 from .base import Base
 
+
 class QueryLog(Base):
     __tablename__ = "query_log"
 

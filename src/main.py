@@ -3,24 +3,35 @@ import os
 import time
 import sys
 sys.path.append("routers")
+sys.path.append("helpers")
+
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
+from helpers.log.logger import init_log
+from db.database import get_db
 
 from routers import health
 from routers import metric
 from routers import tools
 from routers import history
-# Graceful shutdown logic
 
+db=get_db()
+
+# Graceful shutdown logic
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
-    print("init lifespan")
+    logger.info("init lifespan")
     yield
-    #TODO:close db
-    print("Shutting down gracefully...")
-    
+    logger.info("Shutting down gracefully...")
+    db.close()
+
+logger=init_log()
+logger.info('Hello start APP !!')
+
+
+
 app = FastAPI(lifespan=app_lifespan)
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
@@ -29,6 +40,7 @@ app.include_router(history.router, prefix="/v1")
 
 @app.get("/")
 async def root():
+    logger.info(f"/ requested")
     is_k8s = "KUBERNETES_SERVICE_HOST" in os.environ
     return {
         "version": "0.1.0",

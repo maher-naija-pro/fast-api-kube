@@ -22,14 +22,15 @@ services:
     environment: 
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
     restart: always
-
+    logging:
+      driver: "local"
   db:
     image: postgres:12.1-alpine
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      interval: 1s
       timeout: 5s
-      retries: 5
+      retries: 10
     volumes:
       - postgres_data_disk:/var/lib/postgresql/data/
     environment: 
