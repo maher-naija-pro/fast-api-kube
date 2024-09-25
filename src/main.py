@@ -6,23 +6,26 @@ sys.path.append("routers")
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+
+
 from routers import health
 from routers import metric
 from routers import tools
-
+from routers import history
 # Graceful shutdown logic
 
 @asynccontextmanager
 async def app_lifespan(app: FastAPI):
     print("init lifespan")
     yield
+    #TODO:close db
     print("Shutting down gracefully...")
     
 app = FastAPI(lifespan=app_lifespan)
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
 app.include_router(tools.router, prefix="/v1")
-
+app.include_router(history.router, prefix="/v1")
 
 @app.get("/")
 async def root():
