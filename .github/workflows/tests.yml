@@ -67,7 +67,7 @@ jobs:
         done
     - name: Run Alembic migrations
       env:
-        DATABASE_URL: postgres+psycopg2://test_user:test_password@localhost:5432/test_db
+        DB_URI : postgres+psycopg2://test_user:test_password@localhost:5432/test_db
       run: |
         alembic upgrade head
 
