@@ -1,3 +1,57 @@
-.venv/
+
+# Ignorer les fichiers/dossiers Python générés
+*.pyc
+*.pyo
+*.pyd
 __pycache__/
-.git/ 
+*.env
+.venv/
+env/
+venv/
+
+# Ignorer les logs
+*.log
+*.txt
+logs/
+*.out
+*.err
+
+# Ignorer les fichiers de configuration non nécessaires en prod
+*.env
+.env.local
+.env.*.local
+.envrc
+
+# Ignorer les fichiers de cache
+*.cache
+*.coverage
+.coverage.*
+.cache/
+coverage/
+htmlcov/
+
+# Ignorer les fichiers de dépendances locales
+pip-log.txt
+pip-delete-this-directory.txt
+poetry.lock
+Pipfile
+Pipfile.lock
+
+# Ignorer les fichiers de virtualisation
+.vagrant/
+.vscode/
+.idea/
+
+# Ignorer les fichiers de build Docker
+Dockerfile*
+docker-compose.yml*
+
+# Ignorer les fichiers git
+.git/
+.gitignore
+.gitattributes
+
+# Ignorer les fichiers spécifiques à des systèmes d'exploitation
+*.DS_Store
+Thumbs.db
+*.swp
