@@ -87,14 +87,10 @@ mahernaija/fastapi-kube-api:tagname
 ## Tests
 - Run the docker container
 ```
-sudo docker-compose up --build
+ docker-compose up --build
+docker-compose run test
 ```
 
-- Run tests on localhost execute bash script
-
-```
-./scripts/test.sh
-```
 - Stop docker-compose
 ```
  sudo docker compose down --volumes

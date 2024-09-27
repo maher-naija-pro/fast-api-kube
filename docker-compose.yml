@@ -4,6 +4,10 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    command: >
+      bash -c "alembic upgrade head
+      && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0"
+      
     develop:
       watch:
         - action: sync
@@ -11,7 +15,6 @@ services:
           target: /app/src/
         - action: rebuild
           path: requirements/dev.txt
-
     image: fastapiapp:latest
     ports:
       - 3000:3000 # Expose port 3000 for the API service
@@ -22,7 +25,6 @@ services:
     depends_on:
        db:
           condition: service_healthy
-
     environment: 
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
     restart: always # Automatically restart the service if it fails
@@ -36,6 +38,33 @@ services:
           cpus: '1.0'
           memory: 512M # Limit CPU and memory usage for the api service
 
+
+  test:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: pytest
+    image: fastapiapp:latest
+    ports:
+      - 4000:3000 # Expose port 3000 for the API service
+    volumes:
+      - type: bind
+        source: .
+        target: /app/
+    depends_on:
+       db:
+          condition: service_healthy
+
+    environment: 
+        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
+    restart: always # Automatically restart the service if it fails
+    networks:
+      - app_network  # Adding the service to the same dedicated network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M # Limit CPU and memory usage for the api service
 
 # Database service (PostgreSQL)  
   db:
