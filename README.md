@@ -111,7 +111,7 @@ Rename file  value_exemple.yaml value.yaml
 - Change in value.yaml  db.password-
 - Install helm chart on kube:
 ```
-helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
+helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm 
 ```
 ## Production unInstall helm chart
 ```
@@ -200,12 +200,13 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 
 # TODO
 
-- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager  
+- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager 
+- Add ingress rules for production with tls and waf
+- Add fast api auth and security
+
 - Test kube deployement and procedure
-- ADD metric on each  route 
 - Add kube deployement test
 - fix ci helm test
-- Fix DB import 
 
 
 
