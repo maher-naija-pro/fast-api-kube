@@ -42,12 +42,6 @@ USER appuser
 # Copy the application source code
 COPY --chown=appuser:appuser ./src /app/
 
-# Copy the entrypoint script
-COPY --chown=appuser:appuser ./scripts/entrypoint.sh /app/scripts/
-
-# Make the entrypoint script executable
-RUN chmod +x /app/scripts/entrypoint.sh
-
 # Expose the application port
 EXPOSE 3000
 # Run the pytest command by default

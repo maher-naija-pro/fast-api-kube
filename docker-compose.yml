@@ -38,7 +38,6 @@ services:
           cpus: '1.0'
           memory: 512M # Limit CPU and memory usage for the api service
 
-
   test:
     build: 
       context: .
