@@ -1,6 +1,9 @@
 services:
+ # API service for FastAPI
   api:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     develop:
       watch:
         - action: sync
@@ -11,7 +14,7 @@ services:
 
     image: fastapiapp:latest
     ports:
-      - 3000:3000
+      - 3000:3000 # Expose port 3000 for the API service
     volumes:
       - type: bind
         source: .
@@ -19,25 +22,47 @@ services:
     depends_on:
        db:
           condition: service_healthy
+
     environment: 
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
-    restart: always
+    restart: always # Automatically restart the service if it fails
     logging:
-      driver: "local"
+      driver: "local" # Use local logging for better performance and easier troubleshooting
+    networks:
+      - app_network  # Adding the service to the same dedicated network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M # Limit CPU and memory usage for the api service
+
+
+# Database service (PostgreSQL)  
   db:
-    image: postgres:12.1-alpine
-    healthcheck:
+    image: postgres:12.1-alpine # Use a lightweight image like Alpine to reduce the image size
+    healthcheck: # Ensure db service is healthy before starting api
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1s
       timeout: 5s
       retries: 10
     volumes:
-      - postgres_data_disk:/var/lib/postgresql/data/
+      - postgres_data_disk:/var/lib/postgresql/data/  # Persist the database data using volumes
     environment: 
-      - POSTGRES_USER
+      - POSTGRES_USER # Use environment variables from the .env file 
       - POSTGRES_PASSWORD
       - POSTGRES_DB
-
+    networks:
+      - app_network  # Adding the service to the same dedicated network
+    restart: always  # Restart the database service automatically if it crashes
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M  # Limit CPU and memory usage for the db service
 volumes:
-  postgres_data_disk:
+  postgres_data_disk:  # Name the volume explicitly to avoid conflicts
     driver: local
+
+networks:
+  app_network:  # Define the custom network
+    driver: bridge  # Using the default bridge driver
