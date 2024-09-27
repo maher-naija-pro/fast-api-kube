@@ -51,7 +51,7 @@ docker-compose -f "docker-compose.yml" up -d --build
 ```
 - Check on your browser: <http://localhost:8080/check>
 ## Tests
-- Run the docker container
+- Run the test script
 ```
 sh scripts/test.sh 
 ```
@@ -70,6 +70,14 @@ docker-compose run test
 - Go to http://127.0.0.1:8000/docs
 
 - You will see the automatic interactive API documentation (provided by Swagger UI)
+
+## Environment Variables
+
+| Variable Name | Description                     | Example Value            |
+|---------------|---------------------------------|--------------------------|
+| `DB_USER`     | Username for the database       | `admin`                  |
+| `DB_PASSWORD` | Password for the database       | `secretpassword`         |
+| `DB_NAME`     | Name of the database            | `my_database`            |
 
 ## Configuration
 
@@ -106,34 +114,9 @@ mahernaija/fastapi-kube-api:tagname
    - flake8-coverage-report
    - pytest-coverage-report
 
-
-
-
-
-## Environment Variables
-
-| Variable Name | Description                     | Example Value            |
-|---------------|---------------------------------|--------------------------|
-| `DB_USER`     | Username for the database       | `admin`                  |
-| `DB_PASSWORD` | Password for the database       | `secretpassword`         |
-| `DB_NAME`     | Name of the database            | `my_database`            |
-
-
 ## Useful command for manual tests
 
 
-
-### Activate venv (windows) :
-
-```
-env\Scripts\activate
-```
-
-### Manuel Start application :
-
-```
-fastapi dev src/main.py
-```
 
 ### Manuel test helm chart
 ```
@@ -193,7 +176,6 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager  
 - Test helm charts release and lint
 - Test kube deployement and procedure
-- Add tests on pytest 
 - ADD metric on each  route 
 - Add kube deployement test
 - Fix DB import 
