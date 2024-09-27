@@ -103,7 +103,7 @@ mahernaija/fastapi-kube-api:tagname
 ```
 
 # Production deployment
-
+## Production Install helm chart
 Rename file  value_exemple.yaml value.yaml
 
 - Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
@@ -112,6 +112,10 @@ Rename file  value_exemple.yaml value.yaml
 - Install helm chart on kube:
 ```
 helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
+```
+## Production unInstall helm chart
+```
+helm uninstall --debug     fast-api-kube
 ```
 
 # CI/CD
