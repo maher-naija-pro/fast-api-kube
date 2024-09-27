@@ -1,31 +1,49 @@
+# Use a slim image for a smaller size
 FROM python:3.9.20-slim
 
-# Set environment variables (default is 'dev')
+# Set build argument for environment (default to 'dev')
 ARG ENVIRONMENT=dev
-ENV ENVIRONMENT=$ENVIRONMENT
 
-RUN echo "I'm building for $ENVIRONMENT"
+# Environment variables for better robustness and security
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 
 
+# Set the maintainer
 LABEL maintainer="Maher NAIJA <maher.naija@gmail.com>"
 
+# Set the working directory
 WORKDIR /app/
 
-COPY requirements/ /app
+# Start building
+RUN echo "I'm building for $ENVIRONMENT"
 
-# Install Python dependencies
-RUN if [ "$ENVIRONMENT" = "prod" ]; then \
-  pip install  --no-cache-dir -r /app/prod.txt; \
-elif [ "$ENVIRONMENT" = "staging" ]; then \
-  pip install  --no-cache-dir -r /app/staging.txt; \
-else \
-  pip install  --no-cache-dir -r /app/dev.txt; \
-fi
+# Set the working directory
+WORKDIR /app/
 
-COPY ./src /app/
+# Copy dependency files first to optimize Docker cache
+COPY requirements/ /app/requirements/
 
-COPY ./scripts/entrypoint.sh /app/
+# Install environment-specific dependencies
+RUN set -eux; \
+    if [ "$ENVIRONMENT" = "prod" ]; then \
+        pip install --no-cache-dir -r /app/requirements/prod.txt; \
+    elif [ "$ENVIRONMENT" = "staging" ]; then \
+        pip install --no-cache-dir -r /app/requirements/staging.txt; \
+    else \
+        pip install --no-cache-dir -r /app/requirements/dev.txt; \
+    fi
 
-RUN chmod +x  /app/entrypoint.sh
+# Create a non-root user for running the container
+RUN adduser --disabled-password --gecos '' appuser \
+    && chown -R appuser /app
+USER appuser
 
+
+# Copy the application source code
+COPY --chown=appuser:appuser ./src /app/
+
+# Expose the application port
 EXPOSE 3000
-ENTRYPOINT ["/app/scripts/entrypoint.sh"]
+# Run the pytest command by default
+CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:3000", "--reload", "--access-logfile", "-", "--graceful-timeout", "0"]
+
