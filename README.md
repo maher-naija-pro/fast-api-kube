@@ -26,7 +26,11 @@ cd fast-api-kube
 - Build the container image :
 
 ```
-sudo /scripts/build.sh
+sh scripts/build.sh
+```
+or manually execute :
+```
+docker build  --build-arg ENVIRONMENT=dev  --pull --rm -f "Dockerfile" -t fastapiapp:latest "."
 ```
 
 - Rename .env_exemple to .env and set your variable for posgtres database
@@ -38,10 +42,28 @@ mv .env_exemple  .env
 - Bring up the container:
 
 ```
-sudo scripts/up.sh
+sh scripts/up.sh
 ```
-
+or manually execute :
+```
+docker compose down --volumes
+docker-compose -f "docker-compose.yml" up -d --build
+```
 - Check on your browser: <http://localhost:8080/check>
+## Tests
+- Run the docker container
+```
+sh scripts/test.sh 
+```
+or manually execute :
+```
+docker-compose run test
+```
+## Clean Docker-compose
+- Stop docker-compose
+```
+ sudo docker compose down --volumes
+ ```
 
 ## Interactive API docs
 
@@ -84,17 +106,8 @@ mahernaija/fastapi-kube-api:tagname
    - flake8-coverage-report
    - pytest-coverage-report
 
-## Tests
-- Run the docker container
-```
- docker-compose up --build
-docker-compose run test
-```
 
-- Stop docker-compose
-```
- sudo docker compose down --volumes
- ```
+
 
 
 ## Environment Variables
