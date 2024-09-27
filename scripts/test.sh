@@ -1,2 +1,3 @@
 #!/bin/bash
-python3 -m pytest -l -vvv --cache-clear  --color yes --code-highlight yes  --new-first   tests
+docker build  --build-arg ENVIRONMENT=dev  --pull --rm -f "Dockerfile" -t fastapiapp:latest "."
+docker-compose -f "docker-compose.yml" run test  
