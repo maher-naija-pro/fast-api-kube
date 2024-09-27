@@ -51,6 +51,5 @@ RUN chmod +x /app/scripts/entrypoint.sh
 # Expose the application port
 EXPOSE 3000
 # Run the pytest command by default
-CMD ["pytest", "--maxfail=1", "--disable-warnings", "-v"]
-# Set the entrypoint script
-#ENTRYPOINT ["/app/scripts/entrypoint.sh"]
+CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:3000", "--reload", "--access-logfile", "-", "--graceful-timeout", "0"]
+

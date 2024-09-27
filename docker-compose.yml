@@ -43,7 +43,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    command: pytest
+    command:  bash -c "alembic upgrade head && pytest"
     image: fastapiapp:latest
     ports:
       - 4000:3000 # Expose port 3000 for the API service
