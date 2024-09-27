@@ -79,6 +79,7 @@ docker-compose run test
 | `DB_PASSWORD` | Password for the database       | `secretpassword`         |
 | `DB_NAME`     | Name of the database            | `my_database`            |
 
+
 ## Configuration
 
 - Defaults in this repo. Please change them to suit your needs:
@@ -100,64 +101,6 @@ values.yaml#10
 ```
 mahernaija/fastapi-kube-api:tagname
 ```
-## CI/CD
-### CI/CD tasks
-- We use github action for CI/CD to:
-   - Check Code Quality with flake8
-   - Run tests with pytest
-   - Build Docker image and push it to GitHub regitry
-   - Security check
-   - Codacy Static Code Analysis 
-
-### CI/CD Artifacts
-- CI/CD workflow generate these artifacts:
-   - flake8-coverage-report
-   - pytest-coverage-report
-
-## Useful command for manual tests
-
-
-
-### Manuel test helm chart
-```
-helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
-```
-
-### Manuel install python dependencies
-```
-pip install  --no-cache-dir -r ./requirements/dev.txt
-```
-
-### Manuel push to docker hub
-```
-docker build  --build-arg ENVIRONMENT=dev .
-docker login -u username
-docker tag fastapiapp:latest  username/fastapiapp:latest
-docker push username/fastapiapp:latest
-```
-
-### Manual Alembic Database migration
-```
-alembic init migrations
-alembic revision --autogenerate -m "Create a baseline migrations"
-alembic upgrade head
-alembic revision -m "Fill empty "
-```
-
-### Helm charts useful cmds
-```
-helm lint
-helm delete fast-api-kube
-helm  history    fast-api-kube
-helm install --debug --dry-run    fast-api-kube .
-helm install --debug     fast-api-kube ./
-kubectl get deployment fast-api-kube -o yaml
-helm status    fast-api-kube
-```
-### Lint Docker file :
-```
-docker run --rm -i hadolint/hadolint < Dockerfile 
-```
 
 # Production deployment
 
@@ -171,16 +114,26 @@ Rename file  value_exemple.yaml value.yaml
 helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
 ```
 
-# TODO
+# CI/CD
+## CI/CD tasks
+- We use github action for CI/CD to:
+   - Check Code Quality with flake8
+   - Run tests with pytest
+   - Build Docker image and push it to GitHub regitry
+   - Security check
+   - Codacy Static Code Analysis 
+   - Lint and check helm charts
+   - Release helm charts 
+   - Validate docker file
 
-- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager  
-- Test helm charts release and lint
-- Test kube deployement and procedure
-- ADD metric on each  route 
-- Add kube deployement test
-- Fix DB import 
-- Fix lint helm 
-# Manual  Test API
+## CI/CD Artifacts
+- CI/CD workflow generate these artifacts:
+   - flake8-coverage-report
+   - pytest-coverage-report
+
+# Useful command for manual tests
+
+## Manual  Test API
 ```
 curl http://0.0.0.0:3000/health
 ```
@@ -199,6 +152,58 @@ curl "http://localhost:3000/v1/tools/lookup?domain=example.com"
 ```
 curl "http://localhost:3000/v1/history"
 ```
+
+## Manuel test helm chart
+```
+helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
+```
+
+## Manuel install python dependencies
+```
+pip install  --no-cache-dir -r ./requirements/dev.txt
+```
+
+## Manuel push to docker hub
+```
+docker build  --build-arg ENVIRONMENT=dev .
+docker login -u username
+docker tag fastapiapp:latest  username/fastapiapp:latest
+docker push username/fastapiapp:latest
+```
+
+## Manual Alembic Database migration
+```
+alembic init migrations
+alembic revision --autogenerate -m "Create a baseline migrations"
+alembic upgrade head
+alembic revision -m "Fill empty "
+```
+
+## Helm charts useful cmds
+```
+helm lint
+helm delete fast-api-kube
+helm  history    fast-api-kube
+helm install --debug --dry-run    fast-api-kube .
+helm install --debug     fast-api-kube ./
+kubectl get deployment fast-api-kube -o yaml
+helm status    fast-api-kube
+```
+## Lint Docker file :
+```
+docker run --rm -i hadolint/hadolint < Dockerfile 
+```
+
+# TODO
+
+- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager  
+- Test kube deployement and procedure
+- ADD metric on each  route 
+- Add kube deployement test
+- fix ci helm test
+- Fix DB import 
+
+
 
 
 
