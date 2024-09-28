@@ -147,6 +147,8 @@ To add environment variable to docker and docker-compose update these files:
  ENV_NAME =  os.getenv("ENV_NAME")
 ```
 
+
+
 NB: Fixed version should mbe added
 
 

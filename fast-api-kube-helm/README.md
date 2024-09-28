@@ -110,7 +110,16 @@ The following table lists the configurable parameters of the `fast-api-kube` cha
 | `db.password`                                 | Database password                                                                                     | `secretPassword`                    |
 
 
+## Add an env var: 
+To add environment variable to helm charts update these files: 
 
+- Update values files:126 => env: 
+
+# Add a config map:
+- Update values files:130 => configmaps:
+
+# Add a secret:
+- Update values files:147 => secrets:
 ## Custom Namespace:
 
 
