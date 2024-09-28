@@ -113,49 +113,10 @@ mahernaija/fastapi-kube-api:tagname
 ```
 
 # Production deployment
-## Production Install helm chart
-- Rename file  value_exemple.yaml value-dev.yaml
-- Rename file  value_exemple.yaml value-staging.yaml
-- Rename file  value_exemple.yaml value-prod.yaml
-```
- cp fast-api-kube-helm/value_exemple.yaml  value-dev.yaml
- cp fast-api-kube-helm/value_exemple.yaml  value-stagging.yaml
- cp fast-api-kube-helm/value_exemple.yaml  value-prod.yaml
-```
+- For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
 
-- Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
-- Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
-- Change in value.yaml  db.password-
+Please read Readme.md under this directory to deploy on prod step by step
 
-- Install helm chart on kube:
-```
-helm install --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --create-namespace
-```
-## Production check
-```
- kubectl get pods -n fast-api-app
- ```
-
-## Production uninstall helm chart
-```
-helm uninstall --debug    fast-api-kube  -n  fast-api-app
-
-```
-## Test helm deployement with helm test
-```
-helm test   fast-api-kube -n  fast-api-app 
-```
-
-## Access production on node port 
-```
-sh ./scripts/get_url.sh  # It will return URL to access application
-
-```
-## Test app in prod
-```
-curl "URL"
-```
-NB: Should be changed to ingress depend on cluster architecture
 
 # CI/CD
 ## CI/CD tasks
