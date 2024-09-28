@@ -122,3 +122,11 @@ helm install --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --cr
 ```
 
 
+## Helm charts useful cmds
+```
+helm lint
+helm  history    fast-api-kube
+kubectl get deployment fast-api-kube -o yaml
+helm status    fast-api-kube
+```
+
