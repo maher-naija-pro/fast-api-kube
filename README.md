@@ -122,9 +122,8 @@ Please read Readme.md under this directory to deploy on prod step by step
    - Security check
    - Codacy Static Code Analysis 
    - Lint and check helm charts
-   - Release helm charts 
    - Validate docker file
-
+   - pages-build-deployment
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
@@ -214,6 +213,8 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 - Add ARGO CD or flux forCD
 - Add helm hooks for alembic migration on prod
 - Add helm tests to verify database connection
+- Add helm Release to ci 
+- Make tests modulars
 
 
 
