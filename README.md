@@ -129,16 +129,17 @@ mahernaija/fastapi-kube-api:tagname
 
 - Install helm chart on kube:
 ```
-helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm 
+helm install --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --create-namespace
 ```
 ## Production check
 ```
  kubectl get pods -n fast-api-app
  ```
 
-## Production unInstall helm chart
+## Production uninstall helm chart
 ```
-helm uninstall --debug     fast-api-kube
+helm uninstall --debug    fast-api-kube  -n  fast-api-app
+
 ```
 ## Test helm deployement with helm test
 ```
@@ -241,11 +242,14 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ingress rules for production with tls and waf
 - Add fast api auth and security
-- ADD ARGO CD or flux forCD
-- ADD helm hooks for alembic migration on prod
-- fix ci helm test
-- add helm tests
 - Connect application to postgres on prod
+- Add ARGO CD or flux forCD
+- Add helm hooks for alembic migration on prod
+- Add helm tests to verify database connection
+
+
+- fix ci helm test
+
 
 
 

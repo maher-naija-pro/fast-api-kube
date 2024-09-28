@@ -48,6 +48,8 @@ Selector labels
 {{- define "fast-api-kube.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "fast-api-kube.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Chart.AppVersion }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
