@@ -18,12 +18,7 @@ A branch for each stage of deployement:
 
 - Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/standalone/
 
-### Helm
 
-- Install Helm version v3.16.1  https://helm.sh/docs/intro/install/
-
-### Kubectl
-- Install Kubectl version  v1.31.1 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/ 
 ## Getting started for developer
 
 - Clone this repo ☝️:
@@ -135,6 +130,26 @@ Please read Readme.md under this directory to deploy on prod step by step
    - flake8-coverage-report
    - pytest-coverage-report
 
+# Python requirement 
+- To add a new library to Python there is a requirement directory with a file for each stage of deployement
+
+    - dev.txt
+    - prod.txt
+    - stagging.txt
+
+# Add an env var: 
+To add environment variable to docker and docker-compose update these files: 
+
+- Docker-compose-file:28  => environment:
+- Get the env var form python code using:
+```
+ import os
+ ENV_NAME =  os.getenv("ENV_NAME")
+```
+
+NB: Fixed version should mbe added
+
+
 # Useful command for manual tests
 
 ## Manual  Test API
@@ -183,16 +198,6 @@ alembic upgrade head
 alembic revision -m "Fill empty "
 ```
 
-## Helm charts useful cmds
-```
-helm lint
-helm delete fast-api-kube
-helm  history    fast-api-kube
-helm install --debug --dry-run    fast-api-kube .
-helm install --debug     fast-api-kube ./
-kubectl get deployment fast-api-kube -o yaml
-helm status    fast-api-kube
-```
 ## Lint Docker file :
 ```
 docker run --rm -i hadolint/hadolint < Dockerfile 
@@ -209,7 +214,6 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 - Add helm tests to verify database connection
 
 
-- fix ci helm test
 
 
 
