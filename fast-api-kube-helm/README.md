@@ -127,7 +127,7 @@ To add environment variable to helm charts update these files:
 
 - Install helm chart on kube:
 ```
-helm install --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --create-namespace
+helm upgrade --cleanup-on-fail  --install --atomic --timeout 5m --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --create-namespace
 ```
 
 
@@ -138,4 +138,5 @@ helm  history    fast-api-kube
 kubectl get deployment fast-api-kube -o yaml
 helm status    fast-api-kube
 ```
+
 

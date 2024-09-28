@@ -287,13 +287,9 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
      ```  
    - You can modify the volume driver or name as needed.
 
-
-
 # Production deployment
 - For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
 
-
-# !!!! IMPORTANT !!!!
 ### Please read the [**Readme.md**](https://github.com/maher-naija-pro/fast-api-kube/blob/dev/fast-api-kube-helm/README.md) in this directory for detailed **step-by-step** instructions on deploying this project in a **production** environment.
 
 # CI/CD
@@ -354,11 +350,6 @@ curl "http://localhost:3000/v1/tools/lookup?domain=example.com"
 ```
 ```
 curl "http://localhost:3000/v1/history"
-```
-
-## Manuel test helm chart
-```
-helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
 ```
 
 ## Manuel install python dependencies
