@@ -1,5 +1,13 @@
 # Fast-api-kube API
 
+## Branches
+There is 3 branches : 
+
+A branch for each stage of deployement:
+ - dev
+ - stagging
+ - prod
+
 ## Prerequisites
 
 ### Docker
@@ -14,6 +22,8 @@
 
 - Install Helm version v3.16.1  https://helm.sh/docs/intro/install/
 
+### Kubectl
+- Install Kubectl version  v1.31.1 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/ 
 ## Getting started for developer
 
 - Clone this repo ☝️:
@@ -79,6 +89,7 @@ docker-compose run test
 | `DB_PASSWORD` | Password for the database       | `secretpassword`         |
 | `DB_NAME`     | Name of the database            | `my_database`            |
 
+
 ## Configuration
 
 - Defaults in this repo. Please change them to suit your needs:
@@ -100,87 +111,66 @@ values.yaml#10
 ```
 mahernaija/fastapi-kube-api:tagname
 ```
-## CI/CD
-### CI/CD tasks
+
+# Production deployment
+## Production Install helm chart
+- Rename file  value_exemple.yaml value-dev.yaml
+- Rename file  value_exemple.yaml value-staging.yaml
+- Rename file  value_exemple.yaml value-prod.yaml
+```
+ cp fast-api-kube-helm/value_exemple.yaml  value-dev.yaml
+ cp fast-api-kube-helm/value_exemple.yaml  value-stagging.yaml
+ cp fast-api-kube-helm/value_exemple.yaml  value-prod.yaml
+```
+
+- Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
+- Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
+- Change in value.yaml  db.password-
+
+- Install helm chart on kube:
+```
+helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm 
+```
+## Production check
+```
+ kubectl get pods -n fast-api-app
+ ```
+
+## Production unInstall helm chart
+```
+helm uninstall --debug     fast-api-kube
+```
+## Access production on node port 
+```
+sh ./scripts/get_url.sh  # It will return URL to access application
+
+```
+## Test app in prod
+```
+curl "URL"
+```
+NB: Should be changed to ingress depend on cluster architecture
+
+# CI/CD
+## CI/CD tasks
 - We use github action for CI/CD to:
    - Check Code Quality with flake8
    - Run tests with pytest
    - Build Docker image and push it to GitHub regitry
    - Security check
    - Codacy Static Code Analysis 
+   - Lint and check helm charts
+   - Release helm charts 
+   - Validate docker file
 
-### CI/CD Artifacts
+## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
    - pytest-coverage-report
 
-## Useful command for manual tests
+# Useful command for manual tests
 
-
-
-### Manuel test helm chart
-```
-helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
-```
-
-### Manuel install python dependencies
-```
-pip install  --no-cache-dir -r ./requirements/dev.txt
-```
-
-### Manuel push to docker hub
-```
-docker build  --build-arg ENVIRONMENT=dev .
-docker login -u username
-docker tag fastapiapp:latest  username/fastapiapp:latest
-docker push username/fastapiapp:latest
-```
-
-### Manual Alembic Database migration
-```
-alembic init migrations
-alembic revision --autogenerate -m "Create a baseline migrations"
-alembic upgrade head
-alembic revision -m "Fill empty "
-```
-
-### Helm charts useful cmds
-```
-helm lint
-helm delete fast-api-kube
-helm  history    fast-api-kube
-helm install --debug --dry-run    fast-api-kube .
-helm install --debug     fast-api-kube ./
-kubectl get deployment fast-api-kube -o yaml
-helm status    fast-api-kube
-```
-### Lint Docker file :
-```
-docker run --rm -i hadolint/hadolint < Dockerfile 
-```
-
-# Production deployment
-
-Rename file  value_exemple.yaml value.yaml
-
-- Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
-- Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
-- Change in value.yaml  db.password-
-- Install helm chart on kube:
-```
-helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm/
-```
-
-# TODO
-
-- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager  
-- Test helm charts release and lint
-- Test kube deployement and procedure
-- ADD metric on each  route 
-- Add kube deployement test
-- Fix DB import 
-- Fix lint helm 
-# Manual  Test API
+## Manual  Test API
 ```
 curl http://0.0.0.0:3000/health
 ```
@@ -199,6 +189,59 @@ curl "http://localhost:3000/v1/tools/lookup?domain=example.com"
 ```
 curl "http://localhost:3000/v1/history"
 ```
+
+## Manuel test helm chart
+```
+helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
+```
+
+## Manuel install python dependencies
+```
+pip install  --no-cache-dir -r ./requirements/dev.txt
+```
+
+## Manuel push to docker hub
+```
+docker build  --build-arg ENVIRONMENT=dev .
+docker login -u username
+docker tag fastapiapp:latest  username/fastapiapp:latest
+docker push username/fastapiapp:latest
+```
+
+## Manual Alembic Database migration
+```
+alembic init migrations
+alembic revision --autogenerate -m "Create a baseline migrations"
+alembic upgrade head
+alembic revision -m "Fill empty "
+```
+
+## Helm charts useful cmds
+```
+helm lint
+helm delete fast-api-kube
+helm  history    fast-api-kube
+helm install --debug --dry-run    fast-api-kube .
+helm install --debug     fast-api-kube ./
+kubectl get deployment fast-api-kube -o yaml
+helm status    fast-api-kube
+```
+## Lint Docker file :
+```
+docker run --rm -i hadolint/hadolint < Dockerfile 
+```
+
+# TODO
+
+- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
+- Add ingress rules for production with tls and waf
+- Add fast api auth and security
+- ADD ARGO CD or flux forCD
+- Test kube deployement and procedure
+- Add kube deployement test
+- fix ci helm test
+
+
 
 
 

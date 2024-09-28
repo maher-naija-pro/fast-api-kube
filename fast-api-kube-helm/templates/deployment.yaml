@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "fast-api-kube.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "fast-api-kube.labels" . | nindent 4 }}
 spec:
@@ -32,6 +33,8 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          command:  ["hypercorn", "src/main:app", "-b", "0.0.0.0:3000", "--reload", "--access-logfile", "-", "--graceful-timeout", "0"]
+          workingDir: "/app/" # Docker working_dir equivalent
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
