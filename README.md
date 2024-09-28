@@ -122,78 +122,177 @@ The `Dockerfile` Below are the default configurations that you may want to adjus
   - Customize this if you use a different server (e.g., `uvicorn`, `gunicorn`) or a different application structure.
 
 ### Customizing `docker-compose.yml`
+## Customizing `docker-compose.yml`
 
+The `docker-compose.yml` file in this repository is designed to set up and manage multiple services, including the FastAPI API service, a PostgreSQL database, and a test service. Below are the default configurations that can be customized to suit your specific project requirements.
 
+### API Service (FastAPI)
 
-#### 1. **API Service (FastAPI)**
-This service runs the FastAPI application using `hypercorn` and applies Alembic migrations during startup.
+1. **Build Context**:  
+   The `api` service is built using the `Dockerfile` in the root directory.  
+   - Default: `context: .`, `dockerfile: Dockerfile`  
+   - You can modify the build context or Dockerfile location as needed.
 
-- **Command**:
-  - The default command runs database migrations using `alembic` and starts the API with `hypercorn`. 
-    ```bash
-    bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload --access-logfile - --graceful-timeout 0"
-    ```
-  - You can modify this command to suit your needs (e.g., changing the entrypoint or server).
+2. **Command**:  
+   The default command runs database migrations using `alembic` and starts the API with `hypercorn`.  
+   - Default:  
+     ```bash
+     bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload --access-logfile - --graceful-timeout 0"
+     ```  
+   - You can modify this command to suit your needs (e.g., changing the entrypoint or server).
 
-- **Develop Mode**:
-  - The `develop` section allows live reloading of the source code (`/src/`) and rebuilding when changes are made to `requirements/dev.txt`.
-  - You can customize the `watch` paths or actions based on your development workflow.
+3. **Develop Mode**:  
+   The `develop` section allows live reloading of the source code (`/src/`) and rebuilding when changes are made to `requirements/dev.txt`.  
+   - Default:  
+     ```yaml
+     watch:
+       - action: sync
+         path: ./src/
+         target: /app/src/
+       - action: rebuild
+         path: requirements/dev.txt
+     ```  
+   - Customize the `watch` paths or actions based on your development workflow.
 
-- **Ports**:
-  - Default: `3000:3000`. You can change the exposed ports if your application needs a different one.
+4. **Ports**:  
+   The default exposed port is `3000`.  
+   - Default: `3000:3000`  
+   - You can change the exposed ports if your application needs a different one.
 
-- **Resources**:
-  - CPU and memory limits are set to ensure the service does not over-consume resources:
-    ```yaml
-    limits:
-      cpus: '1.0'
-      memory: 512M
-    ```
-  - Adjust these limits as needed based on your server's capacity.
+5. **Volumes**:  
+   A bind mount is used to link the source code on your host machine to the `/app` directory in the container.  
+   - Default:  
+     ```yaml
+     volumes:
+       - type: bind
+         source: .
+         target: /app/
+     ```  
+   - Modify the source or target paths based on your project structure.
 
-#### 2. **Test Service**
-This service runs the test suite using `pytest`.
+6. **Environment Variables**:  
+   The database connection string is provided through environment variables.  
+   - Default: `DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}`  
+   - You can change this environment variable to connect to different databases or use other database drivers.
 
-- **Ports**:
-  - Default: `4000:3000` to avoid conflict with the API service, but you can modify this as required.
+7. **Resources**:  
+   CPU and memory limits are set to ensure the service does not over-consume resources.  
+   - Default:  
+     ```yaml
+     limits:
+       cpus: '1.0'
+       memory: 512M
+     ```  
+   - Adjust these limits as needed based on your server's capacity.
 
-- **Resources**:
-  - Similar CPU and memory limits as the `api` service are applied.
+### Test Service
 
-- **Image**:
-  - The default image is `postgres:12.1-alpine`,You can update the image version or switch to a different database if necessary.
+1. **Build Context**:  
+   Similar to the `api` service, it builds from the same `Dockerfile`.  
+   - Default: `context: .`, `dockerfile: Dockerfile`  
+   - Modify if the Dockerfile is located elsewhere.
 
-- **Environment Variables**:
-  - The PostgreSQL service uses environment variables for configuring the database:
-    ```yaml
-    POSTGRES_USER
-    POSTGRES_PASSWORD
-    POSTGRES_DB
-    ```
-  - These values are loaded from an `.env` file. You can customize them by changing the `.env` file or setting them directly in the `docker-compose.yml` file.
+2. **Command**:  
+   The default command runs Alembic migrations and executes tests using `pytest`.  
+   - Default:  
+     ```bash
+     bash -c "alembic upgrade head && pytest"
+     ```  
+   - Customize this if your testing setup differs.
 
-- **Volumes**:
-  - The database data is persisted using a named volume (`postgres_data_disk`). You can modify the volume name or path if needed.
+3. **Ports**:  
+   The test service is exposed on port `4000` to avoid conflict with the API service.  
+   - Default: `4000:3000`  
+   - You can adjust the port mappings.
 
-- **Resources**:
-  - CPU and memory limits are set for this service to ensure the database doesn’t consume excessive resources:
-    ```yaml
-    limits:
-      cpus: '0.5'
-      memory: 256M
-    ```
+4. **Volumes**:  
+   A bind mount is used to link the source code on your host machine to the `/app` directory in the container, similar to the API service.  
+   - Default:  
+     ```yaml
+     volumes:
+       - type: bind
+         source: .
+         target: /app/
+     ```  
+   - Modify the source or target paths based on your project structure.
+
+5. **Resources**:  
+   CPU and memory limits are set to ensure the service does not over-consume resources.  
+   - Default:  
+     ```yaml
+     limits:
+       cpus: '1.0'
+       memory: 512M
+     ```  
+   - Adjust these limits as needed.
+
+### Database Service (PostgreSQL)
+
+1. **Image**:  
+   The default image is `postgres:12.1-alpine`, which is a lightweight version of PostgreSQL.  
+   - Default: `postgres:12.1-alpine`  
+   - You can update the image version or switch to a different database if necessary.
+
+2. **Environment Variables**:  
+   The PostgreSQL service uses environment variables for configuring the database.  
+   - Default:  
+     ```yaml
+     environment:
+       - POSTGRES_USER
+       - POSTGRES_PASSWORD
+       - POSTGRES_DB
+     ```  
+   - These values are loaded from an `.env` file. Customize them by changing the `.env` file or setting them directly in the `docker-compose.yml` file.
+
+3. **Volumes**:  
+   The database data is persisted using a named volume (`postgres_data_disk`).  
+   - Default:  
+     ```yaml
+     volumes:
+       - postgres_data_disk:/var/lib/postgresql/data/
+     ```  
+   - You can modify the volume name or path if needed.
+
+4. **Resources**:  
+   CPU and memory limits are set for this service to ensure the database doesn’t consume excessive resources.  
+   - Default:  
+     ```yaml
+     limits:
+       cpus: '0.5'
+       memory: 256M
+     ```  
+   - Customize this based on your database's performance needs.
+
+### Networks
+
+1. **app_network**:  
+   All services communicate over a custom bridge network (`app_network`).  
+   - Default:  
+     ```yaml
+     networks:
+       app_network:
+         driver: bridge
+     ```  
+   - You can add other services to this network or change the network driver if needed.
 
 ### Volumes
 
-- **postgres_data_disk**:  
-  - This volume persists the PostgreSQL data, so it's not lost between container restarts. If you need to change the storage location or volume driver, you can do so here.
+1. **postgres_data_disk**:  
+   This volume is used to persist PostgreSQL data.  
+   - Default:  
+     ```yaml
+     volumes:
+       postgres_data_disk:
+         driver: local
+     ```  
+   - You can modify the volume driver or name as needed.
 
 
 
 # Production deployment
 - For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
 
-Please read Readme.md under this directory to deploy on prod step by step
+!!!!Please read Readme.md under this directory to deploy on prod step by step!!!!
 
 
 # CI/CD
