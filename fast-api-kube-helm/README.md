@@ -3,9 +3,15 @@
 This Helm chart deploys a FastAPI application on a Kubernetes cluster.
 
 ## Prerequisites
-
+### Kubernetes
 - Kubernetes 1.18+
-- Helm v3.16.1+
+
+### Helm
+
+- Install Helm version v3.16.1  https://helm.sh/docs/intro/install/
+
+### Kubectl
+- Install Kubectl version  v1.31.1 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 
 
 # Production deployment
@@ -102,3 +108,17 @@ The following table lists the configurable parameters of the `fast-api-kube` cha
 | `env.APP_MODE`                                | Environment variable for application mode                                                             | `prod`                              |
 | `configmaps`                                  | List of config maps for different environments                                                        | `{}`                                |
 | `db.password`                                 | Database password                                                                                     | `secretPassword`                    |
+
+
+
+## Custom Namespace:
+
+
+- **Custom Namespace via Helm Command**:  set a namespace during installation using `--namespace` and `--create-namespace`
+
+- Install helm chart on kube:
+```
+helm install --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --create-namespace
+```
+
+
