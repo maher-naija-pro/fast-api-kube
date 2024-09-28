@@ -2,6 +2,7 @@ import sys
 sys.path = ["", ".."] + sys.path[1:]
 sys.path.append("src")
 
+from prometheus_client import Counter
 from src.models.log import QueryLog
 from fastapi import APIRouter,Request,HTTPException,Depends
 from pydantic import BaseModel
@@ -25,9 +26,12 @@ def log_query( domain: str,  ipv4s: list,db: Session= Depends(get_db)):
     db.add(query_log)
     db.commit()
 
-
+# Define Prometheus metrics
+REQUEST_COUNTER_VALIDATE = Counter('validate_app_requests_total', 'Total number of requests on validate endpoint')
+REQUEST_COUNTER_LOOKUP = Counter('lookup_app_requests_total', 'Total number of requests on lookup endpoint')
 @router.post("/validate")
 def validate_ip(request: Request, ip_data: IPSchema):
+    REQUEST_COUNTER_VALIDATE.inc()
     try:
         ip = ip_data.ip
         print (ip)
@@ -39,6 +43,7 @@ def validate_ip(request: Request, ip_data: IPSchema):
 
 @router.get("/lookup")
 def lookup(domain: str, db: Session = Depends(get_db)):
+    REQUEST_COUNTER_LOOKUP.inc()
     try:
         ipv4s = socket.gethostbyname_ex(domain)[2]  # Get only IPv4 addresses
         log_query( domain, ipv4s, db )  # Save query in the database
