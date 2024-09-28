@@ -3,7 +3,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "fast-api-kube.fullname" . }}
-  namespace: {{ .Values.namespace }}
   labels:
     {{- include "fast-api-kube.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}

@@ -1,23 +1,68 @@
-# Patterns to ignore when building packages.
+# Patterns to ignore when building Helm packages.
 # This supports shell glob matching, relative path matching, and
 # negation (prefixed with !). Only one pattern per line.
+
+# macOS specific files
 .DS_Store
-# Common VCS dirs
+.DS_Store?
+
+# Common VCS directories and files
 .git/
 .gitignore
+.gitattributes
+.gitmodules
 .bzr/
 .bzrignore
 .hg/
 .hgignore
 .svn/
+.svnignore
+
 # Common backup files
 *.swp
 *.bak
 *.tmp
 *.orig
 *~
-# Various IDEs
+
+# Log files
+*.log
+*.log.*
+
+# Temporary files
+*.lock
+*.temp
+*.cache
+*.aux
+*.out
+
+# Various IDEs and editors
 .project
 .idea/
 *.tmproj
 .vscode/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+*.iml
+*.pydevproject
+
+# Python specific
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env/
+venv/
+Pipfile.lock
+
+# Helm specific
+# Negate values files if they're needed for specific environment deployments
+values-*.yaml
+helm-chart.tgz
+
+# Other
+coverage/
+*.coverprofile
+*.prof
+
