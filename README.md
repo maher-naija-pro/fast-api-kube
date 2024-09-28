@@ -140,6 +140,11 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm
 ```
 helm uninstall --debug     fast-api-kube
 ```
+## Test helm deployement with helm test
+```
+helm test   fast-api-kube
+```
+
 ## Access production on node port 
 ```
 sh ./scripts/get_url.sh  # It will return URL to access application
@@ -237,9 +242,10 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 - Add ingress rules for production with tls and waf
 - Add fast api auth and security
 - ADD ARGO CD or flux forCD
-- Test kube deployement and procedure
-- Add kube deployement test
+- ADD helm hooks for alembic migration on prod
 - fix ci helm test
+- add helm tests
+- Connect application to postgres on prod
 
 
 
