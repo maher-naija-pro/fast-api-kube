@@ -140,6 +140,16 @@ helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm
 ```
 helm uninstall --debug     fast-api-kube
 ```
+## Access production on node port 
+```
+sh ./scripts/get_url.sh  # It will return URL to access application
+
+```
+## Test app in prod
+```
+curl "URL"
+```
+NB: Should be changed to ingress depend on cluster architecture
 
 # CI/CD
 ## CI/CD tasks
