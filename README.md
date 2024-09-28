@@ -122,7 +122,7 @@ The `Dockerfile` Below are the default configurations that you may want to adjus
   - Customize this if you use a different server (e.g., `uvicorn`, `gunicorn`) or a different application structure.
 
 ### Customizing `docker-compose.yml`
-## Customizing `docker-compose.yml`
+
 
 The `docker-compose.yml` file in this repository is designed to set up and manage multiple services, including the FastAPI API service, a PostgreSQL database, and a test service. Below are the default configurations that can be customized to suit your specific project requirements.
 
@@ -292,8 +292,9 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
 # Production deployment
 - For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
 
-!!!!Please read Readme.md under this directory to deploy on prod step by step!!!!
 
+# !!!! IMPORTANT !!!!
+### Please read the [**Readme.md**](https://github.com/maher-naija-pro/fast-api-kube/blob/dev/fast-api-kube-helm/README.md) in this directory for detailed **step-by-step** instructions on deploying this project in a **production** environment.
 
 # CI/CD
 ## CI/CD tasks
