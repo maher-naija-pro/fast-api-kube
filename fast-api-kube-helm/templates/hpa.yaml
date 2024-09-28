@@ -3,7 +3,6 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "fast-api-kube.fullname" . }}
-  namespace: {{ .Values.namespace }}
   labels:
     {{- include "fast-api-kube.labels" . | nindent 4 }}
 spec:

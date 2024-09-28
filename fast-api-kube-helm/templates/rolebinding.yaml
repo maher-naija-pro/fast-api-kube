@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "fast-api-kube.fullname" . }}
+
+  labels:
+    {{- include "fast-api-kube.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "fast-api-kube.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "fast-api-kube.serviceAccountName" . }}
+    namespace: {{ .Values.namespace | default "default" }}

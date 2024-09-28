@@ -3,9 +3,7 @@ name: Lint and Test Helm Charts
 
 on: 
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "main" ,"staging " ]
+    branches: [ "dev","main" ,"staging " ]
 
 jobs:
   lint-test:

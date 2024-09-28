@@ -113,43 +113,10 @@ mahernaija/fastapi-kube-api:tagname
 ```
 
 # Production deployment
-## Production Install helm chart
-- Rename file  value_exemple.yaml value-dev.yaml
-- Rename file  value_exemple.yaml value-staging.yaml
-- Rename file  value_exemple.yaml value-prod.yaml
-```
- cp fast-api-kube-helm/value_exemple.yaml  value-dev.yaml
- cp fast-api-kube-helm/value_exemple.yaml  value-stagging.yaml
- cp fast-api-kube-helm/value_exemple.yaml  value-prod.yaml
-```
+- For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
 
-- Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
-- Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
-- Change in value.yaml  db.password-
+Please read Readme.md under this directory to deploy on prod step by step
 
-- Install helm chart on kube:
-```
-helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm 
-```
-## Production check
-```
- kubectl get pods -n fast-api-app
- ```
-
-## Production unInstall helm chart
-```
-helm uninstall --debug     fast-api-kube
-```
-## Access production on node port 
-```
-sh ./scripts/get_url.sh  # It will return URL to access application
-
-```
-## Test app in prod
-```
-curl "URL"
-```
-NB: Should be changed to ingress depend on cluster architecture
 
 # CI/CD
 ## CI/CD tasks
@@ -236,10 +203,14 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 - Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ingress rules for production with tls and waf
 - Add fast api auth and security
-- ADD ARGO CD or flux forCD
-- Test kube deployement and procedure
-- Add kube deployement test
+- Connect application to postgres on prod
+- Add ARGO CD or flux forCD
+- Add helm hooks for alembic migration on prod
+- Add helm tests to verify database connection
+
+
 - fix ci helm test
+
 
 
 

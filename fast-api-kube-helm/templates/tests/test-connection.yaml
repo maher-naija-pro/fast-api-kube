@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: "{{ include "fast-api-kube.fullname" . }}-test-connection"
+  namespace: {{ $.Values.namespace }}
   labels:
     {{- include "fast-api-kube.labels" . | nindent 4 }}
   annotations:
