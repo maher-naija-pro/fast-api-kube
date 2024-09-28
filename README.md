@@ -143,7 +143,7 @@ helm uninstall --debug    fast-api-kube  -n  fast-api-app
 ```
 ## Test helm deployement with helm test
 ```
-helm test   fast-api-kube
+helm test   fast-api-kube -n  fast-api-app 
 ```
 
 ## Access production on node port 
