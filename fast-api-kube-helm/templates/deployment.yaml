@@ -48,22 +48,27 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-
+      # Environment variables from values.yaml (static environment variables)
           env:
-            - name: LOG_LEVEL
-              value: {{ .Values.env.LOG_LEVEL }}
-            - name: DB_HOST
-              valueFrom:
-               configMapKeyRef:
-                 name: {{ .Values.env.APP_MODE | lower }}
-                 key: db-host
-            - name: DB_PASSWORD
-              valueFrom:
-               secretKeyRef:
-                 name:  "db-password"  
-                 key: db-password
-
-
+            {{- with .Values.env }}
+            {{- range $key, $value := . }}
+              - name: {{ $key | upper }}
+                value: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          # Environment variables from ConfigMaps (dynamic environment variables)
+          {{- range .Values.configmaps }}
+          envFrom:
+          - configMapRef:
+              name: {{ .name }}
+          {{- end }}
+          # Environment variable from Secrets (dynamic sensitive environment variables)
+          env:
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "fast-api-kube.fullname" . }}-secrets
+                key: password
       {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
