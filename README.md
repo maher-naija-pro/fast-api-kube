@@ -80,38 +80,217 @@ docker-compose run test
 
 | Variable Name | Description                     | Example Value            |
 |---------------|---------------------------------|--------------------------|
-| `DB_USER`     | Username for the database       | `admin`                  |
-| `DB_PASSWORD` | Password for the database       | `secretpassword`         |
-| `DB_NAME`     | Name of the database            | `my_database`            |
+| `POSTGRES_USER`     | Username for the database       | `admin`                  |
+| `POSTGRES_PASSWORD` | Password for the database       | `secretpassword`         |
+| `POSTGRES_NAME`     | Name of the database            | `my_database`            |
+
+## Deep Configuration
+### Customizing `Dockerfile`
+The `Dockerfile` Below are the default configurations that you may want to adjust based on your specific project needs:
+
+- **Base Image**:
+  - Default: `python:3.9.20-slim`
+  - You can customize the Python version 
+
+- **Environment**:
+  - Default: `ENVIRONMENT=dev`
+  - Customize this value to switch between different environments. For example:
+    - `dev`: For development environment (includes development dependencies).
+    - `staging`: For staging environment.
+    - `prod`: For production environment (includes only production dependencies).
+  - Modify the default `ENVIRONMENT` by adjusting the `ARG ENVIRONMENT` line in the `Dockerfile`.
+
+- **Application Port**:
+  - Default: `3000`
+  - This can be customized by changing the `EXPOSE` directive in the `Dockerfile` if your application listens on a different port.
+
+- **Non-Root User**:
+  - Default: `appuser`
+  - A non-root user is created and used by default for enhanced security. You can modify or remove this by adjusting the `RUN` and `USER` directives in the `Dockerfile` if your application needs specific user permissions.
+
+- **Python Environment Variables**:
+  - The following environment variables are set by default to optimize Python behavior in Docker:
+    - `PYTHONDONTWRITEBYTECODE=1`: Prevents Python from writing `.pyc` files.
+    - `PYTHONUNBUFFERED=1`: Ensures output is sent directly to terminal without being buffered.
+  - These can be adjusted or removed based on your specific application needs.
+
+- **Application Entrypoint**:
+  - Default command to run the application: 
+    ```bash
+    hypercorn --reload --log-level info --graceful-timeout 0 src.main:app
+    ```
+  - Customize this if you use a different server (e.g., `uvicorn`, `gunicorn`) or a different application structure.
+
+### Customizing `docker-compose.yml`
 
 
-## Configuration
+The `docker-compose.yml` file in this repository is designed to set up and manage multiple services, including the FastAPI API service, a PostgreSQL database, and a test service. Below are the default configurations that can be customized to suit your specific project requirements.
 
-- Defaults in this repo. Please change them to suit your needs:
+### API Service (FastAPI)
 
-### Python version:
-```
-Dockerfile#1: FROM python:3.9
-```
-### Image name : `fastapiapp`
-```
-docker build -t fastapiapp .
-docker-compose.yaml#5 image: fastapiapp:latest
-```
-### Image registry :
-```
-values.yaml#10
-```
-### Repository:
-```
-mahernaija/fastapi-kube-api:tagname
-```
+1. **Build Context**:  
+   The `api` service is built using the `Dockerfile` in the root directory.  
+   - Default: `context: .`, `dockerfile: Dockerfile`  
+   - You can modify the build context or Dockerfile location as needed.
+
+2. **Command**:  
+   The default command runs database migrations using `alembic` and starts the API with `hypercorn`.  
+   - Default:  
+     ```bash
+     bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload --access-logfile - --graceful-timeout 0"
+     ```  
+   - You can modify this command to suit your needs (e.g., changing the entrypoint or server).
+
+3. **Develop Mode**:  
+   The `develop` section allows live reloading of the source code (`/src/`) and rebuilding when changes are made to `requirements/dev.txt`.  
+   - Default:  
+     ```yaml
+     watch:
+       - action: sync
+         path: ./src/
+         target: /app/src/
+       - action: rebuild
+         path: requirements/dev.txt
+     ```  
+   - Customize the `watch` paths or actions based on your development workflow.
+
+4. **Ports**:  
+   The default exposed port is `3000`.  
+   - Default: `3000:3000`  
+   - You can change the exposed ports if your application needs a different one.
+
+5. **Volumes**:  
+   A bind mount is used to link the source code on your host machine to the `/app` directory in the container.  
+   - Default:  
+     ```yaml
+     volumes:
+       - type: bind
+         source: .
+         target: /app/
+     ```  
+   - Modify the source or target paths based on your project structure.
+
+6. **Environment Variables**:  
+   The database connection string is provided through environment variables.  
+   - Default: `DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}`  
+   - You can change this environment variable to connect to different databases or use other database drivers.
+
+7. **Resources**:  
+   CPU and memory limits are set to ensure the service does not over-consume resources.  
+   - Default:  
+     ```yaml
+     limits:
+       cpus: '1.0'
+       memory: 512M
+     ```  
+   - Adjust these limits as needed based on your server's capacity.
+
+### Test Service
+
+1. **Build Context**:  
+   Similar to the `api` service, it builds from the same `Dockerfile`.  
+   - Default: `context: .`, `dockerfile: Dockerfile`  
+   - Modify if the Dockerfile is located elsewhere.
+
+2. **Command**:  
+   The default command runs Alembic migrations and executes tests using `pytest`.  
+   - Default:  
+     ```bash
+     bash -c "alembic upgrade head && pytest"
+     ```  
+   - Customize this if your testing setup differs.
+
+3. **Ports**:  
+   The test service is exposed on port `4000` to avoid conflict with the API service.  
+   - Default: `4000:3000`  
+   - You can adjust the port mappings.
+
+4. **Volumes**:  
+   A bind mount is used to link the source code on your host machine to the `/app` directory in the container, similar to the API service.  
+   - Default:  
+     ```yaml
+     volumes:
+       - type: bind
+         source: .
+         target: /app/
+     ```  
+   - Modify the source or target paths based on your project structure.
+
+5. **Resources**:  
+   CPU and memory limits are set to ensure the service does not over-consume resources.  
+   - Default:  
+     ```yaml
+     limits:
+       cpus: '1.0'
+       memory: 512M
+     ```  
+   - Adjust these limits as needed.
+
+### Database Service (PostgreSQL)
+
+1. **Image**:  
+   The default image is `postgres:12.1-alpine`, which is a lightweight version of PostgreSQL.  
+   - Default: `postgres:12.1-alpine`  
+   - You can update the image version or switch to a different database if necessary.
+
+2. **Environment Variables**:  
+   The PostgreSQL service uses environment variables for configuring the database.  
+   - Default:  
+     ```yaml
+     environment:
+       - POSTGRES_USER
+       - POSTGRES_PASSWORD
+       - POSTGRES_DB
+     ```  
+   - These values are loaded from an `.env` file. Customize them by changing the `.env` file or setting them directly in the `docker-compose.yml` file.
+
+3. **Volumes**:  
+   The database data is persisted using a named volume (`postgres_data_disk`).  
+   - Default:  
+     ```yaml
+     volumes:
+       - postgres_data_disk:/var/lib/postgresql/data/
+     ```  
+   - You can modify the volume name or path if needed.
+
+4. **Resources**:  
+   CPU and memory limits are set for this service to ensure the database doesn’t consume excessive resources.  
+   - Default:  
+     ```yaml
+     limits:
+       cpus: '0.5'
+       memory: 256M
+     ```  
+   - Customize this based on your database's performance needs.
+
+### Networks
+
+1. **app_network**:  
+   All services communicate over a custom bridge network (`app_network`).  
+   - Default:  
+     ```yaml
+     networks:
+       app_network:
+         driver: bridge
+     ```  
+   - You can add other services to this network or change the network driver if needed.
+
+### Volumes
+
+1. **postgres_data_disk**:  
+   This volume is used to persist PostgreSQL data.  
+   - Default:  
+     ```yaml
+     volumes:
+       postgres_data_disk:
+         driver: local
+     ```  
+   - You can modify the volume driver or name as needed.
 
 # Production deployment
 - For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
 
-Please read Readme.md under this directory to deploy on prod step by step
-
+### Please read the [**Readme.md**](https://github.com/maher-naija-pro/fast-api-kube/blob/dev/fast-api-kube-helm/README.md) in this directory for detailed **step-by-step** instructions on deploying this project in a **production** environment.
 
 # CI/CD
 ## CI/CD tasks
@@ -122,9 +301,8 @@ Please read Readme.md under this directory to deploy on prod step by step
    - Security check
    - Codacy Static Code Analysis 
    - Lint and check helm charts
-   - Release helm charts 
    - Validate docker file
-
+   - pages-build-deployment
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
@@ -174,11 +352,6 @@ curl "http://localhost:3000/v1/tools/lookup?domain=example.com"
 curl "http://localhost:3000/v1/history"
 ```
 
-## Manuel test helm chart
-```
-helm upgrade --cleanup-on-fail  --install -f fast-api-kube/values.yaml --atomic --timeout 5m fast-api-kube ./fast-api-kube  --version 1.0.0
-```
-
 ## Manuel install python dependencies
 ```
 pip install  --no-cache-dir -r ./requirements/dev.txt
@@ -214,6 +387,8 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 - Add ARGO CD or flux forCD
 - Add helm hooks for alembic migration on prod
 - Add helm tests to verify database connection
+- Add helm Release to ci 
+- Make tests modulars
 
 
 
