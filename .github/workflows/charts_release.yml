@@ -31,3 +31,6 @@ jobs:
         uses: helm/chart-releaser-action@v1.6.0
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          skip_packaging: true
+          charts_dir: fast-api-kube-helm
