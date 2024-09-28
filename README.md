@@ -80,32 +80,115 @@ docker-compose run test
 
 | Variable Name | Description                     | Example Value            |
 |---------------|---------------------------------|--------------------------|
-| `DB_USER`     | Username for the database       | `admin`                  |
-| `DB_PASSWORD` | Password for the database       | `secretpassword`         |
-| `DB_NAME`     | Name of the database            | `my_database`            |
+| `POSTGRES_USER`     | Username for the database       | `admin`                  |
+| `POSTGRES_PASSWORD` | Password for the database       | `secretpassword`         |
+| `POSTGRES_NAME`     | Name of the database            | `my_database`            |
+
+## Deep Configuration
+### Customizing `Dockerfile`
+The `Dockerfile` Below are the default configurations that you may want to adjust based on your specific project needs:
+
+- **Base Image**:
+  - Default: `python:3.9.20-slim`
+  - You can customize the Python version 
+
+- **Environment**:
+  - Default: `ENVIRONMENT=dev`
+  - Customize this value to switch between different environments. For example:
+    - `dev`: For development environment (includes development dependencies).
+    - `staging`: For staging environment.
+    - `prod`: For production environment (includes only production dependencies).
+  - Modify the default `ENVIRONMENT` by adjusting the `ARG ENVIRONMENT` line in the `Dockerfile`.
+
+- **Application Port**:
+  - Default: `3000`
+  - This can be customized by changing the `EXPOSE` directive in the `Dockerfile` if your application listens on a different port.
+
+- **Non-Root User**:
+  - Default: `appuser`
+  - A non-root user is created and used by default for enhanced security. You can modify or remove this by adjusting the `RUN` and `USER` directives in the `Dockerfile` if your application needs specific user permissions.
+
+- **Python Environment Variables**:
+  - The following environment variables are set by default to optimize Python behavior in Docker:
+    - `PYTHONDONTWRITEBYTECODE=1`: Prevents Python from writing `.pyc` files.
+    - `PYTHONUNBUFFERED=1`: Ensures output is sent directly to terminal without being buffered.
+  - These can be adjusted or removed based on your specific application needs.
+
+- **Application Entrypoint**:
+  - Default command to run the application: 
+    ```bash
+    hypercorn --reload --log-level info --graceful-timeout 0 src.main:app
+    ```
+  - Customize this if you use a different server (e.g., `uvicorn`, `gunicorn`) or a different application structure.
+
+### Customizing `docker-compose.yml`
 
 
-## Configuration
 
-- Defaults in this repo. Please change them to suit your needs:
+#### 1. **API Service (FastAPI)**
+This service runs the FastAPI application using `hypercorn` and applies Alembic migrations during startup.
 
-### Python version:
-```
-Dockerfile#1: FROM python:3.9
-```
-### Image name : `fastapiapp`
-```
-docker build -t fastapiapp .
-docker-compose.yaml#5 image: fastapiapp:latest
-```
-### Image registry :
-```
-values.yaml#10
-```
-### Repository:
-```
-mahernaija/fastapi-kube-api:tagname
-```
+- **Command**:
+  - The default command runs database migrations using `alembic` and starts the API with `hypercorn`. 
+    ```bash
+    bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload --access-logfile - --graceful-timeout 0"
+    ```
+  - You can modify this command to suit your needs (e.g., changing the entrypoint or server).
+
+- **Develop Mode**:
+  - The `develop` section allows live reloading of the source code (`/src/`) and rebuilding when changes are made to `requirements/dev.txt`.
+  - You can customize the `watch` paths or actions based on your development workflow.
+
+- **Ports**:
+  - Default: `3000:3000`. You can change the exposed ports if your application needs a different one.
+
+- **Resources**:
+  - CPU and memory limits are set to ensure the service does not over-consume resources:
+    ```yaml
+    limits:
+      cpus: '1.0'
+      memory: 512M
+    ```
+  - Adjust these limits as needed based on your server's capacity.
+
+#### 2. **Test Service**
+This service runs the test suite using `pytest`.
+
+- **Ports**:
+  - Default: `4000:3000` to avoid conflict with the API service, but you can modify this as required.
+
+- **Resources**:
+  - Similar CPU and memory limits as the `api` service are applied.
+
+- **Image**:
+  - The default image is `postgres:12.1-alpine`,You can update the image version or switch to a different database if necessary.
+
+- **Environment Variables**:
+  - The PostgreSQL service uses environment variables for configuring the database:
+    ```yaml
+    POSTGRES_USER
+    POSTGRES_PASSWORD
+    POSTGRES_DB
+    ```
+  - These values are loaded from an `.env` file. You can customize them by changing the `.env` file or setting them directly in the `docker-compose.yml` file.
+
+- **Volumes**:
+  - The database data is persisted using a named volume (`postgres_data_disk`). You can modify the volume name or path if needed.
+
+- **Resources**:
+  - CPU and memory limits are set for this service to ensure the database doesn’t consume excessive resources:
+    ```yaml
+    limits:
+      cpus: '0.5'
+      memory: 256M
+    ```
+
+### Volumes
+
+- **postgres_data_disk**:  
+  - This volume persists the PostgreSQL data, so it's not lost between container restarts. If you need to change the storage location or volume driver, you can do so here.
+
+
 
 # Production deployment
 - For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
