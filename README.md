@@ -1,5 +1,13 @@
 # Fast-api-kube API
 
+## Branches
+There is 3 branches : 
+
+A branch for each stage of deployement:
+ - dev
+ - stagging
+ - prod
+
 ## Prerequisites
 
 ### Docker
@@ -14,6 +22,8 @@
 
 - Install Helm version v3.16.1  https://helm.sh/docs/intro/install/
 
+### Kubectl
+- Install Kubectl version  v1.31.1 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/ 
 ## Getting started for developer
 
 - Clone this repo ☝️:
@@ -104,15 +114,28 @@ mahernaija/fastapi-kube-api:tagname
 
 # Production deployment
 ## Production Install helm chart
-Rename file  value_exemple.yaml value.yaml
+- Rename file  value_exemple.yaml value-dev.yaml
+- Rename file  value_exemple.yaml value-staging.yaml
+- Rename file  value_exemple.yaml value-prod.yaml
+```
+ cp fast-api-kube-helm/value_exemple.yaml  value-dev.yaml
+ cp fast-api-kube-helm/value_exemple.yaml  value-stagging.yaml
+ cp fast-api-kube-helm/value_exemple.yaml  value-prod.yaml
+```
 
 - Change in value.yaml  env.APP_MODE: "dev" / "prod" / "staging"
 - Change in value.yaml  configmaps.db-host configmaps.DB_USER configmaps.DB_PASS 
 - Change in value.yaml  db.password-
+
 - Install helm chart on kube:
 ```
 helm install --debug --dry-run    fast-api-kube ./fast-api-kube-helm 
 ```
+## Production check
+```
+ kubectl get pods -n fast-api-app
+ ```
+
 ## Production unInstall helm chart
 ```
 helm uninstall --debug     fast-api-kube
@@ -200,10 +223,10 @@ docker run --rm -i hadolint/hadolint < Dockerfile
 
 # TODO
 
-- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager 
+- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
 - Add ingress rules for production with tls and waf
 - Add fast api auth and security
-
+- ADD ARGO CD or flux forCD
 - Test kube deployement and procedure
 - Add kube deployement test
 - fix ci helm test
