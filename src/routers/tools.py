@@ -62,11 +62,25 @@ def validate_ip(request: Request, ip_data: IPSchema):
 LOOKUP_DURATION = Histogram('lookup_request_duration_seconds', 'Duration of /lookup requests')
 REQUEST_COUNTER_LOOKUP = Counter('lookup_app_requests_total', 'Total number of requests on lookup endpoint')
 @router.get("/lookup")
-def lookup(domain: str, db: Session = Depends(get_db)):
-    REQUEST_COUNTER_LOOKUP.inc()
+def lookup(domain: str, request: Request, db: Session = Depends(get_db)):
+    start_time = time()  # Track the start time for measuring request duration
+    REQUEST_COUNTER_LOOKUP.inc()  # Increment Prometheus counter for /lookup endpoint
+    client_ip = request.client.host  # Capture the client's IP address
+    logger.info(f"Lookup request from {client_ip} for domain: {domain}")  # Log lookup attempt
+
+
     try:
-        ipv4s = socket.gethostbyname_ex(domain)[2]  # Get only IPv4 addresses
+        # Resolve the domain to get only IPv4 addresses
+        ipv4s = socket.gethostbyname_ex(domain)[2] 
+        # Log the successful domain query in the database
         log_query( domain, ipv4s, db )  # Save query in the database
-        return {"domain": domain, "ipv4": ipv4s}
+        logger.info(f"Lookup success for domain {domain} by {client_ip}: {ipv4s}")  # Log lookup success
+        return {"domain": domain, "ipv4": ipv4s}  # Return the resolved IPv4 addresses
     except socket.gaierror:
+        # If the domain is not found, log the error and return a 400 Bad Request response
+        logger.error(f"Domain lookup failed for {domain} from {client_ip}")
         raise HTTPException(status_code=400, detail="Domain not found")
+    finally:
+        # Record the time taken for the /lookup request in the Prometheus histogram
+        LOOKUP_DURATION.observe(time() - start_time)
+
