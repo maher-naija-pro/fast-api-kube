@@ -44,10 +44,10 @@ from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom mid
 
 # Security Middleware
 from middleware.security_access import SecurityMiddleware  # Import security middleware
-from middleware.security_headers import (  # Import security middleware
-    SecurityHeadersMiddleware,
-)
 from routers import health, history, metric, root, tools
+
+# from middleware.security_headers import SecurityHeadersMiddleware,
+
 
 # Adding necessary paths
 sys.path.append("routers")
@@ -65,7 +65,7 @@ RETRY_LIMIT = int(os.getenv("RETRY_LIMIT", "10"))
 
 
 @asynccontextmanager
-async def app_lifespan():
+async def app_lifespan(status):
     """
     Context manager for managing app lifespan.
 
@@ -96,7 +96,7 @@ app = FastAPI(lifespan=app_lifespan)
 # Add global rate-limiting middleware
 app.add_middleware(GlobalRateLimitMiddleware)
 # Add the security middlewares to the app
-app.add_middleware(SecurityHeadersMiddleware)
+# app.add_middleware(SecurityHeadersMiddleware)
 # Add the security middlewares
 app.add_middleware(SecurityMiddleware)
 # Redirect all HTTP to HTTPS for production environments
