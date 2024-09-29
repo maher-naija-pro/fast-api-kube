@@ -3,11 +3,6 @@ import os
 import sys
 import asyncio
 
-# Security Middleware 
-from starlette.middleware.cors import CORSMiddleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
-from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
-
 
 # Adding necessary paths
 sys.path.append("routers")
@@ -26,8 +21,10 @@ from routers import tools
 from routers import history
 from routers import root
 
+# Security Middleware rate limit 
 from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom middleware
-
+# Security Middleware 
+from middleware.security_middleware import add_security_middleware  # Import security middleware
 
 # Initialize the database
 db=get_db()
@@ -62,24 +59,14 @@ app = FastAPI(lifespan=app_lifespan)
 # Add global rate-limiting middleware
 app.add_middleware(GlobalRateLimitMiddleware)
 
-# Add middleware for security and observability
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # You can restrict origins for better security
-    allow_credentials=True,
-    allow_methods=["*"],  # Controls which methods are allowed (GET, POST, etc.)
-    allow_headers=["*"]   # Specifies which headers are allowed
-    
-)
-
-app.add_middleware(
-    TrustedHostMiddleware, 
-    allowed_hosts=["*", "localhost"] # Replace "*" with trusted domains for security
-)
+# Add security middleware (CORS and TrustedHost)
+add_security_middleware(app)
 
 # Redirect all HTTP to HTTPS for production environments
-if os.getenv("ENV") == "production":
+if os.getenv("ENV") == "prod":
     app.add_middleware(HTTPSRedirectMiddleware)
+
+
 
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
