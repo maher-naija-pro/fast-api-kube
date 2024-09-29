@@ -335,27 +335,33 @@ This FastAPI application includes custom middleware to enforce **global rate-lim
 | `RATE_LIMIT_REQUESTS`    | Maximum number of global requests allowed in the time window. If the total number of requests exceeds this limit, subsequent requests will receive a `429 Too Many Requests` response. | `100`         |
 | `RATE_LIMIT_WINDOW`      | The time window (in seconds) during which the maximum number of requests is counted. Once the time window expires, the counter resets. | `60`          |
 
-## Control access Middleware
-This FastAPI application includes middleware **TrustedHostMiddleware** **CORSMiddleware**. 
-You can customise on main.py configuration parameters for the `CORSMiddleware` and `TrustedHostMiddleware` used in this FastAPI application.
+## Control Access Middleware
 
-| Parameter                | Middleware           | Description                                                                                     | Default Value              | Recommended Value for Production         |
-|--------------------------|----------------------|-------------------------------------------------------------------------------------------------|----------------------------|------------------------------------------|
-| `allow_origins`           | `CORSMiddleware`     | Defines which domains are allowed to make requests to the API.                                   | `["*"]`                    | List of trusted domains, e.g., `["https://example.com"]` |
-| `allow_methods`           | `CORSMiddleware`     | Specifies the allowed HTTP methods (GET, POST, PUT, etc.).                                       | `["*"]`                    | Restrict to required methods, e.g., `["GET", "POST"]`    |
-| `allow_headers`           | `CORSMiddleware`     | Controls which headers are allowed in the requests.                                              | `["*"]`                    | Specify required headers, e.g., `["Authorization", "Content-Type"]` |
-| `allow_credentials`       | `CORSMiddleware`     | Allows cookies or authentication credentials to be included in the requests.                     | `True`                     | `True` (if using cookies or credentials)                |
-| `allowed_hosts`           | `TrustedHostMiddleware` | Limits the hosts that can access the API.                                                        | `["*", "localhost"]`        | List of trusted hosts, e.g., `["example.com"]` |
-| `allow_headers`           | `CORSMiddleware`     | Determines what headers can be included in a request.                                            | `["*"]`                    | List required headers explicitly, e.g., `["Content-Type"]` |
+This FastAPI application includes two essential middlewares for controlling access: **`TrustedHostMiddleware`** and **`CORSMiddleware`**. You can customize their configuration parameters in the `middleware/security_middleware.py` file, which defines the allowed origins, methods, headers, and hosts for accessing your FastAPI application.
 
+### Configuration Parameters
 
-## Notes:
+The following table outlines the configurable parameters for the `CORSMiddleware` and `TrustedHostMiddleware` used in this FastAPI application:
 
-- **`allow_origins`**: Allowing all origins (`["*"]`) is insecure for production environments.  limit it to specific trusted domains for production deployement.
-- **`allowed_hosts`**: Allowing all hosts (`["*"]`) is insecure for production environments.  limit it to specific trusted hosts for production deployement
+| Parameter                | Middleware             | Description                                                                                     | Default Value              | Recommended Value for Production         |
+|--------------------------|------------------------|-------------------------------------------------------------------------------------------------|----------------------------|------------------------------------------|
+| `allow_origins`           | `CORSMiddleware`       | Defines which domains are allowed to make requests to the API.                                   | `["*"]`                    | List of trusted domains, e.g., `["https://example.com"]` |
+| `allow_methods`           | `CORSMiddleware`       | Specifies the allowed HTTP methods (GET, POST, PUT, etc.).                                       | `["*"]`                    | Restrict to required methods, e.g., `["GET", "POST"]`    |
+| `allow_headers`           | `CORSMiddleware`       | Controls which headers are allowed in the requests.                                              | `["*"]`                    | Specify required headers, e.g., `["Authorization", "Content-Type"]` |
+| `allow_credentials`       | `CORSMiddleware`       | Allows cookies or authentication credentials to be included in the requests.                     | `True`                     | `True` (if using cookies or credentials)                |
+| `allowed_hosts`           | `TrustedHostMiddleware`| Limits the hosts that can access the API.                                                        | `["*", "localhost"]`        | List of trusted hosts, e.g., `["example.com"]` |
+| `allow_headers`           | `CORSMiddleware`       | Determines what headers can be included in a request.                                            | `["*"]`                    | List required headers explicitly, e.g., `["Content-Type"]` |
 
+### Notes:
 
-# Useful command for manual tests
+- **`allow_origins`**: Setting `["*"]` (allow all origins) is insecure in production environments, as it permits requests from any domain. For production, restrict this to specific trusted domains like `["https://example.com"]`.
+- **`allow_methods`**: While `["*"]` allows all HTTP methods, it is recommended to restrict this to only the required methods for your API, such as `["GET", "POST"]`.
+- **`allowed_hosts`**: Allowing all hosts with `["*"]` is insecure for production environments. Restrict access to specific trusted hosts, such as `["example.com"]` or `["api.example.com"]`.
+- **`allow_credentials`**: Set this to `True` if your API uses cookies or authentication tokens that require credentials to be sent across domains.
+- **`allow_headers`**: While `["*"]` allows all headers, you should explicitly specify the headers that are required for your application, such as `["Authorization", "Content-Type"]`.
+
+Make sure to update these parameters in your `.env` file or directly in `middleware/security_middleware.py` for a production setup to enhance security.
+
 
 ## Manual  Test API
 ```
