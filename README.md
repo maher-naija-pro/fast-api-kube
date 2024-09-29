@@ -327,11 +327,11 @@ To add environment variable to docker and docker-compose update these files:
 NB: Fixed version should mbe added
 # Middleware config:
 
-## Security Headers Middleware
+# Security Headers Middleware
 
 This FastAPI application includes a custom middleware called `SecurityHeadersMiddleware` that automatically adds essential **security headers** to every HTTP response. These headers help enhance the security of your application by mitigating common vulnerabilities such as **clickjacking**, **MIME sniffing**, and **cross-site scripting (XSS)**.
 
-### Security Headers Added
+## Security Headers Added
 
 The middleware adds the following headers to all responses:
 
@@ -472,9 +472,18 @@ This project is licensed under the MIT License.
 - Connect application to postgres on prod
 - Add ARGO CD or flux forCD
 - Add helm hooks for alembic migration on prod
-- Add helm tests to verify database connection
-- Add helm Release to ci 
-- Make tests modulars
+- Add helm tests hook to verify database connection
+- Add helm Release to ci
+- Add TLS certificate on front of api
+- Implement Authentication (OAuth2/JWT)
+- Implement Role-Based Access Control (RBAC) 
+- Secure Session Management 
+- Protect Against CSRF
+- Test Horizontal Pod Autoscaling (HPA)
+- se Multi-Stage Builds
+- Mock External Dependencies for tests
+
+
 
 
 
