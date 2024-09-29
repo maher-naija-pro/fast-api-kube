@@ -377,6 +377,9 @@ alembic revision -m "Fill empty "
 ```
 docker run --rm -i hadolint/hadolint < Dockerfile 
 ```
+## License
+
+This project is licensed under the MIT License. 
 
 # TODO
 
