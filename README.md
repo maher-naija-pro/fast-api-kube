@@ -324,10 +324,24 @@ To add environment variable to docker and docker-compose update these files:
  import os
  ENV_NAME =  os.getenv("ENV_NAME")
 ```
-
-
-
 NB: Fixed version should mbe added
+# Middleware config:
+You can customise on mail.py configuration parameters for the `CORSMiddleware` and `TrustedHostMiddleware` used in this FastAPI application.
+
+| Parameter                | Middleware           | Description                                                                                     | Default Value              | Recommended Value for Production         |
+|--------------------------|----------------------|-------------------------------------------------------------------------------------------------|----------------------------|------------------------------------------|
+| `allow_origins`           | `CORSMiddleware`     | Defines which domains are allowed to make requests to the API.                                   | `["*"]`                    | List of trusted domains, e.g., `["https://example.com"]` |
+| `allow_methods`           | `CORSMiddleware`     | Specifies the allowed HTTP methods (GET, POST, PUT, etc.).                                       | `["*"]`                    | Restrict to required methods, e.g., `["GET", "POST"]`    |
+| `allow_headers`           | `CORSMiddleware`     | Controls which headers are allowed in the requests.                                              | `["*"]`                    | Specify required headers, e.g., `["Authorization", "Content-Type"]` |
+| `allow_credentials`       | `CORSMiddleware`     | Allows cookies or authentication credentials to be included in the requests.                     | `True`                     | `True` (if using cookies or credentials)                |
+| `allowed_hosts`           | `TrustedHostMiddleware` | Limits the hosts that can access the API.                                                        | `["*", "localhost"]`        | List of trusted hosts, e.g., `["example.com"]` |
+| `allow_headers`           | `CORSMiddleware`     | Determines what headers can be included in a request.                                            | `["*"]`                    | List required headers explicitly, e.g., `["Content-Type"]` |
+
+
+## Notes:
+
+- **`allow_origins`**: Allowing all origins (`["*"]`) is insecure for production environments.  limit it to specific trusted domains for production deployement.
+- **`allowed_hosts`**: Allowing all hosts (`["*"]`) is insecure for production environments.  limit it to specific trusted hosts for production deployement
 
 
 # Useful command for manual tests
