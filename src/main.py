@@ -70,8 +70,6 @@ app.add_middleware(SecurityHeadersMiddleware)
 if os.getenv("ENV") == "prod":
     app.add_middleware(HTTPSRedirectMiddleware)
 
-
-
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
 app.include_router(tools.router, prefix="/v1")

@@ -69,7 +69,6 @@ services:
 
     environment: 
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
-    restart: always # Automatically restart the service if it fails
     networks:
       - app_network  # Adding the service to the same dedicated network
     healthcheck:
