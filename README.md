@@ -480,8 +480,15 @@ This project is licensed under the MIT License.
 - Secure Session Management 
 - Protect Against CSRF
 - Test Horizontal Pod Autoscaling (HPA)
-- se Multi-Stage Builds
+- Test Multi-Stage Builds
 - Mock External Dependencies for tests
+- CI to Regularly Update Dependencies
+- Add sphinx docs 
+- Use external vault for secrets with rotation
+- Add Static Application Security Testing 
+-  Dependency Vulnerability Scanning 
+- add load test
+- Add rollback to helm and  alembic migration 
 
 
 
