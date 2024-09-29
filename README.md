@@ -303,6 +303,7 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Lint and check helm charts
    - Validate docker file
    - Pages-build-deployment
+   - Pycharm Python security scanner
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
