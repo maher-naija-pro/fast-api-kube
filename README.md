@@ -324,13 +324,62 @@ To add environment variable to docker and docker-compose update these files:
  import os
  ENV_NAME =  os.getenv("ENV_NAME")
 ```
-
-
-
 NB: Fixed version should mbe added
+# Middleware config:
+
+## Security Headers Middleware
+
+This FastAPI application includes a custom middleware called `SecurityHeadersMiddleware` that automatically adds essential **security headers** to every HTTP response. These headers help enhance the security of your application by mitigating common vulnerabilities such as **clickjacking**, **MIME sniffing**, and **cross-site scripting (XSS)**.
+
+### Security Headers Added
+
+The middleware adds the following headers to all responses:
+
+| **Header**                    | **Description**                                                                                                                                                     | **Example Value**                                                          |
+|-------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `Strict-Transport-Security`    | Enforces the use of HTTPS and tells the browser to only interact with the site over HTTPS for a specified time period. Also applies the rule to all subdomains.       | `max-age=31536000; includeSubDomains`                                      |
+| `X-Content-Type-Options`       | Prevents browsers from MIME-sniffing the content-type of responses, reducing the risk of some types of attacks, such as XSS.                                         | `nosniff`                                                                  |
+| `X-Frame-Options`              | Protects against **clickjacking** by preventing the page from being embedded in an iframe.                                                                            | `DENY`                                                                     |
+| `X-XSS-Protection`             | Enables the browser’s built-in cross-site scripting (XSS) protection to prevent some forms of XSS attacks.                                                           | `1; mode=block`                                                            |
+| `Content-Security-Policy`      | Defines which content sources are allowed to load. Helps prevent XSS by restricting allowed scripts and resources.                                                    | `default-src 'self'; script-src 'self'; object-src 'none'`                 |
 
 
-# Useful command for manual tests
+## Global rate limiting Middleware
+This FastAPI application includes custom middleware to enforce **global rate-limiting**. The rate-limiting middleware is configured using environment variables (requests are limited across all clients).
+
+
+| Environment Variable    | Description                                         | Default Value |
+|-------------------------|-----------------------------------------------------|---------------|
+| `RATE_LIMIT_REQUESTS`    | Maximum number of global requests allowed in the time window. If the total number of requests exceeds this limit, subsequent requests will receive a `429 Too Many Requests` response. | `100`         |
+| `RATE_LIMIT_WINDOW`      | The time window (in seconds) during which the maximum number of requests is counted. Once the time window expires, the counter resets. | `60`          |
+
+## Control Access Middleware
+
+This FastAPI application includes two essential middlewares for controlling access: **`TrustedHostMiddleware`** and **`CORSMiddleware`**. You can customize their configuration parameters in the `middleware/security_access.py` file, which defines the allowed origins, methods, headers, and hosts for accessing your FastAPI application.
+
+### Configuration Parameters
+
+The following table outlines the configurable parameters for the `CORSMiddleware` and `TrustedHostMiddleware` used in this FastAPI application:
+
+| Parameter                | Middleware             | Description                                                                                     | Default Value              | Recommended Value for Production         |
+|--------------------------|------------------------|-------------------------------------------------------------------------------------------------|----------------------------|------------------------------------------|
+| `allow_origins`           | `CORSMiddleware`       | Defines which domains are allowed to make requests to the API.                                   | `["*"]`                    | List of trusted domains, e.g., `["https://example.com"]` |
+| `allow_methods`           | `CORSMiddleware`       | Specifies the allowed HTTP methods (GET, POST, PUT, etc.).                                       | `["*"]`                    | Restrict to required methods, e.g., `["GET", "POST"]`    |
+| `allow_headers`           | `CORSMiddleware`       | Controls which headers are allowed in the requests.                                              | `["*"]`                    | Specify required headers, e.g., `["Authorization", "Content-Type"]` |
+| `allow_credentials`       | `CORSMiddleware`       | Allows cookies or authentication credentials to be included in the requests.                     | `True`                     | `True` (if using cookies or credentials)                |
+| `allowed_hosts`           | `TrustedHostMiddleware`| Limits the hosts that can access the API.                                                        | `["*", "localhost"]`        | List of trusted hosts, e.g., `["example.com"]` |
+
+
+### Notes:
+
+- **`allow_origins`**: Setting `["*"]` (allow all origins) is insecure in production environments, as it permits requests from any domain. For production, restrict this to specific trusted domains like `["https://example.com"]`.
+- **`allow_methods`**: While `["*"]` allows all HTTP methods, it is recommended to restrict this to only the required methods for your API, such as `["GET", "POST"]`.
+- **`allowed_hosts`**: Allowing all hosts with `["*"]` is insecure for production environments. Restrict access to specific trusted hosts, such as `["example.com"]` or `["api.example.com"]`.
+- **`allow_credentials`**: Set this to `True` if your API uses cookies or authentication tokens that require credentials to be sent across domains.
+- **`allow_headers`**: While `["*"]` allows all headers, you should explicitly specify the headers that are required for your application, such as `["Authorization", "Content-Type"]`.
+
+Make sure to update these parameters in `middleware/security_middleware.py` for a production setup to enhance security.
+
 
 ## Manual  Test API
 ```
@@ -377,6 +426,43 @@ alembic revision -m "Fill empty "
 ```
 docker run --rm -i hadolint/hadolint < Dockerfile 
 ```
+# Application Metrics
+
+This repository exposes various application metrics that can be monitored using Prometheus. Below is a breakdown of the metrics and what each one represents.
+
+## Exposed Metrics
+
+| **Metric**                              | **Description**                                                                      | **Labels**                            | **Type**   | **Example**                                                                                     |
+|-----------------------------------------|--------------------------------------------------------------------------------------|---------------------------------------|------------|-------------------------------------------------------------------------------------------------|
+| `metric_app_requests_total`             | Total number of requests received by the `/metrics` endpoint.                         | None                                  | Counter    | `metric_app_requests_total 1.0`                                                                |
+| `metric_app_requests_created`           | Timestamp of the first request on the `/metrics` endpoint since Unix epoch.           | None                                  | Gauge      | `metric_app_requests_created 1.7276320847868874e+09`                                           |
+| `metric_app_request_errors_total`       | Total number of request errors encountered on the `/metrics` endpoint.                | None                                  | Counter    | `metric_app_request_errors_total 0.0`                                                          |
+| `metric_app_request_errors_created`     | Timestamp of the first request error on the `/metrics` endpoint since Unix epoch.     | None                                  | Gauge      | `metric_app_request_errors_created 1.7276320847869053e+09`                                     |
+| `metric_app_request_latency_seconds`    | Request latency in seconds on the `/metrics` endpoint, split into histogram buckets.  | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `metric_app_request_latency_seconds_bucket{le="0.005"} 0.0`<br>`metric_app_request_latency_seconds_bucket{le="0.01"} 0.0` |
+| `metric_app_request_latency_seconds_created` | Timestamp of first latency measurement on the `/metrics` endpoint.                 | None                                  | Gauge      | `metric_app_request_latency_seconds_created 1.727632084786929e+09`                             |
+| `validate_app_requests_total`           | Total number of requests received on the `/validate` endpoint.                        | None                                  | Counter    | `validate_app_requests_total 0.0`                                                              |
+| `validate_app_requests_created`         | Timestamp of the first request on the `/validate` endpoint since Unix epoch.          | None                                  | Gauge      | `validate_app_requests_created 1.727632084825792e+09`                                          |
+| `validate_request_duration_seconds`     | Duration of requests on the `/validate` endpoint, split into histogram buckets.       | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `validate_request_duration_seconds_bucket{le="0.005"} 0.0`<br>`validate_request_duration_seconds_bucket{le="0.01"} 0.0` |
+| `validate_request_duration_seconds_created` | Timestamp of first duration measurement for `/validate` requests.                   | None                                  | Gauge      | `validate_request_duration_seconds_created 1.7276320848258443e+09`                             |
+| `lookup_request_duration_seconds`       | Duration of requests on the `/lookup` endpoint, split into histogram buckets.         | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `lookup_request_duration_seconds_bucket{le="0.005"} 0.0`<br>`lookup_request_duration_seconds_bucket{le="0.01"} 0.0` |
+| `lookup_request_duration_seconds_created`| Timestamp of first duration measurement for `/lookup` requests.                     | None                                  | Gauge      | `lookup_request_duration_seconds_created 1.727632084826711e+09`                                |
+| `lookup_app_requests_total`             | Total number of requests received on the `/lookup` endpoint.                          | None                                  | Counter    | `lookup_app_requests_total 0.0`                                                                |
+| `lookup_app_requests_created`           | Timestamp of the first request on the `/lookup` endpoint since Unix epoch.            | None                                  | Gauge      | `lookup_app_requests_created 1.727632084826785e+09`                                            |
+| `history_app_requests_total`            | Total number of requests received on the `/history` endpoint.                         | None                                  | Counter    | `history_app_requests_total 1.0`                                                               |
+| `history_app_requests_created`          | Timestamp of the first request on the `/history` endpoint since Unix epoch.           | None                                  | Gauge      | `history_app_requests_created 1.727632084837052e+09`                                           |
+| `history_app_request_errors_total`      | Total number of request errors encountered on the `/history` endpoint.                | None                                  | Counter    | `history_app_request_errors_total 0.0`                                                         |
+| `history_app_request_errors_created`    | Timestamp of the first request error on the `/history` endpoint since Unix epoch.     | None                                  | Gauge      | `history_app_request_errors_created 1.7276320848370783e+09`                                    |
+| `history_app_request_latency_seconds`   | Request latency in seconds on the `/history` endpoint, split into histogram buckets.  | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `history_app_request_latency_seconds_bucket{le="0.005"} 0.0`<br>`history_app_request_latency_seconds_bucket{le="0.01"} 1.0` |
+| `root_app_requests_total`               | Total number of requests received on the `/` (root) endpoint.                         | None                                  | Counter    | `root_app_requests_total 0.0`                                                                  |
+| `root_app_requests_created`             | Timestamp of the first request on the `/` (root) endpoint since Unix epoch.           | None                                  | Gauge      | `root_app_requests_created 1.727632084847543e+09`                                              |
+| `root_app_request_errors_total`         | Total number of request errors encountered on the `/` (root) endpoint.                | None                                  | Counter    | `root_app_request_errors_total 0.0`                                                            |
+| `root_app_request_errors_cre  ated`       | Timestamp of the first request error on the `/` (root) endpoint since Unix epoch.     | None                                  | Gauge      | `root_app_request_errors_created 1.727632084847571e+09`                                        |
+
+
+
+# License
+
+This project is licensed under the MIT License. 
 
 # TODO
 
