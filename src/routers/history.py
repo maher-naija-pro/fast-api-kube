@@ -14,16 +14,11 @@ import sys
 sys.path = ["", ".."] + sys.path[1:]
 sys.path.append("src")
 
-
-
 router = APIRouter()
 logger=init_log()
 
 # Define Prometheus metrics
 REQUEST_COUNTER_HISTORY = Counter('history_app_requests_total', 'Total number of requests on history endpoint')
-
-
-
 
 # Pydantic model for each query log entry
 class QueryLogResponse(BaseModel):
@@ -34,8 +29,6 @@ class QueryLogResponse(BaseModel):
 
     class Config:
         from_attributes = True  # Enable compatibility with SQLAlchemy models
-
-
 
 @router.get("/history",response_model=List[QueryLogResponse])
 def get_history(db: Session = Depends(get_db)):
