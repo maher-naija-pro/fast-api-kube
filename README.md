@@ -326,7 +326,18 @@ To add environment variable to docker and docker-compose update these files:
 ```
 NB: Fixed version should mbe added
 # Middleware config:
-You can customise on mail.py configuration parameters for the `CORSMiddleware` and `TrustedHostMiddleware` used in this FastAPI application.
+## Global rate limiting Middleware
+This FastAPI application includes custom middleware to enforce **global rate-limiting**. The rate-limiting middleware is configured using environment variables (requests are limited across all clients).
+
+
+| Environment Variable    | Description                                         | Default Value |
+|-------------------------|-----------------------------------------------------|---------------|
+| `RATE_LIMIT_REQUESTS`    | Maximum number of global requests allowed in the time window. If the total number of requests exceeds this limit, subsequent requests will receive a `429 Too Many Requests` response. | `100`         |
+| `RATE_LIMIT_WINDOW`      | The time window (in seconds) during which the maximum number of requests is counted. Once the time window expires, the counter resets. | `60`          |
+
+## Control access Middleware
+This FastAPI application includes middleware **TrustedHostMiddleware** **CORSMiddleware**. 
+You can customise on main.py configuration parameters for the `CORSMiddleware` and `TrustedHostMiddleware` used in this FastAPI application.
 
 | Parameter                | Middleware           | Description                                                                                     | Default Value              | Recommended Value for Production         |
 |--------------------------|----------------------|-------------------------------------------------------------------------------------------------|----------------------------|------------------------------------------|
