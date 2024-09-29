@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 from helpers.log.logger import init_log
 from db.database import get_db
 from src.models.log import QueryLog
-from prometheus_client import Counter
-
+from prometheus_client import Counter,Histogram, generate_latest
+from time import time
 import sys
 
 sys.path = ["", ".."] + sys.path[1:]
@@ -19,6 +19,9 @@ logger=init_log()
 
 # Define Prometheus metrics
 REQUEST_COUNTER_HISTORY = Counter('history_app_requests_total', 'Total number of requests on history endpoint')
+ERROR_COUNTER_HISTORY = Counter('history_app_request_errors_total', 'Total number of request errors on history endpoint')
+REQUEST_LATENCY_HISTORY = Histogram('history_app_request_latency_seconds', 'Request latency in seconds on history endpoint')
+
 
 # Pydantic model for each query log entry
 class QueryLogResponse(BaseModel):
@@ -32,6 +35,7 @@ class QueryLogResponse(BaseModel):
 
 @router.get("/history",response_model=List[QueryLogResponse])
 def get_history(db: Session = Depends(get_db)):
+    start_time = time()  # Track the start time for latency measurement
     # Increment the Prometheus counter
     REQUEST_COUNTER_HISTORY.inc()
 
@@ -45,10 +49,15 @@ def get_history(db: Session = Depends(get_db)):
         if not history:
             logger.warning("No history found")
             raise HTTPException(status_code=404, detail="No history records found")
-
+        # Log success with latency
+        request_latency = time() - start_time
+        REQUEST_LATENCY_HISTORY.observe(request_latency)
+        logger.info(f"History served in {request_latency:.4f} seconds")
         return history
 
     except Exception as e:
+        # Log the error and increment error counter
+        ERROR_COUNTER_HISTORY.inc()
         # Log the error and return an appropriate response
         logger.error(f"Failed to fetch history: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
