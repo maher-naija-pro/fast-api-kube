@@ -21,10 +21,11 @@ from routers import tools
 from routers import history
 from routers import root
 
-# Security Middleware rate limit 
+# Rate limit Middleware 
 from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom middleware
-# Security Middleware 
-from middleware.security_middleware import add_security_middleware  # Import security middleware
+# Security Middleware
+from middleware.security_access import SecurityMiddleware  # Import security middleware
+from middleware.security_headers import SecurityHeadersMiddleware  # Import security middleware
 
 # Initialize the database
 db=get_db()
@@ -58,9 +59,9 @@ app = FastAPI(lifespan=app_lifespan)
 
 # Add global rate-limiting middleware
 app.add_middleware(GlobalRateLimitMiddleware)
-
-# Add security middleware (CORS and TrustedHost)
-add_security_middleware(app)
+# Add the security middlewares to the app
+app.add_middleware(SecurityHeadersMiddleware)
+#app.add_middleware(SecurityMiddleware)
 
 # Redirect all HTTP to HTTPS for production environments
 if os.getenv("ENV") == "prod":
