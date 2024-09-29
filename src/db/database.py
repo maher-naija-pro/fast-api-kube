@@ -33,11 +33,11 @@ def check_db_connection():
         db = SessionLocal()
         # Run a simple query to check the database connection
 
-        result = engine.connect() 
+        result = engine.connect().execute(text("SELECT 1")).scalar()
  
         # If connection is successful, return status
-        if result :
-            logger.info("Database connection check successful.")
+        if result == 1 :
+            logger.info(f"Database connection check successful.{str(result)}")
             return {"status": "Database is connected"}
         else:
             raise HTTPException(status_code=500, detail="Unexpected result from DB check")
