@@ -26,6 +26,9 @@ from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom mid
 # Security Middleware
 from middleware.security_access import SecurityMiddleware  # Import security middleware
 from middleware.security_headers import SecurityHeadersMiddleware  # Import security middleware
+# Https redirect Middleware
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
+
 
 # Initialize the database
 db=get_db()
