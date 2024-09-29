@@ -1,4 +1,4 @@
-import time
+
 
 def test_root_in_kubernetes_env(client,monkeypatch):
     # Simulate being in a Kubernetes environment

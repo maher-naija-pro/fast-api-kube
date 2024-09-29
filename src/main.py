@@ -1,9 +1,9 @@
 #!/usr/bin/python
 import os 
-import time
 import sys
 import asyncio
-from prometheus_client import Counter,Histogram, generate_latest
+
+
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
@@ -18,15 +18,12 @@ from fastapi import FastAPI, HTTPException
 
 from helpers.log.logger import init_log
 from db.database import get_db,check_db_connection
- 
+
 from routers import health
 from routers import metric
 from routers import tools
 from routers import history
-
-# Initialize Prometheus metrics
-REQUEST_COUNTER_ROOT = Counter('root_app_requests_total', 'Total number of requests of endpoint root')
-REQUEST_LATENCY_ROOT = Histogram('root_app_request_latency_seconds', 'Request latency in seconds of endpoint root')
+from routers import root
 
 # Initialize the database
 db=get_db()
@@ -77,20 +74,9 @@ app.add_middleware(
 if os.getenv("ENV") == "production":
     app.add_middleware(HTTPSRedirectMiddleware)
 
-
-
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
 app.include_router(tools.router, prefix="/v1")
 app.include_router(history.router, prefix="/v1")
-
-@app.get("/")
-async def root():
-    logger.info(f"/ requested")
-    is_k8s = "KUBERNETES_SERVICE_HOST" in os.environ
-    return {
-        "version": "0.1.0",
-        "date": int(time.time()),
-        "kubernetes": is_k8s
-    }
+app.include_router(root.router, prefix="")
 
