@@ -3,15 +3,16 @@ import os
 import sys
 import asyncio
 
-
+# Security Middleware 
 from starlette.middleware.cors import CORSMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
+
 # Adding necessary paths
 sys.path.append("routers")
 sys.path.append("helpers")
-
+sys.path.append("middleware")
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
@@ -24,6 +25,9 @@ from routers import metric
 from routers import tools
 from routers import history
 from routers import root
+
+from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom middleware
+
 
 # Initialize the database
 db=get_db()
@@ -54,6 +58,9 @@ async def app_lifespan(app: FastAPI):
     db.close()
 
 app = FastAPI(lifespan=app_lifespan)
+
+# Add global rate-limiting middleware
+app.add_middleware(GlobalRateLimitMiddleware)
 
 # Add middleware for security and observability
 app.add_middleware(
