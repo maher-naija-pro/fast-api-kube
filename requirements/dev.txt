@@ -7,3 +7,4 @@ sqlalchemy==2.0.35
 prometheus-client==0.21.0
 ipaddr==2.2.0
 pytest==8.3.3
+pytest-cov==5.0.0
