@@ -61,6 +61,7 @@ db = get_db()
 logger = init_log()
 logger.info("Hello start APP !!")
 # Graceful shutdown logic with retries for DB connection
+RETRY_LIMIT = int(os.getenv("RETRY_LIMIT", "10"))
 
 
 @asynccontextmanager
@@ -73,17 +74,16 @@ async def app_lifespan():
     """
     logger.info("Application lifespan started")
     # Retry logic for DB connection if necessary
-    retries = 3
+    retries = RETRY_LIMIT
     for _ in range(retries):
         try:
             check_db_connection()
             logger.info("Database connected")
+            break
         except ConnectionError as e:
             logger.error(f"Database connection error: {e}")
             await asyncio.sleep(5)
-        except TimeoutError as e:
-            logger.error(f"Database connection timed out: {e}")
-            await asyncio.sleep(5)
+
         logger.critical("Failed to connect to database after retries")
         sys.exit(1)
     yield  # The app runs here
@@ -97,7 +97,7 @@ app = FastAPI(lifespan=app_lifespan)
 app.add_middleware(GlobalRateLimitMiddleware)
 # Add the security middlewares to the app
 app.add_middleware(SecurityHeadersMiddleware)
-# app.add_middleware(SecurityMiddleware)
+# Add the security middlewares
 app.add_middleware(SecurityMiddleware)
 # Redirect all HTTP to HTTPS for production environments
 if os.getenv("ENV") == "prod":

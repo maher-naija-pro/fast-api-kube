@@ -25,7 +25,7 @@ from sqlalchemy.orm import Session
 
 from db.database import get_db
 from helpers.log.logger import init_log
-from src.models.log import QueryLog
+from models.log import QueryLog
 
 sys.path = ["", ".."] + sys.path[1:]
 sys.path.append("src")
