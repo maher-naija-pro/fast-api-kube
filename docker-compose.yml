@@ -7,7 +7,7 @@ services:
     command: >
       bash -c "alembic upgrade head
       && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0"
-      
+
     develop:
       watch:
         - action: sync
@@ -32,6 +32,12 @@ services:
       driver: "local" # Use local logging for better performance and easier troubleshooting
     networks:
       - app_network  # Adding the service to the same dedicated network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]  # Health check to call the /health endpoint
+      interval: 10s  # Check every 10 seconds
+      timeout: 5s  # Timeout after 5 seconds
+      retries: 3  # Retry 3 times before marking the service as unhealthy
+      start_period: 30s  # Wait 30 seconds before starting the health checks
     deploy:
       resources:
         limits:
@@ -43,6 +49,13 @@ services:
       context: .
       dockerfile: Dockerfile
     command:  bash -c "alembic upgrade head && pytest"
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app/
+        - action: rebuild
+          path: requirements/dev.txt
     image: fastapiapp:latest
     ports:
       - 4000:3000 # Expose port 3000 for the API service
@@ -59,6 +72,13 @@ services:
     restart: always # Automatically restart the service if it fails
     networks:
       - app_network  # Adding the service to the same dedicated network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]  # Health check to call the /health endpoint
+      interval: 10s  # Check every 10 seconds
+      timeout: 5s  # Timeout after 5 seconds
+      retries: 3  # Retry 3 times before marking the service as unhealthy
+      start_period: 30s  # Wait 30 seconds before starting the health checks
+
     deploy:
       resources:
         limits:
