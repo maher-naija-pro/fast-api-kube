@@ -1,7 +1,7 @@
 # Fast-api-kube API
 
 ## Branches
-There is 3 branches : 
+There is 3 branches :
 
 A branch for each stage of deployement:
  - dev
@@ -58,7 +58,7 @@ docker-compose -f "docker-compose.yml" up -d --build
 ## Tests
 - Run the test script
 ```
-sh scripts/test.sh 
+sh scripts/test.sh
 ```
 or manually execute :
 ```
@@ -90,7 +90,7 @@ The `Dockerfile` Below are the default configurations that you may want to adjus
 
 - **Base Image**:
   - Default: `python:3.9.20-slim`
-  - You can customize the Python version 
+  - You can customize the Python version
 
 - **Environment**:
   - Default: `ENVIRONMENT=dev`
@@ -115,7 +115,7 @@ The `Dockerfile` Below are the default configurations that you may want to adjus
   - These can be adjusted or removed based on your specific application needs.
 
 - **Application Entrypoint**:
-  - Default command to run the application: 
+  - Default command to run the application:
     ```bash
     hypercorn --reload --log-level info --graceful-timeout 0 src.main:app
     ```
@@ -128,22 +128,22 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
 
 ### API Service (FastAPI)
 
-1. **Build Context**:  
-   The `api` service is built using the `Dockerfile` in the root directory.  
-   - Default: `context: .`, `dockerfile: Dockerfile`  
+1. **Build Context**:
+   The `api` service is built using the `Dockerfile` in the root directory.
+   - Default: `context: .`, `dockerfile: Dockerfile`
    - You can modify the build context or Dockerfile location as needed.
 
-2. **Command**:  
-   The default command runs database migrations using `alembic` and starts the API with `hypercorn`.  
-   - Default:  
+2. **Command**:
+   The default command runs database migrations using `alembic` and starts the API with `hypercorn`.
+   - Default:
      ```bash
      bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload --access-logfile - --graceful-timeout 0"
-     ```  
+     ```
    - You can modify this command to suit your needs (e.g., changing the entrypoint or server).
 
-3. **Develop Mode**:  
-   The `develop` section allows live reloading of the source code (`/src/`) and rebuilding when changes are made to `requirements/dev.txt`.  
-   - Default:  
+3. **Develop Mode**:
+   The `develop` section allows live reloading of the source code (`/src/`) and rebuilding when changes are made to `requirements/dev.txt`.
+   - Default:
      ```yaml
      watch:
        - action: sync
@@ -151,144 +151,144 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
          target: /app/src/
        - action: rebuild
          path: requirements/dev.txt
-     ```  
+     ```
    - Customize the `watch` paths or actions based on your development workflow.
 
-4. **Ports**:  
-   The default exposed port is `3000`.  
-   - Default: `3000:3000`  
+4. **Ports**:
+   The default exposed port is `3000`.
+   - Default: `3000:3000`
    - You can change the exposed ports if your application needs a different one.
 
-5. **Volumes**:  
-   A bind mount is used to link the source code on your host machine to the `/app` directory in the container.  
-   - Default:  
+5. **Volumes**:
+   A bind mount is used to link the source code on your host machine to the `/app` directory in the container.
+   - Default:
      ```yaml
      volumes:
        - type: bind
          source: .
          target: /app/
-     ```  
+     ```
    - Modify the source or target paths based on your project structure.
 
-6. **Environment Variables**:  
-   The database connection string is provided through environment variables.  
-   - Default: `DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}`  
+6. **Environment Variables**:
+   The database connection string is provided through environment variables.
+   - Default: `DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}`
    - You can change this environment variable to connect to different databases or use other database drivers.
 
-7. **Resources**:  
-   CPU and memory limits are set to ensure the service does not over-consume resources.  
-   - Default:  
+7. **Resources**:
+   CPU and memory limits are set to ensure the service does not over-consume resources.
+   - Default:
      ```yaml
      limits:
        cpus: '1.0'
        memory: 512M
-     ```  
+     ```
    - Adjust these limits as needed based on your server's capacity.
 
 ### Test Service
 
-1. **Build Context**:  
-   Similar to the `api` service, it builds from the same `Dockerfile`.  
-   - Default: `context: .`, `dockerfile: Dockerfile`  
+1. **Build Context**:
+   Similar to the `api` service, it builds from the same `Dockerfile`.
+   - Default: `context: .`, `dockerfile: Dockerfile`
    - Modify if the Dockerfile is located elsewhere.
 
-2. **Command**:  
-   The default command runs Alembic migrations and executes tests using `pytest`.  
-   - Default:  
+2. **Command**:
+   The default command runs Alembic migrations and executes tests using `pytest`.
+   - Default:
      ```bash
      bash -c "alembic upgrade head && pytest"
-     ```  
+     ```
    - Customize this if your testing setup differs.
 
-3. **Ports**:  
-   The test service is exposed on port `4000` to avoid conflict with the API service.  
-   - Default: `4000:3000`  
+3. **Ports**:
+   The test service is exposed on port `4000` to avoid conflict with the API service.
+   - Default: `4000:3000`
    - You can adjust the port mappings.
 
-4. **Volumes**:  
-   A bind mount is used to link the source code on your host machine to the `/app` directory in the container, similar to the API service.  
-   - Default:  
+4. **Volumes**:
+   A bind mount is used to link the source code on your host machine to the `/app` directory in the container, similar to the API service.
+   - Default:
      ```yaml
      volumes:
        - type: bind
          source: .
          target: /app/
-     ```  
+     ```
    - Modify the source or target paths based on your project structure.
 
-5. **Resources**:  
-   CPU and memory limits are set to ensure the service does not over-consume resources.  
-   - Default:  
+5. **Resources**:
+   CPU and memory limits are set to ensure the service does not over-consume resources.
+   - Default:
      ```yaml
      limits:
        cpus: '1.0'
        memory: 512M
-     ```  
+     ```
    - Adjust these limits as needed.
 
 ### Database Service (PostgreSQL)
 
-1. **Image**:  
-   The default image is `postgres:12.1-alpine`, which is a lightweight version of PostgreSQL.  
-   - Default: `postgres:12.1-alpine`  
+1. **Image**:
+   The default image is `postgres:12.1-alpine`, which is a lightweight version of PostgreSQL.
+   - Default: `postgres:12.1-alpine`
    - You can update the image version or switch to a different database if necessary.
 
-2. **Environment Variables**:  
-   The PostgreSQL service uses environment variables for configuring the database.  
-   - Default:  
+2. **Environment Variables**:
+   The PostgreSQL service uses environment variables for configuring the database.
+   - Default:
      ```yaml
      environment:
        - POSTGRES_USER
        - POSTGRES_PASSWORD
        - POSTGRES_DB
-     ```  
+     ```
    - These values are loaded from an `.env` file. Customize them by changing the `.env` file or setting them directly in the `docker-compose.yml` file.
 
-3. **Volumes**:  
-   The database data is persisted using a named volume (`postgres_data_disk`).  
-   - Default:  
+3. **Volumes**:
+   The database data is persisted using a named volume (`postgres_data_disk`).
+   - Default:
      ```yaml
      volumes:
        - postgres_data_disk:/var/lib/postgresql/data/
-     ```  
+     ```
    - You can modify the volume name or path if needed.
 
-4. **Resources**:  
-   CPU and memory limits are set for this service to ensure the database doesn’t consume excessive resources.  
-   - Default:  
+4. **Resources**:
+   CPU and memory limits are set for this service to ensure the database doesn’t consume excessive resources.
+   - Default:
      ```yaml
      limits:
        cpus: '0.5'
        memory: 256M
-     ```  
+     ```
    - Customize this based on your database's performance needs.
 
 ### Networks
 
-1. **app_network**:  
-   All services communicate over a custom bridge network (`app_network`).  
-   - Default:  
+1. **app_network**:
+   All services communicate over a custom bridge network (`app_network`).
+   - Default:
      ```yaml
      networks:
        app_network:
          driver: bridge
-     ```  
+     ```
    - You can add other services to this network or change the network driver if needed.
 
 ### Volumes
 
-1. **postgres_data_disk**:  
-   This volume is used to persist PostgreSQL data.  
-   - Default:  
+1. **postgres_data_disk**:
+   This volume is used to persist PostgreSQL data.
+   - Default:
      ```yaml
      volumes:
        postgres_data_disk:
          driver: local
-     ```  
+     ```
    - You can modify the volume driver or name as needed.
 
 # Production deployment
-- For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes 
+- For production, you can find under fast-api-kube-helm helm charts to deploy application on Kubernetes
 
 ### Please read the [**Readme.md**](https://github.com/maher-naija-pro/fast-api-kube/blob/dev/fast-api-kube-helm/README.md) in this directory for detailed **step-by-step** instructions on deploying this project in a **production** environment.
 
@@ -299,24 +299,25 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Run tests with pytest
    - Build Docker image and push it to GitHub regitry
    - Security check
-   - Codacy Static Code Analysis 
+   - Codacy Static Code Analysis
    - Lint and check helm charts
    - Validate docker file
-   - pages-build-deployment
+   - Pages-build-deployment
+   - Pycharm Python security scanner
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
    - pytest-coverage-report
 
-# Python requirement 
+# Python requirement
 - To add a new library to Python there is a requirement directory with a file for each stage of deployement
 
     - dev.txt
     - prod.txt
     - stagging.txt
 
-# Add an env var: 
-To add environment variable to docker and docker-compose update these files: 
+# Add an env var:
+To add environment variable to docker and docker-compose update these files:
 
 - Docker-compose-file:28  => environment:
 - Get the env var form python code using:
@@ -327,11 +328,11 @@ To add environment variable to docker and docker-compose update these files:
 NB: Fixed version should mbe added
 # Middleware config:
 
-## Security Headers Middleware
+# Security Headers Middleware
 
 This FastAPI application includes a custom middleware called `SecurityHeadersMiddleware` that automatically adds essential **security headers** to every HTTP response. These headers help enhance the security of your application by mitigating common vulnerabilities such as **clickjacking**, **MIME sniffing**, and **cross-site scripting (XSS)**.
 
-### Security Headers Added
+## Security Headers Added
 
 The middleware adds the following headers to all responses:
 
@@ -424,7 +425,7 @@ alembic revision -m "Fill empty "
 
 ## Lint Docker file :
 ```
-docker run --rm -i hadolint/hadolint < Dockerfile 
+docker run --rm -i hadolint/hadolint < Dockerfile
 ```
 # Application Metrics
 
@@ -458,11 +459,33 @@ This repository exposes various application metrics that can be monitored using 
 | `root_app_request_errors_total`         | Total number of request errors encountered on the `/` (root) endpoint.                | None                                  | Counter    | `root_app_request_errors_total 0.0`                                                            |
 | `root_app_request_errors_cre  ated`       | Timestamp of the first request error on the `/` (root) endpoint since Unix epoch.     | None                                  | Gauge      | `root_app_request_errors_created 1.727632084847571e+09`                                        |
 
+# Pre-Commit Hooks Setup
+
+This project uses pre-commit hooks to automatically ensure that code follows consistent style and quality standards. The hooks are triggered before every commit to check and format Python code using the following tools:
+
+## Tools Used
+
+### 1. Flake8
+
+[Flake8](https://github.com/PyCQA/flake8) is a Python linting tool that checks for issues related to style guide enforcement, complexity, and potential bugs.
+
+- **What it does:** Verifies the code for style errors, adherence to PEP 8, and complexity limits, ensuring clean and maintainable code.
+
+### 2. Pylint
+
+[Pylint](https://github.com/PyCQA/pylint) is another linting tool that checks for errors in Python code, enforces coding standards, and looks for code smells.
+
+- **What it does:** Provides detailed checks for coding errors, code style violations, and enforces coding best practices during the commit process.
+
+## How it Works
+
+- Every time you commit code, these tools run automatically, ensuring that the code is formatted and free of common issues before being committed.
+- If any problems are detected, the commit is rejected, and you are prompted to fix the issues.
 
 
 # License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.
 
 # TODO
 
@@ -472,14 +495,20 @@ This project is licensed under the MIT License.
 - Connect application to postgres on prod
 - Add ARGO CD or flux forCD
 - Add helm hooks for alembic migration on prod
-- Add helm tests to verify database connection
-- Add helm Release to ci 
-- Make tests modulars
-
-
-
-
-
-
-
-
+- Add helm tests hook to verify database connection
+- Add helm Release to ci
+- Add TLS certificate on front of api
+- Implement Authentication (OAuth2/JWT)
+- Implement Role-Based Access Control (RBAC)
+- Test Horizontal Pod Autoscaling (HPA)
+- Test Multi-Stage Builds
+- Mock External Dependencies for tests
+- CI to Regularly Update Dependencies
+- Add sphinx docs
+- Use external vault for secrets with rotation
+- Add Static Application Security Testing
+- Dependency Vulnerability Scanning
+- add load test
+- Add rollback to helm and  alembic migration
+- Add python package build on ci
+- Fix  middleware headers
