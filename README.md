@@ -326,6 +326,24 @@ To add environment variable to docker and docker-compose update these files:
 ```
 NB: Fixed version should mbe added
 # Middleware config:
+
+## Security Headers Middleware
+
+This FastAPI application includes a custom middleware called `SecurityHeadersMiddleware` that automatically adds essential **security headers** to every HTTP response. These headers help enhance the security of your application by mitigating common vulnerabilities such as **clickjacking**, **MIME sniffing**, and **cross-site scripting (XSS)**.
+
+### Security Headers Added
+
+The middleware adds the following headers to all responses:
+
+| **Header**                    | **Description**                                                                                                                                                     | **Example Value**                                                          |
+|-------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
+| `Strict-Transport-Security`    | Enforces the use of HTTPS and tells the browser to only interact with the site over HTTPS for a specified time period. Also applies the rule to all subdomains.       | `max-age=31536000; includeSubDomains`                                      |
+| `X-Content-Type-Options`       | Prevents browsers from MIME-sniffing the content-type of responses, reducing the risk of some types of attacks, such as XSS.                                         | `nosniff`                                                                  |
+| `X-Frame-Options`              | Protects against **clickjacking** by preventing the page from being embedded in an iframe.                                                                            | `DENY`                                                                     |
+| `X-XSS-Protection`             | Enables the browser’s built-in cross-site scripting (XSS) protection to prevent some forms of XSS attacks.                                                           | `1; mode=block`                                                            |
+| `Content-Security-Policy`      | Defines which content sources are allowed to load. Helps prevent XSS by restricting allowed scripts and resources.                                                    | `default-src 'self'; script-src 'self'; object-src 'none'`                 |
+
+
 ## Global rate limiting Middleware
 This FastAPI application includes custom middleware to enforce **global rate-limiting**. The rate-limiting middleware is configured using environment variables (requests are limited across all clients).
 
@@ -337,7 +355,7 @@ This FastAPI application includes custom middleware to enforce **global rate-lim
 
 ## Control Access Middleware
 
-This FastAPI application includes two essential middlewares for controlling access: **`TrustedHostMiddleware`** and **`CORSMiddleware`**. You can customize their configuration parameters in the `middleware/security_middleware.py` file, which defines the allowed origins, methods, headers, and hosts for accessing your FastAPI application.
+This FastAPI application includes two essential middlewares for controlling access: **`TrustedHostMiddleware`** and **`CORSMiddleware`**. You can customize their configuration parameters in the `middleware/security_access.py` file, which defines the allowed origins, methods, headers, and hosts for accessing your FastAPI application.
 
 ### Configuration Parameters
 
@@ -438,7 +456,7 @@ This repository exposes various application metrics that can be monitored using 
 | `root_app_requests_total`               | Total number of requests received on the `/` (root) endpoint.                         | None                                  | Counter    | `root_app_requests_total 0.0`                                                                  |
 | `root_app_requests_created`             | Timestamp of the first request on the `/` (root) endpoint since Unix epoch.           | None                                  | Gauge      | `root_app_requests_created 1.727632084847543e+09`                                              |
 | `root_app_request_errors_total`         | Total number of request errors encountered on the `/` (root) endpoint.                | None                                  | Counter    | `root_app_request_errors_total 0.0`                                                            |
-| `root_app_request_errors_created`       | Timestamp of the first request error on the `/` (root) endpoint since Unix epoch.     | None                                  | Gauge      | `root_app_request_errors_created 1.727632084847571e+09`                                        |
+| `root_app_request_errors_cre  ated`       | Timestamp of the first request error on the `/` (root) endpoint since Unix epoch.     | None                                  | Gauge      | `root_app_request_errors_created 1.727632084847571e+09`                                        |
 
 
 
