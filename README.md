@@ -350,7 +350,7 @@ The following table outlines the configurable parameters for the `CORSMiddleware
 | `allow_headers`           | `CORSMiddleware`       | Controls which headers are allowed in the requests.                                              | `["*"]`                    | Specify required headers, e.g., `["Authorization", "Content-Type"]` |
 | `allow_credentials`       | `CORSMiddleware`       | Allows cookies or authentication credentials to be included in the requests.                     | `True`                     | `True` (if using cookies or credentials)                |
 | `allowed_hosts`           | `TrustedHostMiddleware`| Limits the hosts that can access the API.                                                        | `["*", "localhost"]`        | List of trusted hosts, e.g., `["example.com"]` |
-| `allow_headers`           | `CORSMiddleware`       | Determines what headers can be included in a request.                                            | `["*"]`                    | List required headers explicitly, e.g., `["Content-Type"]` |
+
 
 ### Notes:
 
@@ -360,7 +360,7 @@ The following table outlines the configurable parameters for the `CORSMiddleware
 - **`allow_credentials`**: Set this to `True` if your API uses cookies or authentication tokens that require credentials to be sent across domains.
 - **`allow_headers`**: While `["*"]` allows all headers, you should explicitly specify the headers that are required for your application, such as `["Authorization", "Content-Type"]`.
 
-Make sure to update these parameters in your `.env` file or directly in `middleware/security_middleware.py` for a production setup to enhance security.
+Make sure to update these parameters in `middleware/security_middleware.py` for a production setup to enhance security.
 
 
 ## Manual  Test API
@@ -408,7 +408,41 @@ alembic revision -m "Fill empty "
 ```
 docker run --rm -i hadolint/hadolint < Dockerfile 
 ```
-## License
+# Application Metrics
+
+This repository exposes various application metrics that can be monitored using Prometheus. Below is a breakdown of the metrics and what each one represents.
+
+## Exposed Metrics
+
+| **Metric**                              | **Description**                                                                      | **Labels**                            | **Type**   | **Example**                                                                                     |
+|-----------------------------------------|--------------------------------------------------------------------------------------|---------------------------------------|------------|-------------------------------------------------------------------------------------------------|
+| `metric_app_requests_total`             | Total number of requests received by the `/metrics` endpoint.                         | None                                  | Counter    | `metric_app_requests_total 1.0`                                                                |
+| `metric_app_requests_created`           | Timestamp of the first request on the `/metrics` endpoint since Unix epoch.           | None                                  | Gauge      | `metric_app_requests_created 1.7276320847868874e+09`                                           |
+| `metric_app_request_errors_total`       | Total number of request errors encountered on the `/metrics` endpoint.                | None                                  | Counter    | `metric_app_request_errors_total 0.0`                                                          |
+| `metric_app_request_errors_created`     | Timestamp of the first request error on the `/metrics` endpoint since Unix epoch.     | None                                  | Gauge      | `metric_app_request_errors_created 1.7276320847869053e+09`                                     |
+| `metric_app_request_latency_seconds`    | Request latency in seconds on the `/metrics` endpoint, split into histogram buckets.  | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `metric_app_request_latency_seconds_bucket{le="0.005"} 0.0`<br>`metric_app_request_latency_seconds_bucket{le="0.01"} 0.0` |
+| `metric_app_request_latency_seconds_created` | Timestamp of first latency measurement on the `/metrics` endpoint.                 | None                                  | Gauge      | `metric_app_request_latency_seconds_created 1.727632084786929e+09`                             |
+| `validate_app_requests_total`           | Total number of requests received on the `/validate` endpoint.                        | None                                  | Counter    | `validate_app_requests_total 0.0`                                                              |
+| `validate_app_requests_created`         | Timestamp of the first request on the `/validate` endpoint since Unix epoch.          | None                                  | Gauge      | `validate_app_requests_created 1.727632084825792e+09`                                          |
+| `validate_request_duration_seconds`     | Duration of requests on the `/validate` endpoint, split into histogram buckets.       | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `validate_request_duration_seconds_bucket{le="0.005"} 0.0`<br>`validate_request_duration_seconds_bucket{le="0.01"} 0.0` |
+| `validate_request_duration_seconds_created` | Timestamp of first duration measurement for `/validate` requests.                   | None                                  | Gauge      | `validate_request_duration_seconds_created 1.7276320848258443e+09`                             |
+| `lookup_request_duration_seconds`       | Duration of requests on the `/lookup` endpoint, split into histogram buckets.         | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `lookup_request_duration_seconds_bucket{le="0.005"} 0.0`<br>`lookup_request_duration_seconds_bucket{le="0.01"} 0.0` |
+| `lookup_request_duration_seconds_created`| Timestamp of first duration measurement for `/lookup` requests.                     | None                                  | Gauge      | `lookup_request_duration_seconds_created 1.727632084826711e+09`                                |
+| `lookup_app_requests_total`             | Total number of requests received on the `/lookup` endpoint.                          | None                                  | Counter    | `lookup_app_requests_total 0.0`                                                                |
+| `lookup_app_requests_created`           | Timestamp of the first request on the `/lookup` endpoint since Unix epoch.            | None                                  | Gauge      | `lookup_app_requests_created 1.727632084826785e+09`                                            |
+| `history_app_requests_total`            | Total number of requests received on the `/history` endpoint.                         | None                                  | Counter    | `history_app_requests_total 1.0`                                                               |
+| `history_app_requests_created`          | Timestamp of the first request on the `/history` endpoint since Unix epoch.           | None                                  | Gauge      | `history_app_requests_created 1.727632084837052e+09`                                           |
+| `history_app_request_errors_total`      | Total number of request errors encountered on the `/history` endpoint.                | None                                  | Counter    | `history_app_request_errors_total 0.0`                                                         |
+| `history_app_request_errors_created`    | Timestamp of the first request error on the `/history` endpoint since Unix epoch.     | None                                  | Gauge      | `history_app_request_errors_created 1.7276320848370783e+09`                                    |
+| `history_app_request_latency_seconds`   | Request latency in seconds on the `/history` endpoint, split into histogram buckets.  | `le`: Latency bucket (e.g., 0.005s, 0.01s, etc.) | Histogram | `history_app_request_latency_seconds_bucket{le="0.005"} 0.0`<br>`history_app_request_latency_seconds_bucket{le="0.01"} 1.0` |
+| `root_app_requests_total`               | Total number of requests received on the `/` (root) endpoint.                         | None                                  | Counter    | `root_app_requests_total 0.0`                                                                  |
+| `root_app_requests_created`             | Timestamp of the first request on the `/` (root) endpoint since Unix epoch.           | None                                  | Gauge      | `root_app_requests_created 1.727632084847543e+09`                                              |
+| `root_app_request_errors_total`         | Total number of request errors encountered on the `/` (root) endpoint.                | None                                  | Counter    | `root_app_request_errors_total 0.0`                                                            |
+| `root_app_request_errors_created`       | Timestamp of the first request error on the `/` (root) endpoint since Unix epoch.     | None                                  | Gauge      | `root_app_request_errors_created 1.727632084847571e+09`                                        |
+
+
+
+# License
 
 This project is licensed under the MIT License. 
 
