@@ -4,6 +4,9 @@ import time
 import sys
 import asyncio
 from prometheus_client import Counter,Histogram, generate_latest
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 # Adding necessary paths
 sys.path.append("routers")
@@ -53,11 +56,29 @@ async def app_lifespan(app: FastAPI):
     logger.info("Shutting down gracefully...")
     db.close()
 
-
-
-
-
 app = FastAPI(lifespan=app_lifespan)
+
+# Add middleware for security and observability
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # You can restrict origins for better security
+    allow_credentials=True,
+    allow_methods=["*"],  # Controls which methods are allowed (GET, POST, etc.)
+    allow_headers=["*"]   # Specifies which headers are allowed
+    
+)
+
+app.add_middleware(
+    TrustedHostMiddleware, 
+    allowed_hosts=["*", "localhost"] # Replace "*" with trusted domains for security
+)
+
+# Redirect all HTTP to HTTPS for production environments
+if os.getenv("ENV") == "production":
+    app.add_middleware(HTTPSRedirectMiddleware)
+
+
+
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
 app.include_router(tools.router, prefix="/v1")
