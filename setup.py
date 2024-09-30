@@ -10,15 +10,20 @@ it includes the required dependencies and package details for distribution.
 
 from setuptools import setup
 
+with open("README.md", encoding="utf-8") as f:
+    long_description = f.read()
+
 setup(
     name="fast-api-kube",
-    version="0.2",
+    version="0.3",
     description="fast-api-kube",
     url="https://github.com/maher-naija-pro/fast-api-kube",
     author="maher naija",
     author_email="maher.naija@gmail.Com",
     license="MIT",
     packages=["src"],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     install_requires=[
         "",
     ],
