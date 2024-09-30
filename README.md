@@ -489,26 +489,91 @@ This project is licensed under the MIT License.
 
 # TODO
 
-- Add helm secrets plugin and manage secret gpg encryption or store secret on secret manager
-- Add ingress rules for production with tls and waf
-- Add fast api auth and security
-- Connect application to postgres on prod
-- Add ARGO CD or flux forCD
-- Add helm hooks for alembic migration on prod
-- Add helm tests hook to verify database connection
-- Add helm Release to ci
-- Add TLS certificate on front of api
-- Implement Authentication (OAuth2/JWT)
-- Implement Role-Based Access Control (RBAC)
-- Test Horizontal Pod Autoscaling (HPA)
-- Test Multi-Stage Builds
-- Mock External Dependencies for tests
-- CI to Regularly Update Dependencies
-- Add sphinx docs
-- Use external vault for secrets with rotation
-- Add Static Application Security Testing
-- Dependency Vulnerability Scanning
-- add load test
-- Add rollback to helm and  alembic migration
-- Add python package build on ci
+- **Add Helm Secrets Plugin and manage secret encryption:**
+  - Install the [Helm Secrets Plugin](https://github.com/jkroepke/helm-secrets).
+  - Use `sops` with GPG for encrypting secrets or integrate with a secret 
+    management solution like AWS Secrets Manager or HashiCorp Vault.
+
+- **Add Ingress Rules for Production with TLS and WAF:**
+  - Configure ingress rules with TLS support using Cert-Manager for automatic 
+    certificate provisioning.
+  - Integrate a WAF (e.g., AWS WAF, GCP Cloud Armor) or use NGINX Ingress with 
+    ModSecurity for enhanced security.
+
+- **Add Authentication and Security to FastAPI:**
+  - Implement OAuth2 with JWT for secure user authentication using FastAPI's 
+    built-in support.
+  - Add role-based access control (RBAC) for fine-grained permission handling.
+
+- **Connect the Application to PostgreSQL in Production:**
+  - Ensure the FastAPI app is connected to a managed PostgreSQL instance in your 
+    production environment using environment variables for connection strings.
+
+- **Integrate ArgoCD or Flux for Continuous Delivery (CD):**
+  - Set up ArgoCD or Flux to manage GitOps-based continuous delivery for your 
+    Kubernetes deployments.
+
+- **Add Helm Hooks for Alembic Database Migrations in Production:**
+  - Use Helm post-deploy hooks to trigger Alembic migrations automatically after 
+    successful deployments.
+
+- **Add Helm Tests Hook to Verify Database Connection:**
+  - Create Helm test hooks to validate the connection between the FastAPI app 
+    and the PostgreSQL database after deployment.
+
+- **Add Helm Release to CI Pipeline:**
+  - Integrate Helm release steps in your CI pipeline to automatically deploy 
+    changes to your Kubernetes cluster.
+
+- **Implement Authentication (OAuth2/JWT):**
+  - Set up OAuth2 with JWT tokens for secure access control within your FastAPI 
+    application.
+
+- **Implement Role-Based Access Control (RBAC):**
+  - Define and enforce role-based permissions within the FastAPI application to 
+    ensure proper access control.
+
+- **Test Horizontal Pod Autoscaling (HPA):**
+  - Configure and test Kubernetes HPA to automatically scale your application 
+    based on CPU or memory usage.
+
+- **Test Multi-Stage Builds:**
+  - Optimize Docker builds with multi-stage builds to reduce image size and 
+    improve build efficiency.
+
+- **Mock External Dependencies for Testing:**
+  - Use tools like `pytest-mock` or custom mock services to simulate external 
+    dependencies during unit and integration tests.
+
+- **Set up CI to Regularly Update Dependencies:**
+  - Automate dependency updates in your CI pipeline using tools like Dependabot 
+    or Renovate to ensure packages stay up-to-date.
+
+- **Add Sphinx Documentation:**
+  - Integrate Sphinx for generating project documentation and ensure it's part 
+    of your CI pipeline for regular updates.
+
+- **Use External Vault for Secrets with Rotation:**
+  - Store sensitive information in an external vault (like HashiCorp Vault or 
+    AWS Secrets Manager) and implement automatic secret rotation.
+
+- **Add Static Application Security Testing (SAST):**
+  - Integrate a SAST tool (like Bandit or SonarQube) into your CI pipeline to 
+    scan for security vulnerabilities in the codebase.
+
+- **Add Dependency Vulnerability Scanning:**
+  - Use tools like `safety` or `pip-audit` in the CI pipeline to detect and 
+    address vulnerabilities in Python dependencies.
+
+- **Add Load Testing:**
+  - Implement load testing using tools like `Locust` or `k6` to simulate real-
+    world traffic and ensure the system scales properly.
+
+- **Add Rollback Functionality for Helm and Alembic Migration:**
+  - Implement rollback strategies for both Helm deployments and Alembic 
+    migrations to handle failed deployments gracefully.
+
+- **Add Python Package Build to CI:**
+  - Configure the CI pipeline to automatically build and publish Python packages 
+    (if applicable) to a repository like PyPI after successful tests.
 
