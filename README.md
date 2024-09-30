@@ -301,7 +301,7 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Check Code Quality with flake8
    - Run tests with pytest
    - Build Docker image and push it to GitHub regitry
-   - Security check
+   - Build py package and publish it to pypi.org
    - Codacy Static Code Analysis
    - Lint and check helm charts
    - Validate docker file
@@ -576,7 +576,5 @@ This project is licensed under the MIT License.
   - Implement rollback strategies for both Helm deployments and Alembic 
     migrations to handle failed deployments gracefully.
 
-- **Add Python Package Build to CI:**
-  - Configure the CI pipeline to automatically build and publish Python packages 
-    (if applicable) to a repository like PyPI after successful tests.
+
 
