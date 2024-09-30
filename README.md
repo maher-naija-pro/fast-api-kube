@@ -576,7 +576,5 @@ This project is licensed under the MIT License.
   - Implement rollback strategies for both Helm deployments and Alembic 
     migrations to handle failed deployments gracefully.
 
-- **Add Python Package Build to CI:**
-  - Configure the CI pipeline to automatically build and publish Python packages 
-    (if applicable) to a repository like PyPI after successful tests.
+
 
