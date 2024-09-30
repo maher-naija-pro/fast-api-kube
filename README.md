@@ -379,7 +379,7 @@ The following table outlines the configurable parameters for the `CORSMiddleware
 - **`allow_credentials`**: Set this to `True` if your API uses cookies or authentication tokens that require credentials to be sent across domains.
 - **`allow_headers`**: While `["*"]` allows all headers, you should explicitly specify the headers that are required for your application, such as `["Authorization", "Content-Type"]`.
 
-Make sure to update these parameters in `middleware/security_middleware.py` for a production setup to enhance security.
+Make sure to update these parameters in `middleware/security.py` for a production setup to enhance security.
 
 
 ## Manual  Test API
@@ -511,4 +511,4 @@ This project is licensed under the MIT License.
 - add load test
 - Add rollback to helm and  alembic migration
 - Add python package build on ci
-- Fix  middleware headers
+
