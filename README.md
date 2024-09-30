@@ -78,11 +78,14 @@ docker-compose run test
 
 ## Environment Variables
 
-| Variable Name | Description                     | Example Value            |
-|---------------|---------------------------------|--------------------------|
-| `POSTGRES_USER`     | Username for the database       | `admin`                  |
-| `POSTGRES_PASSWORD` | Password for the database       | `secretpassword`         |
-| `POSTGRES_NAME`     | Name of the database            | `my_database`            |
+| Variable Name         | Description                                                  | Default Value    | Mandatory / Optional |
+|-----------------------|--------------------------------------------------------------|------------------|----------------------|
+| `POSTGRES_USER`        | Username for the PostgreSQL database.                        | `admin`          | Mandatory             |
+| `POSTGRES_PASSWORD`    | Password for the PostgreSQL database.                        | `secretpassword` | Mandatory             |
+| `POSTGRES_NAME`        | Name of the PostgreSQL database.                             | `my_database`    | Mandatory             |
+| `RATE_LIMIT_REQUESTS`  | Maximum number of requests allowed within the time window.   | `100`            | Optional              |
+| `RATE_LIMIT_WINDOW`    | Time window (in seconds) for rate limiting requests.         | `60`             | Optional              |
+| `RETRY_LIMIT`          | Maximum number of retries allowed for failed requests.       | `60`             | Optional              |
 
 ## Deep Configuration
 ### Customizing `Dockerfile`
