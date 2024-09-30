@@ -301,7 +301,7 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Check Code Quality with flake8
    - Run tests with pytest
    - Build Docker image and push it to GitHub regitry
-   - Security check
+   - Build py package and publish it to pypi.org
    - Codacy Static Code Analysis
    - Lint and check helm charts
    - Validate docker file
