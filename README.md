@@ -1,4 +1,7 @@
 # Fast-api-kube API
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/maher-naija-pro/fast-api-kube)
+![GitHub License](https://img.shields.io/github/license/maher-naija-pro/fast-api-kube)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/maher-naija-pro/fast-api-kube/tests.yml)
 
 ## Branches
 There is 3 branches :
@@ -18,6 +21,14 @@ A branch for each stage of deployement:
 
 - Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/standalone/
 
+### hadolint
+- Downolad hadolint for your platfrom  from  https://github.com/hadolint/hadolint/releases/
+
+for linux: 
+```
+ sudo wget https://github.com/hadolint/hadolint/releases/download/v2.12.1-beta/hadolint-Linux-x86_64 -O /bin/hadolint
+ sudo chmod +x /bin/hadolint
+ ```
 
 ## Getting started for developer
 
@@ -465,20 +476,13 @@ This repository exposes various application metrics that can be monitored using 
 # Pre-Commit Hooks Setup
 
 This project uses pre-commit hooks to automatically ensure that code follows consistent style and quality standards. The hooks are triggered before every commit to check and format Python code using the following tools:
+### Tools Used
 
-## Tools Used
-
-### 1. Flake8
-
-[Flake8](https://github.com/PyCQA/flake8) is a Python linting tool that checks for issues related to style guide enforcement, complexity, and potential bugs.
-
-- **What it does:** Verifies the code for style errors, adherence to PEP 8, and complexity limits, ensuring clean and maintainable code.
-
-### 2. Pylint
-
-[Pylint](https://github.com/PyCQA/pylint) is another linting tool that checks for errors in Python code, enforces coding standards, and looks for code smells.
-
-- **What it does:** Provides detailed checks for coding errors, code style violations, and enforces coding best practices during the commit process.
+1. **Black** - Python code formatter
+2. **Flake8** - Python code linting
+3. **Pylint** - Advanced Python linting
+4. **Hadolint** - Dockerfile linting
+5. **Detect-Secrets** - Detecting and preventing secret leaks in code
 
 ## How it Works
 
