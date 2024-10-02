@@ -1,4 +1,7 @@
 # Fast-api-kube API
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/maher-naija-pro/fast-api-kube)
+![GitHub License](https://img.shields.io/github/license/maher-naija-pro/fast-api-kube)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/maher-naija-pro/fast-api-kube/tests.yml)
 
 ## Branches
 There is 3 branches :
