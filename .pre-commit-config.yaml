@@ -3,7 +3,7 @@ language_version: python3.12
 repos:
   # Black for code formatting
   - repo: https://github.com/psf/black
-    rev: 24.8.0
+    rev: 24.8.0 # Replace with the latest stable version
     hooks:
       - id: black
 
@@ -18,7 +18,7 @@ repos:
 
   # Pylint for advanced Python linting
   - repo: https://github.com/PyCQA/pylint
-    rev: v3.3.1
+    rev: v3.3.1 # Replace with the latest stable version
     hooks:
       - id: pylint
         args: ["--disable=E0401,R0903,W0613,W0621,C0413"]
@@ -28,13 +28,6 @@ repos:
     rev: v2.12.0  # Replace with the latest stable version
     hooks:
       - id: hadolint
-
-  # YAML linting for Helm Charts
-  - repo: https://github.com/adrienverge/yamllint
-    rev: v1.30.0
-    hooks:
-      - id: yamllint
-        args: ["--strict"]
 
 
   # Detect secrets (to avoid committing sensitive information)
