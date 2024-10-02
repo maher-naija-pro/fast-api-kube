@@ -6,7 +6,8 @@ ARG ENVIRONMENT=dev
 
 # Environment variables for better robustness and security
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 
+    PYTHONDONTWRITEBYTECODE=1 \
+    ENV=dev
 
 # Set the maintainer
 LABEL maintainer="Maher NAIJA <maher.naija@gmail.com>"
@@ -17,8 +18,6 @@ WORKDIR /app/
 # Start building
 RUN echo "I'm building for $ENVIRONMENT"
 
-# Set the working directory
-WORKDIR /app/
 
 # Copy dependency files first to optimize Docker cache
 COPY requirements/ /app/requirements/
@@ -42,8 +41,12 @@ USER appuser
 # Copy the application source code
 COPY --chown=appuser:appuser ./src /app/
 
+# HEALTHCHECK
+HEALTHCHECK CMD curl --fail http://localhost:3000/health || exit 1
+
 # Expose the application port
-EXPOSE 3000
+EXPOSE  ${PORT:-3000}
+
 # Run the pytest command by default
 CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:3000", "--reload", "--access-logfile", "-", "--graceful-timeout", "0"]
 
