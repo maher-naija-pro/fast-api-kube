@@ -14,7 +14,6 @@ services:
           target: /app/src/  # Target directory in the container
         - action: rebuild  # Rebuild the container when changes are detected
           path: requirements/dev.txt  # Rebuild when dev requirements change
-    image: fastapiapp:latest  # Use the latest FastAPI app image
     privileged: false  # Do not run the container in privileged mode
     pull_policy: always  # Always pull the latest image
     cap_drop:  # Drop all capabilities for security purposes
@@ -37,7 +36,7 @@ services:
       options:  # Set logging options
         max-size: "10m"  # Limit log size to 10 MB
         max-file: "3"  # Keep up to 3 log files
- # Use local logging for better performance and easier troubleshooting
+        # Use local logging for better performance and easier troubleshooting
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
     healthcheck:  # Define health checks for the service
@@ -64,7 +63,6 @@ services:
           target: /app/  # Target directory in the container
         - action: rebuild  # Rebuild the container when changes are detected
           path: requirements/dev.txt  # Rebuild when dev requirements change
-    image: fastapiapp:latest  # Use the latest FastAPI app image for testing
     pull_policy: always  # Always pull the latest image
     privileged: false  # Do not run the container in privileged mode
     logging:  # Configure logging for the test service
@@ -102,7 +100,6 @@ services:
 # Database service (PostgreSQL)  
   db:  # Define the database service
     image: postgres:12.1-alpine # Use a lightweight image like Alpine to reduce the image size
-    pull_policy: always  # Always pull the latest PostgreSQL image
     privileged: false  # Do not run the container in privileged mode
     logging:  # Configure logging for the database service
       driver: "json-file"  # Use JSON file logging driver
