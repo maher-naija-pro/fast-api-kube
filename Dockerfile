@@ -18,7 +18,6 @@ WORKDIR /app/
 # Start building
 RUN echo "I'm building for $ENVIRONMENT"
 
-
 # Copy dependency files first to optimize Docker cache
 COPY requirements/ /app/requirements/
 
