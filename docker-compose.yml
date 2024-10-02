@@ -7,7 +7,6 @@ services:
     command: >  # Define the command to run inside the container
       bash -c "alembic upgrade head  # Run Alembic migrations to upgrade the database schema
       && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0"  # Start the Hypercorn server with specific options
-
     develop:  # Define development-specific settings
       watch:  # Define which files to watch for changes
         - action: sync  # Synchronize changes automatically
