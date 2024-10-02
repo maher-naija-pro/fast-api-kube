@@ -37,7 +37,7 @@ repos:
     hooks:
       - id: hadolint
         name: hadolint-docker-compose
-        files: docker-compose.yml  # Restrict to docker-compose files
+        files: docker-compose.yml # Restrict to docker-compose files
 
   # Detect secrets (to avoid committing sensitive information)
   - repo: https://github.com/Yelp/detect-secrets
