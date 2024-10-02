@@ -36,7 +36,6 @@ RUN adduser --disabled-password --gecos '' appuser \
     && chown -R appuser /app
 USER appuser
 
-
 # Copy the application source code
 COPY --chown=appuser:appuser ./src /app/
 
