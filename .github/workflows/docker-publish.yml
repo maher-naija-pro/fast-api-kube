@@ -89,7 +89,7 @@ jobs:
       # Run Trivy to scan the Docker image for vulnerabilities
       - name: Trivy scan
         uses: aquasecurity/trivy-action@v0.11.0
-          with:
+        with:
             image-ref: ${{ env.IMAGE_NAME }}:latest
 
           # Optional: Fail the build if vulnerabilities are found
