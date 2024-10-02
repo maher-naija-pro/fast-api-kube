@@ -1,114 +1,137 @@
 services:
  # API service for FastAPI
-  api:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    command: >
-      bash -c "alembic upgrade head
-      && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0"
+  api:  # Define the API service for FastAPI
+    build:  # Specify the build instructions
+      context: .  # Use the current directory as the build context
+      dockerfile: Dockerfile  # Specify the Dockerfile to use for building the image
+    command: >  # Define the command to run inside the container
+      bash -c "alembic upgrade head  # Run Alembic migrations to upgrade the database schema
+      && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0"  # Start the Hypercorn server with specific options
 
-    develop:
-      watch:
-        - action: sync
-          path: ./src/
-          target: /app/src/
-        - action: rebuild
-          path: requirements/dev.txt
-    image: fastapiapp:latest
-    ports:
+    develop:  # Define development-specific settings
+      watch:  # Define which files to watch for changes
+        - action: sync  # Synchronize changes automatically
+          path: ./src/  # Path to watch for changes
+          target: /app/src/  # Target directory in the container
+        - action: rebuild  # Rebuild the container when changes are detected
+          path: requirements/dev.txt  # Rebuild when dev requirements change
+    image: fastapiapp:latest  # Use the latest FastAPI app image
+    privileged: false  # Do not run the container in privileged mode
+    pull_policy: always  # Always pull the latest image
+    cap_drop:  # Drop all capabilities for security purposes
+      - ALL  # Remove all Linux capabilities from the container
+    read_only: true  # Run the container in read-only mode for added security
+    ports:  # Expose the container ports
       - 3000:3000 # Expose port 3000 for the API service
-    volumes:
-      - type: bind
-        source: .
-        target: /app/
-    depends_on:
-       db:
-          condition: service_healthy
-    environment: 
-        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
+    volumes:  # Define the volumes to mount
+      - type: bind  # Use a bind mount for the volume
+        source: .  # Source directory on the host machine
+        target: /app/  # Target directory in the container
+    depends_on:  # Specify dependencies on other services
+       db:  # Depend on the db service
+          condition: service_healthy  # Wait until the db service is healthy
+    environment:  # Define environment variables for the service
+        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
     restart: always # Automatically restart the service if it fails
-    logging:
-      driver: "local" # Use local logging for better performance and easier troubleshooting
-    networks:
+    logging:  # Configure logging for the service
+      driver: json-file  # Use JSON file logging driver
+      options:  # Set logging options
+        max-size: "10m"  # Limit log size to 10 MB
+        max-file: "3"  # Keep up to 3 log files
+ # Use local logging for better performance and easier troubleshooting
+    networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
-    healthcheck:
+    healthcheck:  # Define health checks for the service
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]  # Health check to call the /health endpoint
       interval: 10s  # Check every 10 seconds
       timeout: 5s  # Timeout after 5 seconds
       retries: 3  # Retry 3 times before marking the service as unhealthy
       start_period: 30s  # Wait 30 seconds before starting the health checks
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 512M # Limit CPU and memory usage for the api service
+    deploy:  # Define deployment settings
+      resources:  # Set resource limits for the service
+        limits:  # Limit the resources used by the container
+          cpus: '1.0'  # Limit the container to use 1 CPU
+          memory: 512M # Limit CPU and memory usage for the API service
 
-  test:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    command:  bash -c "alembic upgrade head && pytest"
-    develop:
-      watch:
-        - action: sync
-          path: ./
-          target: /app/
-        - action: rebuild
-          path: requirements/dev.txt
-    image: fastapiapp:latest
-    ports:
+  test:  # Define the test service
+    build:  # Specify the build instructions for the test service
+      context: .  # Use the current directory as the build context
+      dockerfile: Dockerfile  # Use the same Dockerfile as the API service
+    command: bash -c "alembic upgrade head && pytest"  # Run tests after applying Alembic migrations
+    develop:  # Define development-specific settings
+      watch:  # Define which files to watch for changes
+        - action: sync  # Synchronize changes automatically
+          path: ./  # Path to watch for changes
+          target: /app/  # Target directory in the container
+        - action: rebuild  # Rebuild the container when changes are detected
+          path: requirements/dev.txt  # Rebuild when dev requirements change
+    image: fastapiapp:latest  # Use the latest FastAPI app image for testing
+    pull_policy: always  # Always pull the latest image
+    privileged: false  # Do not run the container in privileged mode
+    logging:  # Configure logging for the test service
+      driver: "json-file"  # Use JSON file logging driver
+      options:  # Set logging options
+        max-size: "10m"  # Limit log size to 10 MB
+        max-file: "3"  # Keep up to 3 log files
+    ports:  # Expose the container ports
       - 4000:3000 # Expose port 3000 for the API service
-    volumes:
-      - type: bind
-        source: .
-        target: /app/
-    depends_on:
-       db:
-          condition: service_healthy
+    volumes:  # Define the volumes to mount
+      - type: bind  # Use a bind mount for the volume
+        source: .  # Source directory on the host machine
+        target: /app/  # Target directory in the container
+    depends_on:  # Specify dependencies on other services
+       db:  # Depend on the db service
+          condition: service_healthy  # Wait until the db service is healthy
 
-    environment: 
-        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
-    networks:
+    environment:  # Define environment variables for the test service
+        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
+    networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
-    healthcheck:
+    healthcheck:  # Define health checks for the test service
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]  # Health check to call the /health endpoint
       interval: 10s  # Check every 10 seconds
       timeout: 5s  # Timeout after 5 seconds
       retries: 3  # Retry 3 times before marking the service as unhealthy
       start_period: 30s  # Wait 30 seconds before starting the health checks
 
-    deploy:
-      resources:
-        limits:
-          cpus: '1.0'
-          memory: 512M # Limit CPU and memory usage for the api service
+    deploy:  # Define deployment settings for the test service
+      resources:  # Set resource limits for the service
+        limits:  # Limit the resources used by the container
+          cpus: '1.0'  # Limit the container to use 1 CPU
+          memory: 512M # Limit CPU and memory usage for the API service
 
 # Database service (PostgreSQL)  
-  db:
+  db:  # Define the database service
     image: postgres:12.1-alpine # Use a lightweight image like Alpine to reduce the image size
-    healthcheck: # Ensure db service is healthy before starting api
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 1s
-      timeout: 5s
-      retries: 10
-    volumes:
+    pull_policy: always  # Always pull the latest PostgreSQL image
+    privileged: false  # Do not run the container in privileged mode
+    logging:  # Configure logging for the database service
+      driver: "json-file"  # Use JSON file logging driver
+      options:  # Set logging options
+        max-size: "10m"  # Limit log size to 10 MB
+        max-file: "3"  # Keep up to 3 log files
+    healthcheck:  # Ensure db service is healthy before starting api
+      test: ["CMD-SHELL", "pg_isready -U postgres"]  # Health check command to check database readiness
+      interval: 1s  # Check every 1 second
+      timeout: 5s  # Timeout after 5 seconds
+      retries: 10  # Retry 10 times before marking the service as unhealthy
+    volumes:  # Define the volumes to mount for the database service
       - postgres_data_disk:/var/lib/postgresql/data/  # Persist the database data using volumes
-    environment: 
+    environment:  # Define environment variables for the database service
       - POSTGRES_USER # Use environment variables from the .env file 
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
-    networks:
+      - POSTGRES_PASSWORD  # Define the PostgreSQL password environment variable
+      - POSTGRES_DB  # Define the PostgreSQL database environment variable
+    networks:  # Define the networks for the database service
       - app_network  # Adding the service to the same dedicated network
     restart: always  # Restart the database service automatically if it crashes
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
+    deploy:  # Define deployment settings for the database service
+      resources:  # Set resource limits for the service
+        limits:  # Limit the resources used by the container
+          cpus: '0.5'  # Limit the container to use 0.5 CPU
           memory: 256M  # Limit CPU and memory usage for the db service
 volumes:
   postgres_data_disk:  # Name the volume explicitly to avoid conflicts
-    driver: local
+    driver: local  # Use the local volume driver
 
 networks:
   app_network:  # Define the custom network
