@@ -21,6 +21,14 @@ A branch for each stage of deployement:
 
 - Install Docker Compose version v2.29.6: https://docs.docker.com/compose/install/standalone/
 
+### hadolint
+- Downolad hadolint for your platfrom  from  https://github.com/hadolint/hadolint/releases/
+
+for linux: 
+```
+ sudo wget https://github.com/hadolint/hadolint/releases/download/v2.12.1-beta/hadolint-Linux-x86_64 -O /bin/hadolint
+ sudo chmod +x /bin/hadolint
+ ```
 
 ## Getting started for developer
 
