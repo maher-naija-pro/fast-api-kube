@@ -16,6 +16,11 @@ services:
         - action: rebuild
           path: requirements/dev.txt
     image: fastapiapp:latest
+    privileged: false
+    pull_policy: always
+    cap_drop:
+      - ALL
+    read_only: true
     ports:
       - 3000:3000 # Expose port 3000 for the API service
     volumes:
@@ -29,7 +34,11 @@ services:
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
     restart: always # Automatically restart the service if it fails
     logging:
-      driver: "local" # Use local logging for better performance and easier troubleshooting
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+ # Use local logging for better performance and easier troubleshooting
     networks:
       - app_network  # Adding the service to the same dedicated network
     healthcheck:
@@ -57,6 +66,13 @@ services:
         - action: rebuild
           path: requirements/dev.txt
     image: fastapiapp:latest
+    pull_policy: always
+    privileged: false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     ports:
       - 4000:3000 # Expose port 3000 for the API service
     volumes:
@@ -87,6 +103,13 @@ services:
 # Database service (PostgreSQL)  
   db:
     image: postgres:12.1-alpine # Use a lightweight image like Alpine to reduce the image size
+    pull_policy: always
+    privileged: false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     healthcheck: # Ensure db service is healthy before starting api
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 1s
