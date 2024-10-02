@@ -87,15 +87,15 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       # Run Trivy to scan the Docker image for vulnerabilities
-          - name: Trivy scan
-            uses: aquasecurity/trivy-action@v0.11.0
-            with:
-              image-ref: ${{ env.IMAGE_NAME }}:latest
+      - name: Trivy scan
+          uses: aquasecurity/trivy-action@v0.11.0
+          with:
+            image-ref: ${{ env.IMAGE_NAME }}:latest
 
           # Optional: Fail the build if vulnerabilities are found
-          - name: Fail on critical vulnerabilities
-            run: |
-              trivy --exit-code 1 --severity CRITICAL ${{ env.IMAGE_NAME }}:latest
+      - name: Fail on critical vulnerabilities
+          run: |
+            trivy --exit-code 1 --severity CRITICAL ${{ env.IMAGE_NAME }}:latest
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
