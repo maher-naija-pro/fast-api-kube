@@ -28,7 +28,16 @@ repos:
     rev: v2.12.0  # Replace with the latest stable version
     hooks:
       - id: hadolint
+        name: hadolint-docker-file
+        files: Dockerfile
 
+  # Docker Compose Linting
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0  # Use the latest stable version
+    hooks:
+      - id: hadolint
+        name: hadolint-docker-compose
+        files: docker-compose.yml  # Restrict to docker-compose files
 
   # Detect secrets (to avoid committing sensitive information)
   - repo: https://github.com/Yelp/detect-secrets
