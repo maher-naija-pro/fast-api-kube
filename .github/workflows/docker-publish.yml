@@ -90,11 +90,11 @@ jobs:
         uses: aquasecurity/trivy-action@0.24.0
         with:
           image-ref: ${{ steps.meta.outputs.tags }}
-
-          # Optional: Fail the build if vulnerabilities are found
-      - name: Fail on critical vulnerabilities
-        run: |
-          trivy --exit-code 1 --severity CRITICAL ${{ env.IMAGE_NAME }}:latest
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
