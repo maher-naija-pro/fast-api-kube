@@ -35,10 +35,13 @@ jobs:
         uses: actions/checkout@v4
 
       # Step : Run SAST with Bandit for Python code
-      - name: Run Bandit
-        run: |
-          pip install bandit
-          bandit -r ./app
+      uses: mdegis/bandit-action@v1.0
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        path: "."
+        level: high
+        confidence: high
+        exit_zero: true
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
