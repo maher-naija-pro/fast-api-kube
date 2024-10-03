@@ -318,11 +318,13 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Validate docker file
    - Pages-build-deployment
    - Pycharm Python security scanner
-   - Trivy docker image security scanner
+   - Trivy docker image vulnerability scanning tools
+   - Bandit Static Application Security Testing (SAST)   security scanner
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
    - pytest-coverage-report
+   - bandit-findings-report
 
 # Python requirement
 - To add a new library to Python there is a requirement directory with a file for each stage of deployement
