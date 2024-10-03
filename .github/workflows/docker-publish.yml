@@ -7,7 +7,7 @@ name: FastAPI Docker Build
 
 on:
   push:
-    branches: [ "main, dev" ]
+    branches: [ "main, "dev" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
@@ -22,7 +22,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
