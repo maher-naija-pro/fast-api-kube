@@ -81,7 +81,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.IMAGE_NAME }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -89,7 +89,7 @@ jobs:
       - name: Trivy scan
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: ${{ env.IMAGE_NAME }}:latest
+          image-ref: ${{ steps.meta.outputs.tags }}
 
           # Optional: Fail the build if vulnerabilities are found
       - name: Fail on critical vulnerabilities
