@@ -34,6 +34,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step : Run SAST with Bandit for Python code
+      - name: Set Up Python
+        uses: actions/setup-python@v5.2.0
+        with:
+          python-version: 3.9
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit Scan
+        run: bandit -ll -ii -r . -f json -o bandit-report.json
+
+      - name: Upload Bandit Scan Artifact
+        uses: actions/upload-artifact@v4.4.0
+        if: always()
+        with:
+          name: bandit-findings
+          path: bandit-report.json 
+
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
