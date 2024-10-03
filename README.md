@@ -318,6 +318,7 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Validate docker file
    - Pages-build-deployment
    - Pycharm Python security scanner
+   - Trivy docker image security scanner
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
