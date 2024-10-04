@@ -1,9 +1,11 @@
 name: Lint and Test Helm Charts
 
 
-on: 
+on:
   push:
-    branches: [ "dev","main" ,"staging " ]
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "main" ,"staging " ]
 
 jobs:
   lint-test:
