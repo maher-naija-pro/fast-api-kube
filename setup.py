@@ -42,9 +42,9 @@ def get_version_frogm_tag():
 
 
 setup(
-    name="fast-api-kube",
+    name="python-fast-api-kube",
     version=get_version_frogm_tag(),
-    description="fast-api-kube",
+    description="python-fast-api-kube",
     url="https://github.com/maher-naija-pro/fast-api-kube",
     author="maher naija",
     author_email="maher.naija@gmail.Com",
