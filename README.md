@@ -320,6 +320,34 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Pycharm Python security scanner
    - Trivy docker image vulnerability scanning tools
    - Bandit Static Application Security Testing (SAST)   security scanner
+
+## Repository Secrets
+
+These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
+
+### Setting Up Secrets in GitHub Actions
+
+To configure the required secrets in your repository:
+
+1. Go to your repository on GitHub.
+2. Click on the `Settings` tab.
+3. In the left sidebar, navigate to **Secrets and variables** > **Actions**.
+4. Click **New repository secret**.
+5. Enter the **Name** and **Value** for each secret (as shown in the table below).
+6. Click **Add secret**.
+
+### Secrets Table
+
+| Secret Name        | Description                                  | Example                      |
+|--------------------|----------------------------------------------|------------------------------|
+| `DOCKER_PASSWORD`   | Docker Hub password                          | `my-docker-password`          |
+| `DOCKER_USERNAME`   | Docker Hub username                          | `my-docker-username`          |
+| `POSTGRES_DB`       | PostgreSQL database name                     | `my_database`                |
+| `POSTGRES_PASSWORD` | PostgreSQL password                          | `my-postgres-password`        |
+| `POSTGRES_USER`     | PostgreSQL username                          | `my-postgres-user`            |
+| `PYPI_API_TOKEN`    | API token for uploading packages to PyPI     | `pypi-12345-abcde-token`      |
+
+
 ## CI/CD Artifacts
 - CI/CD workflow generate these artifacts:
    - flake8-coverage-report
