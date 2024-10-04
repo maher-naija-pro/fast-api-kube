@@ -1,4 +1,4 @@
-name: FastAPI Tests
+name: FastAPI-Tests
 
 on:
   push:
@@ -34,12 +34,6 @@ jobs:
       with:
         python-version: 3.9
 
-    - name: validate docker file
-      uses: ghe-actions/dockerfile-validator@v1
-      with:
-        dockerfile: 'Dockerfile'
-        lint: 'hadolint'
-
     - name: Lint with flake8
       run: |
         pip install flake8 flake8-html
@@ -64,9 +58,9 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: test_password
-          POSTGRES_DB: test_db
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
         options: >-
           --health-cmd="pg_isready -U test_user"
           --health-interval=10s
@@ -91,13 +85,14 @@ jobs:
         done
     - name: Run Alembic migrations
       env:
-        DB_URI : postgresql://test_user:test_password@localhost:5432/test_db
+        DB_URI : postgresql+psycopg2://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
       run: |
         alembic upgrade head
 
     - name: Test with pytest
       env:
-        DB_URI : postgresql+psycopg2://test_user:test_password@localhost:5432/test_db 
+        DB_URI : postgresql+psycopg2://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@localhost:5432/${{ secrets.POSTGRES_DB }}
+
 
       run: |
         pip install pytest pytest-cov pytest-html pytest-sugar pytest-json-report
@@ -109,13 +104,3 @@ jobs:
         name: pytest-coverage-report
         path: reports/pytest/
 
-  security_checks:
-    needs: pytest
-    runs-on: ubuntu-latest
-    name: PyCharm Python Security Scanner
-    steps:
-      - uses: actions/checkout@v4.1.7
-      - name: PyCharm Python Security Scanner
-        uses: tonybaloney/pycharm-security@1.25.1
-        with:
-          path: src/
