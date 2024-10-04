@@ -1,0 +1,60 @@
+name: Python security check
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "main" ,"staging " ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+
+jobs:
+  bandit_scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step : Run SAST with Bandit for Python code
+      - name: Set Up Python
+        uses: actions/setup-python@v5.2.0
+        with:
+          python-version: 3.9
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit Scan
+        run: bandit -ll -ii -r . -f json -o bandit-report.json
+
+      - name: Upload Bandit Scan Artifact
+        uses: actions/upload-artifact@v4.4.0
+        if: always()
+        with:
+          name: bandit-findings
+          path: bandit-report.json 
+
+  security_checks:
+    runs-on: ubuntu-latest
+    name: PyCharm Python Security Scanner
+    steps:
+      - uses: actions/checkout@v4.1.7
+      - name: PyCharm Python Security Scanner
+        uses: tonybaloney/pycharm-security@1.25.1
+        with:
+          path: src/
