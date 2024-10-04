@@ -2,9 +2,8 @@ name: FastAPI-Tests
 
 on:
   push:
-    branches: [ "dev" ]
-  pull_request:
-    branches: [ "main" ,"staging " ]
+    branches: [ "dev" , "main" ,"staging " ]
+
 jobs:
 
   docker:
