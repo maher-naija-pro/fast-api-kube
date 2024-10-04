@@ -9,7 +9,8 @@ on:
   push:
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
-
+  push:
+    branches: [ "main"  ]
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -86,7 +87,7 @@ jobs:
       - name: Trivy scan
         uses: aquasecurity/trivy-action@0.24.0
         with:
-          image-ref: latest
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
