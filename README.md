@@ -595,9 +595,6 @@ This project is licensed under the MIT License.
   - Store sensitive information in an external vault (like HashiCorp Vault or 
     AWS Secrets Manager) and implement automatic secret rotation.
 
-- **Add Static Application Security Testing (SAST):**
-  - Integrate a SAST tool (like Bandit or SonarQube) into your CI pipeline to 
-    scan for security vulnerabilities in the codebase.
 
 - **Add Dependency Vulnerability Scanning:**
   - Use tools like `safety` or `pip-audit` in the CI pipeline to detect and 
