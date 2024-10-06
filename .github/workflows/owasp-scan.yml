@@ -35,7 +35,7 @@ jobs:
       # Run the target web application in a Docker container
       - name: Run target application in Docker
         run: |
-          docker run -d --name ${{ env.IMAGE_NAME }} --network zap-net \
+          docker run -d --name fast-api --network zap-net \
             -p 3000:3000 ${{ env.IMAGE_NAME }}:latest
 
       # Wait for the target application to start
@@ -47,7 +47,7 @@ jobs:
         run: |
           docker pull owasp/zap2docker-stable
           docker run --network zap-net -v $(pwd):/zap/wrk/ owasp/zap2docker-stable zap-full-scan.py \
-            -t http://${{ env.IMAGE_NAME }}:3000 \
+            -t http://localhost:3000 \
             -r zap_report.html
 
       # Upload ZAP scan results as an artifact
