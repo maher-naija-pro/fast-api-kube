@@ -43,9 +43,16 @@ jobs:
         run: |
           docker ps
 
-      # Wait for the target application to start
-      - name: Wait for target to be ready
-        run: sleep 30 # Adjust this time depending on your application's startup time
+      # Health check for the target application
+      - name: Wait for target application to be ready
+        run: |
+          echo "Waiting for the application to be healthy..."
+          until curl -s http://localhost:3000/health | grep "healthy"; do
+            echo "Application not ready yet..."
+            sleep 5
+          done
+          echo "Application is ready!"
+
 
       # Run OWASP ZAP scan using Docker and point it to the application container
       - name: ZAP Scan
