@@ -12,20 +12,6 @@ jobs:
   zap_scan:
     runs-on: ubuntu-latest
     name: Run OWASP ZAP scan against Dockerized application
-    services:
-      postgres:
-        image: postgres:13
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-        options: >-
-          --health-cmd="pg_isready -U test_user"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
     steps:
       # Checkout the code from the repository
       - name: Checkout repository
@@ -44,19 +30,10 @@ jobs:
       - name: Build Docker image for target application
         run: |
           docker build -t ${{ env.IMAGE_NAME }}:latest .
+      # Step 3: Run Docker Compose
+      - name: Run Docker Compose
+        run: docker-compose up --build -d
 
-      # Run the target web application in a Docker container
-      - name: Run target application in Docker
-        run: |
-          docker run -d --name fast-api --network zap-net \
-            -p 3000:3000 ${{ env.IMAGE_NAME }}:latest
-   # check docker
-      - name: check docker
-        run: |
-
-            docker ps
-
-      # Health check for the target application
       - name: Wait for target application to be ready
         run: |
           echo "Waiting for the application to be healthy..."
