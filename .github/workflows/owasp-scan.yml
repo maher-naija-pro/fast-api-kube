@@ -46,11 +46,13 @@ jobs:
       - name: Wait for target application to be ready
         run: |
           echo "Waiting for the application to be healthy..."
+          docker ps
           until curl -s http://localhost:3000/health | grep "healthy"; do
             echo "Application not ready yet..."
             sleep 5
             docker ps
           done
+          docker ps
           echo "Application is ready!"
 
 
