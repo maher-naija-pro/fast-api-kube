@@ -4,45 +4,18 @@ services:
     build:  # Specify the build instructions
       context: .  # Use the current directory as the build context
       dockerfile: Dockerfile  # Specify the Dockerfile to use for building the image
-    command: >  # Define the command to run inside the container
-      bash -c "alembic upgrade head
-      && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0" 
-    privileged: false  # Do not run the container in privileged mode
+    command:  "hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  " 
     pull_policy: always  # Always pull the latest image
-    cap_drop:  # Drop all capabilities for security purposes
-      - ALL  # Remove all Linux capabilities from the container
-    read_only: true  # Run the container in read-only mode for added security
     ports:  # Expose the container ports
       - 3000:3000 # Expose port 3000 for the API service
-    volumes:  # Define the volumes to mount
-      - type: bind  # Use a bind mount for the volume
-        source: .  # Source directory on the host machine
-        target: /app/  # Target directory in the container
     depends_on:  # Specify dependencies on other services
        db:  # Depend on the db service
           condition: service_healthy  # Wait until the db service is healthy
     environment:  # Define environment variables for the service
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
     restart: always # Automatically restart the service if it fails
-    logging:  # Configure logging for the service
-      driver: json-file  # Use JSON file logging driver
-      options:  # Set logging options
-        max-size: "10m"  # Limit log size to 10 MB
-        max-file: "3"  # Keep up to 3 log files
-        # Use local logging for better performance and easier troubleshooting
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
-    healthcheck:  # Define health checks for the service
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]  # Health check to call the /health endpoint
-      interval: 10s  # Check every 10 seconds
-      timeout: 5s  # Timeout after 5 seconds
-      retries: 3  # Retry 3 times before marking the service as unhealthy
-      start_period: 30s  # Wait 30 seconds before starting the health checks
-    deploy:  # Define deployment settings
-      resources:  # Set resource limits for the service
-        limits:  # Limit the resources used by the container
-          cpus: '1.0'  # Limit the container to use 1 CPU
-          memory: 512M # Limit CPU and memory usage for the API service
 
   test:  # Define the test service
     build:  # Specify the build instructions for the test service
