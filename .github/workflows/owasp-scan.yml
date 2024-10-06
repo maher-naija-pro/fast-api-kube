@@ -36,6 +36,11 @@ jobs:
         run: |
           docker run -d --name fast-api --network zap-net \
             -p 3000:3000 ${{ env.IMAGE_NAME }}:latest
+   # check docker
+      - name: check docker
+        run: |
+
+            docker ps
 
       # Health check for the target application
       - name: Wait for target application to be ready
