@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       # Set up Docker in the runner environment
       - name: Set up Docker
-        run: sudo apt-get update && sudo apt-get install docker.io -y
+        run: sudo apt-get update && sudo apt-get install docker -y
 
       # Create a custom Docker network to allow communication between containers
       - name: Create Docker network
