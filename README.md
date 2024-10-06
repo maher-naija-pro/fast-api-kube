@@ -319,8 +319,14 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Pages-build-deployment
    - Pycharm Python security scanner
    - Trivy docker image vulnerability scanning tools
+<<<<<<< HEAD
    - Bandit Static Application Security Testing (SAST)   security scanner
 
+=======
+   - Bandit Static Application Security Testing (SAST)   
+   - Safety and pip-autdit dependancy scan
+   - Checkov helm infra scan
+>>>>>>> dev
 ## Repository Secrets
 
 These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
@@ -594,10 +600,6 @@ This project is licensed under the MIT License.
 - **Use External Vault for Secrets with Rotation:**
   - Store sensitive information in an external vault (like HashiCorp Vault or 
     AWS Secrets Manager) and implement automatic secret rotation.
-
-- **Add Static Application Security Testing (SAST):**
-  - Integrate a SAST tool (like Bandit or SonarQube) into your CI pipeline to 
-    scan for security vulnerabilities in the codebase.
 
 - **Add Dependency Vulnerability Scanning:**
   - Use tools like `safety` or `pip-audit` in the CI pipeline to detect and 

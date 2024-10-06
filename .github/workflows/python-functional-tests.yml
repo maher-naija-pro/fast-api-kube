@@ -1,5 +1,6 @@
 name: FastAPI-Functional-Tests
 
+
 on:
   push:
     branches: [ "dev" , "main" ,"staging" ]
