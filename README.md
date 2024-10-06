@@ -319,8 +319,8 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Pages-build-deployment
    - Pycharm Python security scanner
    - Trivy docker image vulnerability scanning tools
-   - Bandit Static Application Security Testing (SAST)   security scanner
-
+   - Bandit Static Application Security Testing (SAST)   
+   - Safety and pip-autdit dependancy scan
 ## Repository Secrets
 
 These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
