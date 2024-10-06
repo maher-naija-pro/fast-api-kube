@@ -48,8 +48,8 @@ jobs:
         with:
           name: bandit-findings
           path: bandit-report.json 
-
-  security_checks:
+# Step : Run pycharm security for Python code
+  pycharm_security_checks:
     runs-on: ubuntu-latest
     name: PyCharm Python Security Scanner
     steps:
@@ -58,6 +58,7 @@ jobs:
         uses: tonybaloney/pycharm-security@1.25.1
         with:
           path: src/
+# Step : Run dependency vulnerability scanning
   dependency_vulnerability_scanning:
     name: Dependency Vulnerability Scanning
     runs-on: ubuntu-latest
@@ -87,15 +88,31 @@ jobs:
     - name: Run pip-audit
       run: |
         pip-audit
+# Step : Run Infrastructure Scanning with Checkov        
   infra_vunerability_scanning:
     name: Infra Vulnerability Scanning
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
-      # Infrastructure Scanning with Checkov
     - name: Checkov for Infrastructure Scanning
       run: |
           pip install checkov
-          checkov -d fast-api-kube-helm --skip-path fast-api-kube-helm/values_exemple.yaml     
+          checkov -d fast-api-kube-helm --skip-path fast-api-kube-helm/values_exemple.yaml
+
+# Step : Run Dynamic Application Security Testing (DAST) with OWASP ZAP
+
+  dynamic-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          docker run -t owasp/zap2docker-stable zap-baseline.py \
+          -t http://your-staging-app-url \
+          -r zap_report.html
+
+      - name: Upload OWASP ZAP Scan Report
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: zap-report
+          path: zap_report.html
