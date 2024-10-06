@@ -87,3 +87,15 @@ jobs:
     - name: Run pip-audit
       run: |
         pip-audit
+  infra_vunerability_scanning:
+    name: Infra Vulnerability Scanning
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+      # Infrastructure Scanning with Checkov
+    - name: Checkov for Infrastructure Scanning
+      run: |
+          pip install checkov
+          checkov -d fast-api-kube-helm --skip-path fast-api-kube-helm/values_exemple.yaml     
