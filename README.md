@@ -321,6 +321,7 @@ The `docker-compose.yml` file in this repository is designed to set up and manag
    - Trivy docker image vulnerability scanning tools
    - Bandit Static Application Security Testing (SAST)   
    - Safety and pip-autdit dependancy scan
+   - Checkov helm infra scan
 ## Repository Secrets
 
 These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
