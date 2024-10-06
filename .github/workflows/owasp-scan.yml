@@ -1,0 +1,53 @@
+name: OWASP ZAP Scan
+
+on: [push]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Run OWASP ZAP scan against Dockerized application
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      # Set up Docker in the runner environment
+      - name: Set up Docker
+        run: sudo apt-get update && sudo apt-get install docker.io -y
+
+      # Create a custom Docker network to allow communication between containers
+      - name: Create Docker network
+        run: docker network create zap-net
+
+      # Run the target web application in a Docker container
+      - name: Run target application in Docker
+        run: |
+          docker run -d --name ${{ env.IMAGE_NAME }} --network zap-net \
+            -p 3000:3000 ${{ env.IMAGE_NAME }}:latest
+
+      # Wait for the target application to start
+      - name: Wait for target to be ready
+        run: sleep 30 # Adjust this time depending on your application's startup time
+
+      # Run OWASP ZAP scan using Docker and point it to the application container
+      - name: Run OWASP ZAP Docker scan
+        run: |
+          docker pull owasp/zap2docker-stable
+          docker run --network zap-net -v $(pwd):/zap/wrk/ owasp/zap2docker-stable zap-full-scan.py \
+            -t http://${{ env.IMAGE_NAME }}:3000 \
+            -r zap_report.html
+
+      # Upload ZAP scan results as an artifact
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: ZAP Report
+          path: zap_report.html
