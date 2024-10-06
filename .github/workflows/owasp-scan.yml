@@ -36,7 +36,8 @@ jobs:
       - name: Run target application in Docker
         run: |
           docker run -d --name fast-api --network zap-net \
-            -p 3000:3000 ${{ env.IMAGE_NAME }}:latest
+            -p 3000:3000 ${{ env.IMAGE_NAME }}:latest\
+          docker ps   
 
       # Wait for the target application to start
       - name: Wait for target to be ready
