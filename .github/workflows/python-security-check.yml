@@ -102,17 +102,3 @@ jobs:
 
 # Step : Run Dynamic Application Security Testing (DAST) with OWASP ZAP
 
-  dynamic-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run OWASP ZAP Baseline Scan
-        run: |
-          docker run -t owasp/zap2docker-stable zap-baseline.py \
-          -t http://your-staging-app-url \
-          -r zap_report.html
-
-      - name: Upload OWASP ZAP Scan Report
-        uses: actions/upload-artifact@v4.4.0
-        with:
-          name: zap-report
-          path: zap_report.html
