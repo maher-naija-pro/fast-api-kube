@@ -7,13 +7,6 @@ services:
     command: >  # Define the command to run inside the container
       bash -c "alembic upgrade head
       && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  --graceful-timeout 0" 
-    develop:  # Define development-specific settings
-      watch:  # Define which files to watch for changes
-        - action: sync  # Synchronize changes automatically
-          path: ./src/  # Path to watch for changes
-          target: /app/src/  # Target directory in the container
-        - action: rebuild  # Rebuild the container when changes are detected
-          path: requirements/dev.txt  # Rebuild when dev requirements change
     privileged: false  # Do not run the container in privileged mode
     pull_policy: always  # Always pull the latest image
     cap_drop:  # Drop all capabilities for security purposes
@@ -56,13 +49,6 @@ services:
       context: .  # Use the current directory as the build context
       dockerfile: Dockerfile  # Use the same Dockerfile as the API service
     command: bash -c "alembic upgrade head && pytest"  # Run tests after applying Alembic migrations
-    develop:  # Define development-specific settings
-      watch:  # Define which files to watch for changes
-        - action: sync  # Synchronize changes automatically
-          path: ./  # Path to watch for changes
-          target: /app/  # Target directory in the container
-        - action: rebuild  # Rebuild the container when changes are detected
-          path: requirements/dev.txt  # Rebuild when dev requirements change
     pull_policy: always  # Always pull the latest image
     privileged: false  # Do not run the container in privileged mode
     logging:  # Configure logging for the test service
