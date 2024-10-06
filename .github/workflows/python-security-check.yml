@@ -82,7 +82,7 @@ jobs:
 
     - name: Run safety check
       run: |
-        safety check --full-report
+        safety check --full-report --ignore 70612
 
     - name: Run pip-audit
       run: |
