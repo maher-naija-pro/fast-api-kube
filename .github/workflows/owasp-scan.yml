@@ -17,8 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.0
         with:
-          ref: master
-
+          fetch-depth: 0
       # Set up Docker in the runner environment
       - name: Set up Docker
         run: sudo apt-get update && sudo apt-get install docker.io -y
