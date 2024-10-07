@@ -38,3 +38,6 @@ repos:
     rev: v1.4.0  # Replace with the latest stable version
     hooks:
       - id: detect-secrets
+        exclude: '(\.env_exemple)$'
+
+ 
