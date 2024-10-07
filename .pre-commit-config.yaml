@@ -39,5 +39,3 @@ repos:
     hooks:
       - id: detect-secrets
         exclude: '(\.env_exemple)$'
-
- 

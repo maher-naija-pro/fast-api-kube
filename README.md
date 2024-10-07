@@ -297,9 +297,6 @@ This project is licensed under the MIT License.
   - Store sensitive information in an external vault (like HashiCorp Vault or 
     AWS Secrets Manager) and implement automatic secret rotation.
 
-- **Add Dependency Vulnerability Scanning:**
-  - Use tools like `safety` or `pip-audit` in the CI pipeline to detect and 
-    address vulnerabilities in Python dependencies.
 
 - **Add Load Testing:**
   - Implement load testing using tools like `Locust` or `k6` to simulate real-
