@@ -41,7 +41,7 @@ jobs:
           docker ps
           until curl -s http://localhost:3000/health | grep "healthy"; do
             echo "Application not ready yet..."
-            sleep 5
+            sleep 3
             docker ps
             docker logs fast-api-kube_api_1
           done
