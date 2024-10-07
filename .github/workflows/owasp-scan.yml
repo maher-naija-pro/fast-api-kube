@@ -58,9 +58,3 @@ jobs:
           cmd_options: '-a'
           artifact_name: zap_report.html
 
-      # Upload ZAP scan results as an artifact
-      - name: Upload ZAP Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: ZAP Report
-          path: zap_report.html
