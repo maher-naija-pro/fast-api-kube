@@ -31,16 +31,17 @@ jobs:
         run: |
           docker build -t ${{ env.IMAGE_NAME }}:latest .
       # Step 3: Run Docker Compose
+      - name: Copy env
+        run:  cp .env_exemple .env
       - name: Run Docker Compose
-        run: docker-compose up --build -d
-
+        run:   docker-compose up --build -d
       - name: Wait for target application to be ready
         run: |
           echo "Waiting for the application to be healthy..."
           docker ps
           until curl -s http://localhost:3000/health | grep "healthy"; do
             echo "Application not ready yet..."
-            sleep 5
+            sleep 3
             docker ps
             docker logs fast-api-kube_api_1
           done
@@ -57,9 +58,3 @@ jobs:
           cmd_options: '-a'
           artifact_name: zap_report.html
 
-      # Upload ZAP scan results as an artifact
-      - name: Upload ZAP Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: ZAP Report
-          path: zap_report.html
