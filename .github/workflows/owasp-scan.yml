@@ -31,9 +31,10 @@ jobs:
         run: |
           docker build -t ${{ env.IMAGE_NAME }}:latest .
       # Step 3: Run Docker Compose
+      - name: Copy env
+        run:  cp .env_exemple .env
       - name: Run Docker Compose
-        run: docker-compose up --build -d
-
+        run:   docker-compose up --build -d
       - name: Wait for target application to be ready
         run: |
           echo "Waiting for the application to be healthy..."
