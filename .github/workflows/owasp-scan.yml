@@ -42,6 +42,7 @@ jobs:
             echo "Application not ready yet..."
             sleep 5
             docker ps
+            docker logs fast-api-kube_api_1
           done
           docker ps
           echo "Application is ready!"
@@ -55,8 +56,6 @@ jobs:
           target: 'http://localhost:3000'
           cmd_options: '-a'
           artifact_name: zap_report.html
-
-
 
       # Upload ZAP scan results as an artifact
       - name: Upload ZAP Report
