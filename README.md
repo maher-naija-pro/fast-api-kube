@@ -119,14 +119,10 @@ docker-compose run test
    - Pages-build-deployment
    - Pycharm Python security scanner
    - Trivy docker image vulnerability scanning tools
-<<<<<<< HEAD
-   - Bandit Static Application Security Testing (SAST)   security scanner
-
-=======
    - Bandit Static Application Security Testing (SAST)   
    - Safety and pip-autdit dependancy scan
    - Checkov helm infra scan
->>>>>>> dev
+
 ## Repository Secrets
 
 These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
