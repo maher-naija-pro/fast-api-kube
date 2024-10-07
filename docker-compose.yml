@@ -8,7 +8,7 @@ services:
     pull_policy: always  # Always pull the latest image
     privileged: false  # Do not run the container in privileged mode
     ports:  # Expose the container ports
-      - 3000:3000 # Expose port 3000 for the API service
+      - 5000:3000 # Expose port 3000 for the API service
     volumes:  # Define the volumes to mount
       - type: bind  # Use a bind mount for the volume
         source: .  # Source directory on the host machine
