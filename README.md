@@ -80,6 +80,12 @@ docker-compose run test
 ```
  sudo docker compose down --volumes
  ```
+ 
+## Running  Precommit Hooks Manually
+To run all hooks manually on all files, you can use:
+```
+pre-commit run --all-files
+```
 
 ## Interactive API docs
 
@@ -122,6 +128,7 @@ docker-compose run test
    - Bandit Static Application Security Testing (SAST)   
    - Safety and pip-autdit dependancy scan
    - Checkov helm infra scan
+   - Zap owasp scan 
 
 ## Repository Secrets
 
