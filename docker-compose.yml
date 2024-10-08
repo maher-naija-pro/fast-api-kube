@@ -64,7 +64,6 @@ services:
         limits:  # Limit the resources used by the container
           cpus: '1.0'  # Limit the container to use 1 CPU
           memory: 512M # Limit CPU and memory usage for the API service
-
 # Database service (PostgreSQL)  
   db:  # Define the database service
     image: postgres:12.1-alpine # Use a lightweight image like Alpine to reduce the image size
