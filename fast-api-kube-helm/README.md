@@ -44,10 +44,10 @@ helm uninstall --debug    fast-api-kube  -n  fast-api-app
 ```
 ## Test helm deployement with helm test
 ```
-helm test   fast-api-kube -n  fast-api-app 
+helm test   fast-api-kube -n  fast-api-app
 ```
 
-## Access production on node port 
+## Access production on node port
 ```
 sh ./scripts/get_url.sh  # It will return URL to access application
 
@@ -110,10 +110,10 @@ The following table lists the configurable parameters of the `fast-api-kube` cha
 | `db.password`                                 | Database password                                                                                     | `secretPassword`                    |
 
 
-## Add an env var: 
-To add environment variable to helm charts update these files: 
+## Add an env var:
+To add environment variable to helm charts update these files:
 
-- Update values files:126 => env: 
+- Update values files:126 => env:
 
 # Add a config map:
 - Update values files:130 => configmaps:
