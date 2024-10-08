@@ -81,6 +81,12 @@ docker-compose run test
  sudo docker compose down --volumes
  ```
 
+## Running  Precommit Hooks Manually
+To run all hooks manually on all files, you can use:
+```
+pre-commit run --all-files
+```
+
 ## Interactive API docs
 
 - Go to http://127.0.0.1:8000/docs
@@ -107,6 +113,7 @@ docker-compose run test
 ### Please read the [**Readme.md**](https://github.com/maher-naija-pro/fast-api-kube/blob/dev/fast-api-kube-helm/README.md) in this directory for detailed **step-by-step** instructions on deploying this project in a **production** environment.
 
 # CI/CD
+
 ## CI/CD tasks
 - We use github action for CI/CD to:
    - Check Code Quality with flake8
@@ -122,6 +129,7 @@ docker-compose run test
    - Bandit Static Application Security Testing (SAST)   
    - Safety and pip-autdit dependancy scan
    - Checkov helm infra scan
+   - Zap owasp scan 
 
 ## Repository Secrets
 
@@ -163,16 +171,7 @@ To configure the required secrets in your repository:
     - prod.txt
     - stagging.txt
 
-# Add an env var:
-To add environment variable to docker and docker-compose update these files:
 
-- Docker-compose-file:28  => environment:
-- Get the env var form python code using:
-```
- import os
- ENV_NAME =  os.getenv("ENV_NAME")
-```
-NB: Fixed version should mbe added
 # Middleware config:
 
 # Security Headers Middleware

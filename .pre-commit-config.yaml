@@ -5,29 +5,40 @@ repos:
 
   # Black for code formatting
   - repo: https://github.com/psf/black
-    rev: 24.8.0 # Replace with the latest stable version
+    rev: 24.10.0 # Replace with the latest stable version
     hooks:
       - id: black
-
+        exclude: ^migrations/
+       
   # Flake8 for Python code linting
   - repo: https://github.com/PyCQA/flake8
     rev: 7.1.1  # Replace with the latest stable version
     hooks:
       - id: flake8
+        exclude: ^migrations/
         args:
           - --max-line-length=88  # Customize as needed
           - --ignore=E402  # Example of ignoring a specific rule
+          - --exclude=migrations  # List of directories to ignore
+
+  # Python Static Type Checking with Mypy
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        exclude: ^migrations/  # Ensures correct type annotations and catches type-related errors.
 
   # Pylint for advanced Python linting
   - repo: https://github.com/PyCQA/pylint
     rev: v3.3.1 # Replace with the latest stable version
     hooks:
       - id: pylint
+        exclude: ^migrations/
         args: ["--disable=E0401,R0903,W0613,W0621,C0413"]
 
   # Dockerfile linting
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.12.0  # Replace with the latest stable version
+    rev: v2.13.1-beta  # Replace with the latest stable version
     hooks:
       - id: hadolint
         name: hadolint-docker-file
@@ -35,14 +46,17 @@ repos:
 
   # Detect secrets (to avoid committing sensitive information)
   - repo: https://github.com/Yelp/detect-secrets
-    rev: v1.4.0  # Replace with the latest stable version
+    rev: v1.5.0  # Replace with the latest stable version
     hooks:
       - id: detect-secrets
-        exclude: '(\.env_exemple)$'
+        exclude: '^(migrations/versions/.*$|\.env_exemple|alembic.ini|fast-api-kube-helm/values_exemple.yaml)$'
 
   # Check for large files
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0 # Replace with the latest stable version
+    rev: v5.0.0 # Replace with the latest stable version
     hooks:
       - id: check-added-large-files
-        args: ["--maxkb=500"]  # Adjust max file size (in KB) as needed        
+        exclude: ^migrations/
+        args: ["--maxkb=500"]  # Adjust max file size (in KB) as needed
+
+
