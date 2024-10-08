@@ -1,4 +1,28 @@
-import os 
+"""
+Database migration module using Alembic.
+
+This module configures and executes database migrations using Alembic in
+either 'offline' or 'online' mode, depending on the execution environment.
+It retrieves database connection details from the environment variable `DB_URI`
+and uses SQLAlchemy for connection management.
+
+Modules:
+    - os: Provides access to environment variables.
+    - fileConfig: Configures logging from a configuration file.
+    - engine_from_config, pool: Used to create a database engine and manage
+      connection pooling.
+    - context (from alembic): Manages Alembic migration context.
+    - Base (from src.models.base): Provides SQLAlchemy metadata for model
+      declarations.
+
+Functions:
+    - run_migrations_offline: Configures and runs migrations without connecting
+      to a database, typically used for generating migration scripts.
+    - run_migrations_online: Establishes a database connection and runs
+      migrations, typically used for applying migrations to the database.
+"""
+
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -66,9 +90,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
