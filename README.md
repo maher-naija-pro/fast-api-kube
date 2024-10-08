@@ -163,6 +163,7 @@ To configure the required secrets in your repository:
    - flake8-coverage-report
    - pytest-coverage-report
    - bandit-findings-report
+   - zap-report.html
 
 # Python requirement
 - To add a new library to Python there is a requirement directory with a file for each stage of deployement
@@ -170,7 +171,6 @@ To configure the required secrets in your repository:
     - dev.txt
     - prod.txt
     - stagging.txt
-
 
 # Middleware config:
 
@@ -210,11 +210,21 @@ This repository exposes various application metrics that can be monitored using 
 This project uses pre-commit hooks to automatically ensure that code follows consistent style and quality standards. The hooks are triggered before every commit to check and format Python code using the following tools:
 ### Tools Used
 
-1. **Black** - Python code formatter
-2. **Flake8** - Python code linting
-3. **Pylint** - Advanced Python linting
-4. **Hadolint** - Dockerfile linting
-5. **Detect-Secrets** - Detecting and preventing secret leaks in code
+1. **Black** - A Python code formatter that enforces a consistent code style. We use Black to format our code automatically, making it readable and maintainable.
+2. **Flake8** - A tool that checks the compliance of our code with PEP 8, the Python style guide. It helps us catch coding errors and maintain a clean codebase.
+3. **Mypy** - A static type checker for Python. Mypy ensures that type annotations are used correctly and helps catch type-related logic errors before runtime.
+4. **Pylint** - An advanced tool for checking possible errors in Python code. It also checks for coding standard compliance and helps improve code quality.
+5. **Hadolint** - A Dockerfile linter that helps write clean and correct Dockerfiles following best practices.
+6. **Detect-Secrets** - A tool designed to prevent secrets from being committed to version control. It scans the codebase for potential secret tokens.
+7. **Pre-commit Hooks** - Various hooks integrated via the pre-commit framework to automate the checking of large files, private keys, trailing whitespaces, and file formats such as JSON and YAML:
+   - **Detect Private Key**: Prevents private keys from being committed to the repository. It scans files for patterns that are typically found in private keys.
+   - **Trailing Whitespace**: Removes any trailing whitespaces at the end of lines. This helps to keep the codebase clean and avoids unnecessary diff changes.
+   - **Check YAML**: Ensures that YAML files are formatted and structured correctly. This hook allows for multiple documents per YAML file, which is particularly useful for configurations that use several YAML documents in a single file.
+   - **Check JSON**: Validates that JSON files are properly formatted. This helps in catching syntax errors and structure issues early in the development cycle.
+   - **Mixed Line Ending**: Standardizes on LF (Unix-like line endings) to prevent a mix of CRLF and LF in the same project, which can lead to inconsistencies and issues, especially in cross-platform development environments.
+   - **Check Added Large Files**: Blocks the addition of large files to the repository. It is configurable, allowing teams to set a maximum file size limit. This ensures that the repository does not become bloated with large files that could slow down operations like cloning and fetching.
+8. **Docker Compose Check** - This hook checks Docker Compose files for common mistakes and misconfigurations.
+9. **Helm Lint** - A local hook that uses Helm to lint Kubernetes Helm charts, ensuring they are well-structured and adhere to best practices.
 
 ## How it Works
 
