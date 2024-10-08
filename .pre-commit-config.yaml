@@ -8,7 +8,8 @@ repos:
     rev: 24.10.0 # Replace with the latest stable version
     hooks:
       - id: black
-
+        exclude: ^migrations/
+       
   # Flake8 for Python code linting
   - repo: https://github.com/PyCQA/flake8
     rev: 7.1.1  # Replace with the latest stable version
@@ -17,6 +18,7 @@ repos:
         args:
           - --max-line-length=88  # Customize as needed
           - --ignore=E402  # Example of ignoring a specific rule
+          - --exclude=migrations  # List of directories to ignore
 
   # Python Static Type Checking with Mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -29,6 +31,7 @@ repos:
     rev: v3.3.1 # Replace with the latest stable version
     hooks:
       - id: pylint
+        exclude: ^migrations/
         args: ["--disable=E0401,R0903,W0613,W0621,C0413"]
 
   # Dockerfile linting
@@ -44,7 +47,7 @@ repos:
     rev: v1.5.0  # Replace with the latest stable version
     hooks:
       - id: detect-secrets
-        exclude: '(\.env_exemple)$'
+        exclude: '(migrations/|\.env_exemple)$'
 
   # Check for large files
   - repo: https://github.com/pre-commit/pre-commit-hooks
