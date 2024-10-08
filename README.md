@@ -24,7 +24,7 @@ A branch for each stage of deployement:
 ### hadolint
 - Downolad hadolint for your platfrom  from  https://github.com/hadolint/hadolint/releases/
 
-for linux: 
+for linux:
 ```
  sudo wget https://github.com/hadolint/hadolint/releases/download/v2.12.1-beta/hadolint-Linux-x86_64 -O /bin/hadolint
  sudo chmod +x /bin/hadolint
@@ -126,10 +126,10 @@ pre-commit run --all-files
    - Pages-build-deployment
    - Pycharm Python security scanner
    - Trivy docker image vulnerability scanning tools
-   - Bandit Static Application Security Testing (SAST)   
+   - Bandit Static Application Security Testing (SAST)
    - Safety and pip-autdit dependancy scan
    - Checkov helm infra scan
-   - Zap owasp scan 
+   - Zap owasp scan
 
 ## Repository Secrets
 
@@ -203,7 +203,7 @@ This FastAPI application includes two essential middlewares for controlling acce
 This repository exposes various application metrics that can be monitored using Prometheus. Below is a breakdown of the metrics and what each one represents.
 
 ## Exposed Metrics
-- Check wiki page 
+- Check wiki page
 
 # Pre-Commit Hooks Setup
 
@@ -230,70 +230,70 @@ This project is licensed under the MIT License.
 
 - **Add Helm Secrets Plugin and manage secret encryption:**
   - Install the [Helm Secrets Plugin](https://github.com/jkroepke/helm-secrets).
-  - Use `sops` with GPG for encrypting secrets or integrate with a secret 
+  - Use `sops` with GPG for encrypting secrets or integrate with a secret
     management solution like AWS Secrets Manager or HashiCorp Vault.
 
 - **Add Ingress Rules for Production with TLS and WAF:**
-  - Configure ingress rules with TLS support using Cert-Manager for automatic 
+  - Configure ingress rules with TLS support using Cert-Manager for automatic
     certificate provisioning.
-  - Integrate a WAF (e.g., AWS WAF, GCP Cloud Armor) or use NGINX Ingress with 
+  - Integrate a WAF (e.g., AWS WAF, GCP Cloud Armor) or use NGINX Ingress with
     ModSecurity for enhanced security.
 
 - **Add Authentication and Security to FastAPI:**
-  - Implement OAuth2 with JWT for secure user authentication using FastAPI's 
+  - Implement OAuth2 with JWT for secure user authentication using FastAPI's
     built-in support.
   - Add role-based access control (RBAC) for fine-grained permission handling.
 
 - **Connect the Application to PostgreSQL in Production:**
-  - Ensure the FastAPI app is connected to a managed PostgreSQL instance in your 
+  - Ensure the FastAPI app is connected to a managed PostgreSQL instance in your
     production environment using environment variables for connection strings.
 
 - **Integrate ArgoCD or Flux for Continuous Delivery (CD):**
-  - Set up ArgoCD or Flux to manage GitOps-based continuous delivery for your 
+  - Set up ArgoCD or Flux to manage GitOps-based continuous delivery for your
     Kubernetes deployments.
 
 - **Add Helm Hooks for Alembic Database Migrations in Production:**
-  - Use Helm post-deploy hooks to trigger Alembic migrations automatically after 
+  - Use Helm post-deploy hooks to trigger Alembic migrations automatically after
     successful deployments.
 
 - **Add Helm Tests Hook to Verify Database Connection:**
-  - Create Helm test hooks to validate the connection between the FastAPI app 
+  - Create Helm test hooks to validate the connection between the FastAPI app
     and the PostgreSQL database after deployment.
 
 - **Add Helm Release to CI Pipeline:**
-  - Integrate Helm release steps in your CI pipeline to automatically deploy 
+  - Integrate Helm release steps in your CI pipeline to automatically deploy
     changes to your Kubernetes cluster.
 
 - **Implement Authentication (OAuth2/JWT):**
-  - Set up OAuth2 with JWT tokens for secure access control within your FastAPI 
+  - Set up OAuth2 with JWT tokens for secure access control within your FastAPI
     application.
 
 - **Implement Role-Based Access Control (RBAC):**
-  - Define and enforce role-based permissions within the FastAPI application to 
+  - Define and enforce role-based permissions within the FastAPI application to
     ensure proper access control.
 
 - **Test Horizontal Pod Autoscaling (HPA):**
-  - Configure and test Kubernetes HPA to automatically scale your application 
+  - Configure and test Kubernetes HPA to automatically scale your application
     based on CPU or memory usage.
 
 - **Test Multi-Stage Builds:**
-  - Optimize Docker builds with multi-stage builds to reduce image size and 
+  - Optimize Docker builds with multi-stage builds to reduce image size and
     improve build efficiency.
 
 - **Mock External Dependencies for Testing:**
-  - Use tools like `pytest-mock` or custom mock services to simulate external 
+  - Use tools like `pytest-mock` or custom mock services to simulate external
     dependencies during unit and integration tests.
 
 - **Set up CI to Regularly Update Dependencies:**
-  - Automate dependency updates in your CI pipeline using tools like Dependabot 
+  - Automate dependency updates in your CI pipeline using tools like Dependabot
     or Renovate to ensure packages stay up-to-date.
 
 - **Add Sphinx Documentation:**
-  - Integrate Sphinx for generating project documentation and ensure it's part 
+  - Integrate Sphinx for generating project documentation and ensure it's part
     of your CI pipeline for regular updates.
 
 - **Use External Vault for Secrets with Rotation:**
-  - Store sensitive information in an external vault (like HashiCorp Vault or 
+  - Store sensitive information in an external vault (like HashiCorp Vault or
     AWS Secrets Manager) and implement automatic secret rotation.
 
 
@@ -302,8 +302,10 @@ This project is licensed under the MIT License.
     world traffic and ensure the system scales properly.
 
 - **Add Rollback Functionality for Helm and Alembic Migration:**
-  - Implement rollback strategies for both Helm deployments and Alembic 
+  - Implement rollback strategies for both Helm deployments and Alembic
     migrations to handle failed deployments gracefully.
+
+- **Auto increment helm version:**
 
 
 

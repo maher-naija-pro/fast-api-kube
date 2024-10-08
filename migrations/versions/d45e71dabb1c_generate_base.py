@@ -1,7 +1,7 @@
 """generate base
 
 Revision ID: d45e71dabb1c
-Revises: 
+Revises:
 Create Date: 2024-09-25 16:08:53.863417
 
 """
