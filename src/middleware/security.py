@@ -40,7 +40,10 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         # Add CORS middleware
         app = CORSMiddleware(
             app=app,
-            allow_origins=["*"],  # Allow all origins (can be restricted in production)
+            allow_origins=[
+                "http://localhost",
+                "http://localhost:3000",
+            ],  # Allow all origins (can be restricted in production)
             allow_credentials=True,
             allow_methods=["*"],  # Allow all HTTP methods
             allow_headers=["*"],  # Allow all headers
@@ -69,17 +72,43 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         Returns:
             Response: The HTTP response after applying security rules.
         """
-        # Here, you can add custom logic if needed
+        # Process the request and get response from the next middleware or endpoint
         response = await call_next(request)
+
+        # Set security headers to protect against common attacks
+        response.headers["Sec-Fetch-Dest"] = "document"
+        response.headers["Sec-Fetch-Mode"] = "navigate"
+        response.headers["Sec-Fetch-Site"] = "same-origin"
+        response.headers["Sec-Fetch-User"] = "?1"
+
+        # Prevent caching to ensure data privacy
+        response.headers["Cache-Control"] = "no-store"
+
+        # Prevent clickjacking by disallowing iframes
         response.headers["X-Frame-Options"] = "DENY"
-        # Add security headers to the response
+
+        # Hide server software information
+        response.headers["server"] = "none"
+
+        # Suppress date and last-modified headers for timestamp privacy
+        response.headers["date"] = "none"
+        response.headers["last-modified"] = "none"
+
+        # Enforce HTTPS with Strict-Transport-Security
         response.headers["Strict-Transport-Security"] = (
             "max-age=31536000; includeSubDomains"
         )
+
+        # Prevent MIME sniffing
         response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
+
+        # Basic XSS protection
         response.headers["X-XSS-Protection"] = "1; mode=block"
+
+        # Limit scripts and objects to trusted sources
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; script-src 'self'; object-src 'none'"
         )
+
+        # Return the response with security and privacy headers
         return response
