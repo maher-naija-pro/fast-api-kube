@@ -15,6 +15,7 @@ repos:
     rev: 7.1.1  # Replace with the latest stable version
     hooks:
       - id: flake8
+        exclude: ^migrations/
         args:
           - --max-line-length=88  # Customize as needed
           - --ignore=E402  # Example of ignoring a specific rule
@@ -24,7 +25,8 @@ repos:
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.11.2
     hooks:
-      - id: mypy  # Ensures correct type annotations and catches type-related errors.
+      - id: mypy
+        exclude: ^migrations/  # Ensures correct type annotations and catches type-related errors.
 
   # Pylint for advanced Python linting
   - repo: https://github.com/PyCQA/pylint
@@ -47,11 +49,12 @@ repos:
     rev: v1.5.0  # Replace with the latest stable version
     hooks:
       - id: detect-secrets
-        exclude: '(migrations/|\.env_exemple)$'
+        exclude: '^(migrations/versions/.*$|\.env_exemple|alembic.ini|fast-api-kube-helm/values_exemple.yaml)$'
 
   # Check for large files
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0 # Replace with the latest stable version
     hooks:
       - id: check-added-large-files
-        args: ["--maxkb=500"]  # Adjust max file size (in KB) as needed        
+        exclude: ^migrations/
+        args: ["--maxkb=500"]  # Adjust max file size (in KB) as needed
