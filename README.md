@@ -131,7 +131,8 @@ pre-commit run --all-files
    - Checkov helm infra scan
    - Zap owasp scan
    - Auto PR from stagiing to main
-## Repository Secrets
+
+## Repository CI/CD Secrets
 
 These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
 
