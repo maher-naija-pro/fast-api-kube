@@ -58,3 +58,5 @@ repos:
       - id: check-added-large-files
         exclude: ^migrations/
         args: ["--maxkb=500"]  # Adjust max file size (in KB) as needed
+
+
