@@ -4,7 +4,7 @@ services:
     build:  # Specify the build instructions
       context: .  # Use the current directory as the build context
       dockerfile: Dockerfile  # Specify the Dockerfile to use for building the image
-    command: bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  " 
+    command: bash -c "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload  --access-logfile -  "
     pull_policy: always  # Always pull the latest image
     privileged: false  # Do not run the container in privileged mode
     ports:  # Expose the container ports
@@ -12,7 +12,7 @@ services:
     volumes:  # Define the volumes to mount
       - type: bind  # Use a bind mount for the volume
         source: .  # Source directory on the host machine
-        target: /app/  # Target directory in the container  
+        target: /app/  # Target directory in the container
     depends_on:  # Specify dependencies on other services
        db:  # Depend on the db service
           condition: service_healthy  # Wait until the db service is healthy
@@ -64,7 +64,7 @@ services:
         limits:  # Limit the resources used by the container
           cpus: '1.0'  # Limit the container to use 1 CPU
           memory: 512M # Limit CPU and memory usage for the API service
-# Database service (PostgreSQL)  
+# Database service (PostgreSQL)
   db:  # Define the database service
     image: postgres:12.1-alpine # Use a lightweight image like Alpine to reduce the image size
     privileged: false  # Do not run the container in privileged mode
@@ -81,7 +81,7 @@ services:
     volumes:  # Define the volumes to mount for the database service
       - postgres_data_disk:/var/lib/postgresql/data/  # Persist the database data using volumes
     environment:  # Define environment variables for the database service
-      - POSTGRES_USER # Use environment variables from the .env file 
+      - POSTGRES_USER # Use environment variables from the .env file
       - POSTGRES_PASSWORD  # Define the PostgreSQL password environment variable
       - POSTGRES_DB  # Define the PostgreSQL database environment variable
     networks:  # Define the networks for the database service
@@ -92,7 +92,7 @@ services:
         limits:  # Limit the resources used by the container
           cpus: '0.5'  # Limit the container to use 0.5 CPU
           memory: 256M  # Limit CPU and memory usage for the db service
-          
+
 
 volumes:
   postgres_data_disk:  # Name the volume explicitly to avoid conflicts

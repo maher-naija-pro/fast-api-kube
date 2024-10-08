@@ -24,7 +24,7 @@ A branch for each stage of deployement:
 ### hadolint
 - Downolad hadolint for your platfrom  from  https://github.com/hadolint/hadolint/releases/
 
-for linux: 
+for linux:
 ```
  sudo wget https://github.com/hadolint/hadolint/releases/download/v2.12.1-beta/hadolint-Linux-x86_64 -O /bin/hadolint
  sudo chmod +x /bin/hadolint
@@ -126,10 +126,10 @@ pre-commit run --all-files
    - Pages-build-deployment
    - Pycharm Python security scanner
    - Trivy docker image vulnerability scanning tools
-   - Bandit Static Application Security Testing (SAST)   
+   - Bandit Static Application Security Testing (SAST)
    - Safety and pip-autdit dependancy scan
    - Checkov helm infra scan
-   - Zap owasp scan 
+   - Zap owasp scan
 
 ## Repository Secrets
 
@@ -163,6 +163,7 @@ To configure the required secrets in your repository:
    - flake8-coverage-report
    - pytest-coverage-report
    - bandit-findings-report
+   - zap-report.html
 
 # Python requirement
 - To add a new library to Python there is a requirement directory with a file for each stage of deployement
@@ -170,7 +171,6 @@ To configure the required secrets in your repository:
     - dev.txt
     - prod.txt
     - stagging.txt
-
 
 # Middleware config:
 
@@ -203,18 +203,28 @@ This FastAPI application includes two essential middlewares for controlling acce
 This repository exposes various application metrics that can be monitored using Prometheus. Below is a breakdown of the metrics and what each one represents.
 
 ## Exposed Metrics
-- Check wiki page 
+- Check wiki page
 
 # Pre-Commit Hooks Setup
 
 This project uses pre-commit hooks to automatically ensure that code follows consistent style and quality standards. The hooks are triggered before every commit to check and format Python code using the following tools:
 ### Tools Used
 
-1. **Black** - Python code formatter
-2. **Flake8** - Python code linting
-3. **Pylint** - Advanced Python linting
-4. **Hadolint** - Dockerfile linting
-5. **Detect-Secrets** - Detecting and preventing secret leaks in code
+1. **Black** - A Python code formatter that enforces a consistent code style. We use Black to format our code automatically, making it readable and maintainable.
+2. **Flake8** - A tool that checks the compliance of our code with PEP 8, the Python style guide. It helps us catch coding errors and maintain a clean codebase.
+3. **Mypy** - A static type checker for Python. Mypy ensures that type annotations are used correctly and helps catch type-related logic errors before runtime.
+4. **Pylint** - An advanced tool for checking possible errors in Python code. It also checks for coding standard compliance and helps improve code quality.
+5. **Hadolint** - A Dockerfile linter that helps write clean and correct Dockerfiles following best practices.
+6. **Detect-Secrets** - A tool designed to prevent secrets from being committed to version control. It scans the codebase for potential secret tokens.
+7. **Pre-commit Hooks** - Various hooks integrated via the pre-commit framework to automate the checking of large files, private keys, trailing whitespaces, and file formats such as JSON and YAML:
+   - **Detect Private Key**: Prevents private keys from being committed to the repository. It scans files for patterns that are typically found in private keys.
+   - **Trailing Whitespace**: Removes any trailing whitespaces at the end of lines. This helps to keep the codebase clean and avoids unnecessary diff changes.
+   - **Check YAML**: Ensures that YAML files are formatted and structured correctly. This hook allows for multiple documents per YAML file, which is particularly useful for configurations that use several YAML documents in a single file.
+   - **Check JSON**: Validates that JSON files are properly formatted. This helps in catching syntax errors and structure issues early in the development cycle.
+   - **Mixed Line Ending**: Standardizes on LF (Unix-like line endings) to prevent a mix of CRLF and LF in the same project, which can lead to inconsistencies and issues, especially in cross-platform development environments.
+   - **Check Added Large Files**: Blocks the addition of large files to the repository. It is configurable, allowing teams to set a maximum file size limit. This ensures that the repository does not become bloated with large files that could slow down operations like cloning and fetching.
+8. **Docker Compose Check** - This hook checks Docker Compose files for common mistakes and misconfigurations.
+9. **Helm Lint** - A local hook that uses Helm to lint Kubernetes Helm charts, ensuring they are well-structured and adhere to best practices.
 
 ## How it Works
 
@@ -230,70 +240,70 @@ This project is licensed under the MIT License.
 
 - **Add Helm Secrets Plugin and manage secret encryption:**
   - Install the [Helm Secrets Plugin](https://github.com/jkroepke/helm-secrets).
-  - Use `sops` with GPG for encrypting secrets or integrate with a secret 
+  - Use `sops` with GPG for encrypting secrets or integrate with a secret
     management solution like AWS Secrets Manager or HashiCorp Vault.
 
 - **Add Ingress Rules for Production with TLS and WAF:**
-  - Configure ingress rules with TLS support using Cert-Manager for automatic 
+  - Configure ingress rules with TLS support using Cert-Manager for automatic
     certificate provisioning.
-  - Integrate a WAF (e.g., AWS WAF, GCP Cloud Armor) or use NGINX Ingress with 
+  - Integrate a WAF (e.g., AWS WAF, GCP Cloud Armor) or use NGINX Ingress with
     ModSecurity for enhanced security.
 
 - **Add Authentication and Security to FastAPI:**
-  - Implement OAuth2 with JWT for secure user authentication using FastAPI's 
+  - Implement OAuth2 with JWT for secure user authentication using FastAPI's
     built-in support.
   - Add role-based access control (RBAC) for fine-grained permission handling.
 
 - **Connect the Application to PostgreSQL in Production:**
-  - Ensure the FastAPI app is connected to a managed PostgreSQL instance in your 
+  - Ensure the FastAPI app is connected to a managed PostgreSQL instance in your
     production environment using environment variables for connection strings.
 
 - **Integrate ArgoCD or Flux for Continuous Delivery (CD):**
-  - Set up ArgoCD or Flux to manage GitOps-based continuous delivery for your 
+  - Set up ArgoCD or Flux to manage GitOps-based continuous delivery for your
     Kubernetes deployments.
 
 - **Add Helm Hooks for Alembic Database Migrations in Production:**
-  - Use Helm post-deploy hooks to trigger Alembic migrations automatically after 
+  - Use Helm post-deploy hooks to trigger Alembic migrations automatically after
     successful deployments.
 
 - **Add Helm Tests Hook to Verify Database Connection:**
-  - Create Helm test hooks to validate the connection between the FastAPI app 
+  - Create Helm test hooks to validate the connection between the FastAPI app
     and the PostgreSQL database after deployment.
 
 - **Add Helm Release to CI Pipeline:**
-  - Integrate Helm release steps in your CI pipeline to automatically deploy 
+  - Integrate Helm release steps in your CI pipeline to automatically deploy
     changes to your Kubernetes cluster.
 
 - **Implement Authentication (OAuth2/JWT):**
-  - Set up OAuth2 with JWT tokens for secure access control within your FastAPI 
+  - Set up OAuth2 with JWT tokens for secure access control within your FastAPI
     application.
 
 - **Implement Role-Based Access Control (RBAC):**
-  - Define and enforce role-based permissions within the FastAPI application to 
+  - Define and enforce role-based permissions within the FastAPI application to
     ensure proper access control.
 
 - **Test Horizontal Pod Autoscaling (HPA):**
-  - Configure and test Kubernetes HPA to automatically scale your application 
+  - Configure and test Kubernetes HPA to automatically scale your application
     based on CPU or memory usage.
 
 - **Test Multi-Stage Builds:**
-  - Optimize Docker builds with multi-stage builds to reduce image size and 
+  - Optimize Docker builds with multi-stage builds to reduce image size and
     improve build efficiency.
 
 - **Mock External Dependencies for Testing:**
-  - Use tools like `pytest-mock` or custom mock services to simulate external 
+  - Use tools like `pytest-mock` or custom mock services to simulate external
     dependencies during unit and integration tests.
 
 - **Set up CI to Regularly Update Dependencies:**
-  - Automate dependency updates in your CI pipeline using tools like Dependabot 
+  - Automate dependency updates in your CI pipeline using tools like Dependabot
     or Renovate to ensure packages stay up-to-date.
 
 - **Add Sphinx Documentation:**
-  - Integrate Sphinx for generating project documentation and ensure it's part 
+  - Integrate Sphinx for generating project documentation and ensure it's part
     of your CI pipeline for regular updates.
 
 - **Use External Vault for Secrets with Rotation:**
-  - Store sensitive information in an external vault (like HashiCorp Vault or 
+  - Store sensitive information in an external vault (like HashiCorp Vault or
     AWS Secrets Manager) and implement automatic secret rotation.
 
 
@@ -302,8 +312,10 @@ This project is licensed under the MIT License.
     world traffic and ensure the system scales properly.
 
 - **Add Rollback Functionality for Helm and Alembic Migration:**
-  - Implement rollback strategies for both Helm deployments and Alembic 
+  - Implement rollback strategies for both Helm deployments and Alembic
     migrations to handle failed deployments gracefully.
+
+- **Auto increment helm version:**
 
 
 
