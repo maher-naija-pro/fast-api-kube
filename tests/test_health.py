@@ -30,5 +30,29 @@ def test_read_health_check(client):
     - The JSON response should be {"status": "healthy"}.
     """
     response = client.get("/health")
+
     assert response.status_code == 200
-    assert response.json() == {"status": "healthy"}
+
+    # Load the response data as JSON
+    data = response.json()
+
+    # Assert the main health status
+    assert data["status"] == "healthy", "Main status is not healthy"
+
+    # Check the timestamp is not None or empty
+    assert data["timestamp"], "Timestamp is missing"
+
+    # Check uptime is reported
+    assert data["uptime"], "Uptime is missing"
+
+    # Check the services array
+    assert "services" in data, "Services data is missing"
+
+    # Check service health details
+    services = data["services"]
+    assert services[0]["name"] == "database", "Service name is not 'database'"
+    assert services[0]["status"] == "healthy", "Database service is not healthy"
+    assert "latency" in services[0], "Latency data is missing"
+
+    # Optionally, you could also check the type of latency to be float
+    assert isinstance(services[0]["latency"], float), "Latency is not a float"

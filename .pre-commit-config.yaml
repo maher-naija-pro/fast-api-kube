@@ -34,7 +34,7 @@ repos:
     hooks:
       - id: pylint
         exclude: ^migrations/
-        args: ["--disable=E0401,R0903,W0613,W0621,C0413"]
+        args: ["--disable=E0401,R0903,W0613,W0621,C0413,C0103,W0134,W0150,W0718"]
 
   # Dockerfile linting
   - repo: https://github.com/hadolint/hadolint

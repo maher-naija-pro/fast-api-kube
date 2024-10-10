@@ -81,6 +81,24 @@ docker-compose run test
  sudo docker compose down --volumes
  ```
 
+## Health Check Endpoint
+
+The `/health` endpoint provides real-time status of the application and its core services, including database. It returns the overall health status, uptime, and latency details.
+
+### Response Example
+
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-10-10T10:00:00Z",
+  "uptime": "02:15:30",
+  "version": "1.0.0",
+  "services": [
+    {"name": "database", "status": "healthy", "latency": 0.123}
+  ]
+}
+
+
 ## Running  Precommit Hooks Manually
 To run all hooks manually on all files, you can use:
 ```
@@ -103,6 +121,7 @@ pre-commit run --all-files
 | `RATE_LIMIT_REQUESTS`  | Maximum number of requests allowed within the time window.   | `100`            | Optional              |
 | `RATE_LIMIT_WINDOW`    | Time window (in seconds) for rate limiting requests.         | `60`             | Optional              |
 | `RETRY_LIMIT`          | Maximum number of retries allowed for failed requests.       | `60`             | Optional              |
+| `APP_VERSION`          | Define App version                                           | `0.0.1`             | Optional              |
 
 ## Deep Configuration
 - Check wiki page
