@@ -40,7 +40,7 @@ USER appuser
 COPY --chown=appuser:appuser ./ /app/
 
 # Add a health check for the application
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=1s --timeout=10s --start-period=1s --retries=30 \
     CMD curl --fail http://localhost:3000/health || exit 1
 
 # Expose the application port
