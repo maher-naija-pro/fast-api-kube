@@ -41,6 +41,7 @@ class SecurityMiddleware(BaseHTTPMiddleware):
         app = CORSMiddleware(
             app=app,
             allow_origins=[
+                "*",
                 "http://localhost",
                 "http://localhost:3000",
             ],  # Allow all origins (can be restricted in production)

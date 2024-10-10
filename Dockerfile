@@ -39,6 +39,9 @@ USER appuser
 # Copy the application source code
 COPY --chown=appuser:appuser ./ /app/
 
+# Add a health check for the application
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl --fail http://localhost:3000/health || exit 1
 
 # Expose the application port
 EXPOSE  3000

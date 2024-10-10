@@ -18,6 +18,7 @@ services:
           condition: service_healthy  # Wait until the db service is healthy
     environment:  # Define environment variables for the service
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
+        - APP_VERSION  # Define App version
     restart: always # Automatically restart the service if it fails
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
@@ -51,6 +52,7 @@ services:
           condition: service_healthy  # Wait until the db service is healthy
     environment:  # Define environment variables for the test service
         - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
+        - APP_VERSION  # Define App version
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
     healthcheck:  # Define health checks for the test service

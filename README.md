@@ -81,6 +81,24 @@ docker-compose run test
  sudo docker compose down --volumes
  ```
 
+## Health Check Endpoint
+
+The `/health` endpoint provides real-time status of the application and its core services, including database. It returns the overall health status, uptime, and latency details.
+
+### Response Example
+
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-10-10T10:00:00Z",
+  "uptime": "02:15:30",
+  "version": "1.0.0",
+  "services": [
+    {"name": "database", "status": "healthy", "latency": 0.123}
+  ]
+}
+
+
 ## Running  Precommit Hooks Manually
 To run all hooks manually on all files, you can use:
 ```
@@ -103,6 +121,7 @@ pre-commit run --all-files
 | `RATE_LIMIT_REQUESTS`  | Maximum number of requests allowed within the time window.   | `100`            | Optional              |
 | `RATE_LIMIT_WINDOW`    | Time window (in seconds) for rate limiting requests.         | `60`             | Optional              |
 | `RETRY_LIMIT`          | Maximum number of retries allowed for failed requests.       | `60`             | Optional              |
+| `APP_VERSION`          | Define App version                                           | `0.0.1`             | Optional              |
 
 ## Deep Configuration
 - Check wiki page
@@ -130,8 +149,9 @@ pre-commit run --all-files
    - Safety and pip-autdit dependancy scan
    - Checkov helm infra scan
    - Zap owasp scan
+   - Auto PR from stagiing to main
 
-## Repository Secrets
+## Repository CI/CD Secrets
 
 These secrets are used for automating the CI/CD pipeline and managing external integrations such as Docker Hub, PostgreSQL, and PyPI.
 
@@ -204,6 +224,15 @@ This repository exposes various application metrics that can be monitored using 
 
 ## Exposed Metrics
 - Check wiki page
+
+# Automating Dependency Updates with Dependabot
+
+Dependabot automates dependency updates by checking your project against a database of updates and
+security vulnerabilities. Configure it in `.github/dependabot.yml` to run on a daily, weekly, or
+monthly schedule. It scans dependency files, identifies outdated versions, and if updates or patches
+are available, automatically generates pull requests. These PRs detail changes and potential
+compatibility issues, enhancing security and maintaining software quality by keeping dependencies current.
+
 
 # Pre-Commit Hooks Setup
 
@@ -295,10 +324,6 @@ This project is licensed under the MIT License.
   - Use tools like `pytest-mock` or custom mock services to simulate external
     dependencies during unit and integration tests.
 
-- **Set up CI to Regularly Update Dependencies:**
-  - Automate dependency updates in your CI pipeline using tools like Dependabot
-    or Renovate to ensure packages stay up-to-date.
-
 - **Add Sphinx Documentation:**
   - Integrate Sphinx for generating project documentation and ensure it's part
     of your CI pipeline for regular updates.
@@ -319,4 +344,5 @@ This project is licensed under the MIT License.
 - **Auto increment helm version:**
 
 - **Auto create pr**
-
+- **ADD CHANGELOG.md**
+- **ADD CONTRIBUTING.md**
