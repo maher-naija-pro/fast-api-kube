@@ -146,5 +146,5 @@ configmaps:
       DB_USER: prod_user
       DB_PASS: yourpassword
 
-db:
+secrets:
   password: secretPassword
