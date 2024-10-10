@@ -57,7 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.7
       - name: PyCharm Python Security Scanner
-        uses: tonybaloney/pycharm-security@1.25.1
+        uses: tonybaloney/pycharm-security@1.29.0
         with:
           path: src/
 # Step : Run dependency vulnerability scanning
