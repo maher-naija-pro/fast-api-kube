@@ -18,6 +18,10 @@ WORKDIR /app/
 # Start building
 RUN echo "I'm building for $ENVIRONMENT"
 
+# Install curl
+RUN apt-get update && apt-get install -y --no-install-recommends  curl=*  && rm -rf /var/lib/apt/lists/*
+
+
 # Copy dependency files first to optimize Docker cache
 COPY requirements/ /app/requirements/
 
