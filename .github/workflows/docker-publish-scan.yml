@@ -84,7 +84,7 @@ jobs:
           cache-to: type=gha,mode=max
       # Run Trivy to scan the Docker image for vulnerabilities
       - name: Trivy scan
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@0.26.0
         with:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           format: 'table'
