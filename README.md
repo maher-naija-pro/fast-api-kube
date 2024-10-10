@@ -65,7 +65,7 @@ or manually execute :
 docker compose down --volumes
 docker-compose -f "docker-compose.yml" up -d --build
 ```
-- Check on your browser: <http://localhost:8080/check>
+- Check on your browser: <http://localhost:3000/health>
 ## Tests
 - Run the test script
 ```
@@ -107,7 +107,7 @@ pre-commit run --all-files
 
 ## Interactive API docs
 
-- Go to http://127.0.0.1:8000/docs
+- Go to http://127.0.0.1:3000/docs
 
 - You will see the automatic interactive API documentation (provided by Swagger UI)
 

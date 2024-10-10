@@ -43,7 +43,7 @@ from helpers.log.logger import init_log
 from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom middleware
 
 # Security Middleware
-from middleware.security import SecurityMiddleware  # Import security middleware
+# from middleware.security import SecurityMiddleware  # Import security middleware
 from routers import health, history, metric, root, tools
 
 
@@ -94,7 +94,7 @@ app = FastAPI(lifespan=app_lifespan)
 # Add global rate-limiting middleware
 app.add_middleware(GlobalRateLimitMiddleware)
 # Add the security middlewares
-app.add_middleware(SecurityMiddleware)
+# app.add_middleware(SecurityMiddleware)
 # Redirect all HTTP to HTTPS for production environments
 if os.getenv("ENV") == "prod":
     app.add_middleware(HTTPSRedirectMiddleware)
