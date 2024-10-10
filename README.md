@@ -97,7 +97,7 @@ The `/health` endpoint provides real-time status of the application and its core
     {"name": "database", "status": "healthy", "latency": 0.123}
   ]
 }
-
+```
 
 ## Running  Precommit Hooks Manually
 To run all hooks manually on all files, you can use:
