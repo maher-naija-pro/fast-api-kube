@@ -134,17 +134,14 @@ configmaps:
     data:
       db-host: dev.database.example.com
       DB_USER: dev_user
-      DB_PASS: yourpassword
   - name: staging
     data:
       db-host: staging.database.example.com
       DB_USER: staging_user
-      DB_PASS: yourpassword
   - name: prod
     data:
       db-host: prod.database.example.com
       DB_USER: prod_user
-      DB_PASS: yourpassword
 
 secrets:
   password: secretPassword
