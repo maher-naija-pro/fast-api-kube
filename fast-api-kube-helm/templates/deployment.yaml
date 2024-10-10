@@ -54,14 +54,6 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      # Environment variables from values.yaml (static environment variables)
-          env:
-            {{- with .Values.env }}
-            {{- range $key, $value := . }}
-              - name: {{ $key | upper }}
-                value: {{ $value | quote }}
-            {{- end }}
-            {{- end }}
           # Environment variables from ConfigMaps (dynamic environment variables)
           {{- range .Values.configmaps }}
           envFrom:

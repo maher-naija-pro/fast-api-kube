@@ -125,23 +125,30 @@ tolerations: []
 
 affinity: {}
 
-env:
-  LOG_LEVEL: debug
-  APP_MODE: "prod"
-
 configmaps:
   - name: dev
     data:
       db-host: dev.database.example.com
       DB_USER: dev_user
+      DB_URI: "postgresql://username:password@localhost:5432/dbname"
+      LOG_LEVEL: debug
+      APP_MODE: "dev"
+
   - name: staging
     data:
       db-host: staging.database.example.com
       DB_USER: staging_user
+      DB_URI: "postgresql://username:password@localhost:5432/dbname"
+      LOG_LEVEL: debug
+      APP_MODE: "staging"
+
   - name: prod
     data:
       db-host: prod.database.example.com
       DB_USER: prod_user
+      DB_URI: "postgresql://username:password@localhost:5432/dbname"
+      LOG_LEVEL: debug
+      APP_MODE: "prod"
 
 secrets:
   password: secretPassword
