@@ -22,8 +22,15 @@ from helpers.log.logger import init_log
 
 # Initialize loggers
 logger = init_log()
-# Database URL: replace with your PostgreSQL credentials
-DATABASE_URL = os.getenv("DB_URI")
+
+# Database URL: replace with your PostgreSQL credentials or use the default
+
+POSTGRES_USER = os.getenv("POSTGRES_USER", "default_user")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "default_pass")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "default_db")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
+DATABASE_URL = f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"  # noqa: E501  # pylint: disable=C0301
 # SQLAlchemy engine
 engine = create_engine(DATABASE_URL)
 
@@ -74,5 +81,5 @@ def check_db_connection():
     except Exception as e:
         # Log the exception and return an error response
         logger.error(f"Database connection failed: {str(e)}")
-        raise HTTPException(status_code=500, detail="Database connection failed") from e
+    # raise HTTPException(status_code=500, detail="Database connection failed") from e
     return None

@@ -16,8 +16,12 @@ services:
     depends_on:  # Specify dependencies on other services
        db:  # Depend on the db service
           condition: service_healthy  # Wait until the db service is healthy
-    environment:  # Define environment variables for the service
-        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
+    environment:
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - POSTGRES_HOST
+        - POSTGRES_PORT
         - APP_VERSION  # Define App version
     restart: always # Automatically restart the service if it fails
     networks:  # Define the networks for the service
@@ -51,7 +55,11 @@ services:
        db:  # Depend on the db service
           condition: service_healthy  # Wait until the db service is healthy
     environment:  # Define environment variables for the test service
-        - DB_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}  # Database connection string
+        - POSTGRES_USER
+        - POSTGRES_PASSWORD
+        - POSTGRES_DB
+        - POSTGRES_HOST
+        - POSTGRES_PORT
         - APP_VERSION  # Define App version
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network

@@ -80,9 +80,17 @@ async def check_database_connection():
         float: Time taken to establish the connection and query the database.
     """
     # Database URL: replace with your PostgreSQL credentials
-    DATABASE_URL = os.getenv("DB_URI")
+
+    POSTGRES_USER = os.getenv("POSTGRES_USER", "default_user")
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "default_pass")
+    POSTGRES_DB = os.getenv("POSTGRES_DB", "default_db")
+    POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+    POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
+
+    url = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"  # noqa: E501  # pylint: disable=C0301
+
     start = time.time()
-    engine = create_engine(DATABASE_URL)
+    engine = create_engine(url)
 
     try:
         await engine.connect()

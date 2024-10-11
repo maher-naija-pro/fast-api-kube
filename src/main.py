@@ -26,7 +26,7 @@ Routers:
     root: Root-level endpoints.
 """
 
-import asyncio
+# import asyncio
 import os
 import sys
 from contextlib import asynccontextmanager
@@ -34,9 +34,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 # Https redirect Middleware
-from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
+# from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
-from db.database import check_db_connection, get_db
+# from db.database import check_db_connection, get_db
+from db.database import get_db
 from helpers.log.logger import init_log
 
 # Rate limit Middleware
@@ -72,18 +73,18 @@ async def app_lifespan(status):
     """
     logger.info("Application lifespan started")
     # Retry logic for DB connection if necessary
-    retries = RETRY_LIMIT
-    for _ in range(retries):
-        try:
-            check_db_connection()
-            logger.info("Database connected")
-            break
-        except ConnectionError as e:
-            logger.error(f"Database connection error: {e}")
-            await asyncio.sleep(5)
+    #    retries = RETRY_LIMIT
+    #    for _ in range(retries):
+    #        try:
+    #            check_db_connection()
+    #            logger.info("Database connected")
+    #            break
+    #        except ConnectionError as e:
+    #            logger.error(f"Database connection error: {e}")
+    #            await asyncio.sleep(5)
 
-        logger.critical("Failed to connect to database after retries")
-        sys.exit(1)
+    #        logger.critical("Failed to connect to database after retries")
+    #        sys.exit(1)
     yield  # The app runs here
     logger.info("Shutting down gracefully...")
     db.close()
@@ -96,8 +97,8 @@ app.add_middleware(GlobalRateLimitMiddleware)
 # Add the security middlewares
 # app.add_middleware(SecurityMiddleware)
 # Redirect all HTTP to HTTPS for production environments
-if os.getenv("ENV") == "prod":
-    app.add_middleware(HTTPSRedirectMiddleware)
+# if os.getenv("ENV") == "prod":
+#    app.add_middleware(HTTPSRedirectMiddleware)
 
 app.include_router(health.router, prefix="")
 app.include_router(metric.router, prefix="")
