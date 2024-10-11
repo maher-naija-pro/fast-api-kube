@@ -22,7 +22,6 @@ services:
         - POSTGRES_DB
         - POSTGRES_HOST
         - POSTGRES_PORT
-        - APP_VERSION  # Define App version
     restart: always # Automatically restart the service if it fails
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
@@ -60,7 +59,6 @@ services:
         - POSTGRES_DB
         - POSTGRES_HOST
         - POSTGRES_PORT
-        - APP_VERSION  # Define App version
     networks:  # Define the networks for the service
       - app_network  # Adding the service to the same dedicated network
     healthcheck:  # Define health checks for the test service

@@ -1,13 +1,19 @@
 # Use a slim image for a smaller size
 FROM python:3.9.20-slim
 
+
 # Set build argument for environment (default to 'dev')
 ARG ENVIRONMENT=dev
 
+ENV APP_VERSION=0.0.1
+ENV LOG_LEVEL=debug
+ENV APP_PORT=3000
+
+
 # Environment variables for better robustness and security
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    ENV=dev
+    PYTHONDONTWRITEBYTECODE=1
+
 
 # Set the maintainer
 LABEL maintainer="Maher NAIJA <maher.naija@gmail.com>"
@@ -45,11 +51,11 @@ COPY --chown=appuser:appuser ./ /app/
 
 # Add a health check for the application
 HEALTHCHECK --interval=1s --timeout=10s --start-period=1s --retries=30 \
-    CMD curl --fail http://localhost:3000/health || exit 1
+    CMD curl --fail http://localhost:${APP_PORT}/health || exit 1
 
 # Expose the application port
-EXPOSE  3000
+EXPOSE  ${APP_PORT}
 
 # Run the pytest command by default
-CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:3000", "--reload", "--access-logfile", "-"]
+CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:${APP_PORT}", "--reload", "--access-logfile", "-"]
 
