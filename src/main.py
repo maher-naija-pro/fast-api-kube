@@ -48,7 +48,6 @@ from middleware.rate_limit import GlobalRateLimitMiddleware  # Import custom mid
 from routers import health, history, metric, root, tools
 
 APP_VERSION = os.getenv("APP_VERSION", "0.0.1")
-LOG_LEVEL = os.getenv("LOG_LEVEL", "debug")
 RETRY_LIMIT = int(os.getenv("RETRY_LIMIT", "10"))
 
 # Adding necessary paths

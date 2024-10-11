@@ -12,6 +12,7 @@ Functions:
 """
 
 import logging
+import os
 
 
 class AppFilter(logging.Filter):
@@ -61,9 +62,14 @@ def init_log(logger_name="root"):
     Returns:
         logging.Logger: The initialized logger with the custom filter.
     """
-    logging.basicConfig(
-        level=logging.DEBUG,
-    )
+
     logger = logging.getLogger(logger_name)
+    log_level = os.getenv("LOG_LEVEL", "DEBUG").upper()
+
+    # Convert the log level from string to the corresponding logging constant
+    numeric_level = getattr(logging, log_level, logging.DEBUG)
+
+    logging.basicConfig(level=numeric_level)
+
     logger.addFilter(AppFilter())
     return logger

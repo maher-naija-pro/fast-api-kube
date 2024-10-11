@@ -57,5 +57,5 @@ HEALTHCHECK --interval=1s --timeout=10s --start-period=1s --retries=30 \
 EXPOSE  ${APP_PORT}
 
 # Run the pytest command by default
-CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:${APP_PORT}", "--reload", "--access-logfile", "-"]
+CMD ["hypercorn", "src/main:app", "-b", "0.0.0.0:${APP_PORT}", "--reload", "--access-logfile", "-" ,"--log-level","${LOG_LEVEL}"]
 

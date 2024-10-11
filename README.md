@@ -111,6 +111,14 @@ pre-commit run --all-files
 
 - You will see the automatic interactive API documentation (provided by Swagger UI)
 
+## Logging Configuration
+
+Set the `LOG_LEVEL` environment variable to control log verbosity.
+Use `LOG_LEVEL=DEBUG` for detailed logs during development.
+Set it with `export LOG_LEVEL=DEBUG` and restart the app to apply changes.
+Available levels: `DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`.
+
+
 ## Environment Variables
 
 ### PostgreSQL Configuration
