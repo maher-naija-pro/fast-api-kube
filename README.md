@@ -113,15 +113,30 @@ pre-commit run --all-files
 
 ## Environment Variables
 
-| Variable Name         | Description                                                  | Default Value    | Mandatory / Optional |
-|-----------------------|--------------------------------------------------------------|------------------|----------------------|
-| `POSTGRES_USER`        | Username for the PostgreSQL database.                        | `admin`          | Mandatory             |
-| `POSTGRES_PASSWORD`    | Password for the PostgreSQL database.                        | `secretpassword` | Mandatory             |
-| `POSTGRES_NAME`        | Name of the PostgreSQL database.                             | `my_database`    | Mandatory             |
-| `RATE_LIMIT_REQUESTS`  | Maximum number of requests allowed within the time window.   | `100`            | Optional              |
-| `RATE_LIMIT_WINDOW`    | Time window (in seconds) for rate limiting requests.         | `60`             | Optional              |
-| `RETRY_LIMIT`          | Maximum number of retries allowed for failed requests.       | `60`             | Optional              |
-| `APP_VERSION`          | Define App version                                           | `0.0.1`             | Optional              |
+### PostgreSQL Configuration
+
+| Variable           | Description                 | Default Value      | Required |
+|--------------------|-----------------------------|--------------------|----------|
+| `POSTGRES_USER`    | PostgreSQL username         | `appuser`          | Yes      |
+| `POSTGRES_PASSWORD`| PostgreSQL password         | `your_secret_password` | Yes   |
+| `POSTGRES_DB`      | PostgreSQL database name    | `your_db_name`     | Yes      |
+| `POSTGRES_HOST`    | PostgreSQL host             | `db`               | No       |
+| `POSTGRES_PORT`    | PostgreSQL port             | `5432`             | No       |
+
+### Rate Limiting Configuration
+
+| Variable              | Description                                      | Default Value | Required |
+|-----------------------|--------------------------------------------------|---------------|----------|
+| `RATE_LIMIT_REQUESTS` | Maximum number of global requests allowed        | `1000`        | No       |
+| `RATE_LIMIT_WINDOW`   | Time window (in seconds) for rate limiting        | `60`          | No       |
+
+### Application Configuration
+
+| Variable      | Description                    | Default Value | Required |
+|---------------|--------------------------------|---------------|----------|
+| `APP_VERSION` | Application version            | `0.0.1`       | No       |
+| `LOG_LEVEL`   | Log level for application logs | `debug`       | No       |
+| `APP_PORT`    | Port on which the app runs     | `3000`        | Yes      |
 
 ## Deep Configuration
 - Check wiki page
