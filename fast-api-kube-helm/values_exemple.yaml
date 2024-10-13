@@ -152,3 +152,9 @@ configmaps:
 
 secrets:
   password: secretPassword
+
+imageCredentials:
+  registry: ghcr.io
+  username: someone
+  password: somepass
+  email: someone@host.com
