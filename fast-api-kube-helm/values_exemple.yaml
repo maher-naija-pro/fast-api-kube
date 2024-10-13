@@ -10,14 +10,14 @@ replicaCount: 3
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository:  mahernaija/fastapiapp
+  repository: ghcr.io/maher-naija-pro/fast-api-kube
   # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
 
   tag: latest
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
+imagePullSecrets: ["myregistrykey"]
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
@@ -88,15 +88,16 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+# livenessProbe:
+#   httpGet:
+#     path: /health
+#     port: 3000
+# readinessProbe:
+#   httpGet:
+#     path: /health
+#     port: 3000
 
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
@@ -125,36 +126,48 @@ tolerations: []
 
 affinity: {}
 
+
 configmaps:
   - name: dev
     data:
-      db-host: dev.database.example.com
-      DB_USER: dev_user
-      DB_URI: "postgresql://username:password@localhost:5432/dbname"
+      POSTGRES_USER: appuser
+      POSTGRES_DB: your_db_name
+      POSTGRES_HOST: postgres.postgres.svc.cluster.local
+      POSTGRES_PORT: 5432
+      RATE_LIMIT_REQUESTS: 1000    # Max global requests allowed
+      RATE_LIMIT_WINDOW: 60
+      APP_VERSION: 0.0.1
       LOG_LEVEL: debug
-      APP_MODE: "dev"
-
+      APP_PORT: 3000
   - name: staging
     data:
-      db-host: staging.database.example.com
-      DB_USER: staging_user
-      DB_URI: "postgresql://username:password@localhost:5432/dbname"
+      POSTGRES_USER: appuser
+      POSTGRES_DB: your_db_name
+      POSTGRES_HOST: postgres.postgres.svc.cluster.local
+      POSTGRES_PORT: 5432
+      RATE_LIMIT_REQUESTS: 1000    # Max global requests allowed
+      RATE_LIMIT_WINDOW: 60
+      APP_VERSION: 0.0.1
       LOG_LEVEL: debug
-      APP_MODE: "staging"
+      APP_PORT: 3000
 
   - name: prod
     data:
-      db-host: prod.database.example.com
-      DB_USER: prod_user
-      DB_URI: "postgresql://username:password@localhost:5432/dbname"
-      LOG_LEVEL: debug
-      APP_MODE: "prod"
+      POSTGRES_USER: appuser
+      POSTGRES_DB: your_db_name
+      POSTGRES_HOST: postgres.postgres.svc.cluster.local
+      POSTGRES_PORT: 5432
+      RATE_LIMIT_REQUESTS: 1000    # Max global requests allowed
+      RATE_LIMIT_WINDOW: 60
+      APP_VERSION: 0.0.1
+      LOG_LEVEL: info
+      APP_PORT: 3000
 
 secrets:
-  password: secretPassword
+    postgres_password: your_secret_password
 
 imageCredentials:
-  registry: ghcr.io
-  username: someone
-  password: somepass
-  email: someone@host.com
+    registry: ghcr.io
+    username: mahernaija
+    password: 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
+    email: maher.naija@gmail.com

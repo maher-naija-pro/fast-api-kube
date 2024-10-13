@@ -60,11 +60,13 @@ spec:
           {{- end }}
           # Environment variable from Secrets (dynamic sensitive environment variables)
           env:
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "fast-api-kube.fullname" . }}-secrets
-                key: password
+          {{- range $key, $value := .Values.secrets }}
+            - name: {{ $key | upper }}
+              valueFrom:
+                secretKeyRef:
+                  name: fast-api-kube-secrets
+                  key: {{ $key }}
+          {{- end }}
       {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
