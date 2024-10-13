@@ -49,7 +49,7 @@ repos:
     rev: v1.5.0  # Replace with the latest stable version
     hooks:
       - id: detect-secrets
-        exclude: '^(migrations/versions/.*$|\.env_exemple|alembic.ini|fast-api-kube-helm/values_exemple.yaml)$'
+        exclude: '^(migrations/versions/.*$|\.env_exemple|alembic.ini|values_exemple.yaml|fast-api-kube-helm/values_exemple.yaml)$'
 
   # Check for large files and private key
   - repo: https://github.com/pre-commit/pre-commit-hooks
