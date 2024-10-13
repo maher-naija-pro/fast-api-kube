@@ -34,7 +34,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          command:  ["hypercorn", "src/main:app", "-b", "0.0.0.0:3000", "--reload", "--access-logfile", "-", "--graceful-timeout", "0"]
+          command: ["sh", "-c", "alembic upgrade head && hypercorn src/main:app -b 0.0.0.0:3000 --reload --access-logfile -"]
           workingDir: "/app/" # Docker working_dir equivalent
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
