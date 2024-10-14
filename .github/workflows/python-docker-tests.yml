@@ -53,7 +53,7 @@ jobs:
       # Run tests using pytest
       - name: Run Pytest
         run: |
-          docker-compose exec api pytest -v --tb=short --html=reports/pytest/report.html
+          docker-compose exec -T api pytest -v --tb=short --html=reports/pytest/report.html
 
       # Archive pytest results
       - name: Archive pytest results
