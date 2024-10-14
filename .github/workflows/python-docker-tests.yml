@@ -34,7 +34,7 @@ jobs:
 
       # Copy environment variables file (if needed)
       - name: Copy .env file
-        run: cp .env.example .env
+        run: cp .env_example .env
 
       # Run Docker Compose
       - name: Run Docker Compose
