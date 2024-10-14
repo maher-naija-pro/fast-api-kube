@@ -5,6 +5,11 @@ on:
     branches: [ "dev", "main", "staging" ]
   pull_request:
     branches: [ "main", "staging" ]
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   docker-tests:
