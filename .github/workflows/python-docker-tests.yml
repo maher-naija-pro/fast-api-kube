@@ -50,7 +50,7 @@ jobs:
       # Run tests using pytest
       - name: Run Pytest
         run: |
-          docker-compose exec -T api pytest -v --tb=short
+          docker-compose exec -T api pytest
 
       # Clean up
       - name: Clean up Docker containers
