@@ -30,7 +30,7 @@ This Helm chart deploys a FastAPI application on a Kubernetes cluster.
 ## Production  install
 - Install helm chart on kube:
 ```
-helm install --debug    fast-api-kube ./fast-api-kube-helm -n  fast-api-app --create-namespace
+helm install --debug fast-api-kube ./fast-api-kube-helm -n fast-api-app --create-namespace -f fast-api-kube-helm/values-prod.yaml
 ```
 ## Production check
 ```
