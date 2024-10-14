@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: python test docker
 
 on:
   push:
@@ -16,40 +16,35 @@ jobs:
         uses: actions/checkout@v4.2.0
         with:
           fetch-depth: 0
-
-      # Set up Docker
+      # Set up Docker in the runner environment
       - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker docker-compose
+        run: sudo apt-get update && sudo apt-get install docker docker-compose -y
 
-      # Create a Docker network
+      # Create a custom Docker network to allow communication between containers
       - name: Create Docker network
-        run: docker network create test-net
+        run: docker network create zap-net
 
-      # Build Docker image for the application
-      - name: Build Docker image
+      # Build the Docker image for the target web application
+      - name: Build Docker image for target application
         run: |
-          docker build -t my-app:latest .
-
-      # Copy environment variables file (if needed)
-      - name: Copy .env file
-        run: cp .env_example .env
-
-      # Run Docker Compose
+          docker build -t ${{ env.IMAGE_NAME }}:latest .
+      # Step 3: Run Docker Compose
+      - name: Copy env
+        run:  cp .env_exemple .env
       - name: Run Docker Compose
-        run: docker-compose up -d --build
-
-      # Wait for the application to be ready
-      - name: Wait for application to be healthy
+        run:   docker-compose up --build -d
+      - name: Wait for target application to be ready
         run: |
           echo "Waiting for the application to be healthy..."
+          docker ps
           until curl -s http://localhost:3000/health | grep "healthy"; do
             echo "Application not ready yet..."
             sleep 3
+            docker ps
+            docker logs fast-api-kube_api_1
           done
+          docker ps
           echo "Application is ready!"
-
       # Run tests using pytest
       - name: Run Pytest
         run: |
