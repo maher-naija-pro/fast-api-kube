@@ -51,13 +51,6 @@ jobs:
         run: |
           docker-compose exec -T api pytest -v --tb=short
 
-      # Archive pytest results
-      - name: Archive pytest results
-        uses: actions/upload-artifact@v4.4.0
-        with:
-          name: pytest-report
-          path: reports/pytest/report.html
-
       # Clean up
       - name: Clean up Docker containers
         run: docker-compose down
