@@ -1,0 +1,67 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "dev", "main", "staging" ]
+  pull_request:
+    branches: [ "main", "staging" ]
+
+jobs:
+  docker-tests:
+    runs-on: ubuntu-latest
+    name: Run Docker Compose and Pytest
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.0
+        with:
+          fetch-depth: 0
+
+      # Set up Docker
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker docker-compose
+
+      # Create a Docker network
+      - name: Create Docker network
+        run: docker network create test-net
+
+      # Build Docker image for the application
+      - name: Build Docker image
+        run: |
+          docker build -t my-app:latest .
+
+      # Copy environment variables file (if needed)
+      - name: Copy .env file
+        run: cp .env.example .env
+
+      # Run Docker Compose
+      - name: Run Docker Compose
+        run: docker-compose up -d --build
+
+      # Wait for the application to be ready
+      - name: Wait for application to be healthy
+        run: |
+          echo "Waiting for the application to be healthy..."
+          until curl -s http://localhost:3000/health | grep "healthy"; do
+            echo "Application not ready yet..."
+            sleep 3
+          done
+          echo "Application is ready!"
+
+      # Run tests using pytest
+      - name: Run Pytest
+        run: |
+          docker-compose exec api pytest -v --tb=short --html=reports/pytest/report.html
+
+      # Archive pytest results
+      - name: Archive pytest results
+        uses: actions/upload-artifact@v4.4.0
+        with:
+          name: pytest-report
+          path: reports/pytest/report.html
+
+      # Clean up
+      - name: Clean up Docker containers
+        run: docker-compose down
