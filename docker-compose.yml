@@ -17,6 +17,7 @@ services:
        db:  # Depend on the db service
           condition: service_healthy  # Wait until the db service is healthy
     environment:
+        - COVERAGE_FILE=/tmp/.coverage
         - POSTGRES_USER
         - POSTGRES_PASSWORD
         - POSTGRES_DB
