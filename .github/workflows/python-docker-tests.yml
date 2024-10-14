@@ -25,10 +25,6 @@ jobs:
       - name: Set up Docker
         run: sudo apt-get update && sudo apt-get install docker docker-compose -y
 
-      # Create a custom Docker network to allow communication between containers
-      - name: Create Docker network
-        run: docker network create zap-net
-
       # Build the Docker image for the target web application
       - name: Build Docker image for target application
         run: |
@@ -53,7 +49,7 @@ jobs:
       # Run tests using pytest
       - name: Run Pytest
         run: |
-          docker-compose exec -T api pytest -v --tb=short --html=reports/pytest/report.html
+          docker-compose exec -T api pytest -v --tb=short
 
       # Archive pytest results
       - name: Archive pytest results
