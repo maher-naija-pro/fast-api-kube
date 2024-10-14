@@ -12,3 +12,4 @@ pytest-html==4.1.1
 pytest-sugar==1.0.0
 pytest-json-report==1.5.0
 setuptools==75.1.0
+httpx==0.27.2

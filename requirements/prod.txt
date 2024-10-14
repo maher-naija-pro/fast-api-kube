@@ -6,3 +6,4 @@ sqlalchemy==2.0.35
 prometheus-client==0.21.0
 ipaddr==2.2.0
 setuptools==75.1.0
+httpx==0.27.2
