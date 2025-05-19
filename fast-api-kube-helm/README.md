@@ -13,6 +13,23 @@ This Helm chart deploys a FastAPI application on a Kubernetes cluster.
 ### Kubectl
 - Install Kubectl version  v1.31.1 https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 
+postgres 
+### Kubectl
+- Installing PostgreSQL with Helm in Kubernetes
+
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install my-postgres bitnami/postgresql \
+  --namespace my-namespace \
+  --create-namespace \
+  --set auth.postgresPassword=mysecretpassword
+
+  Note: Replace mysecretpassword with your own strong password.
+
+
+```
+
 
 # Production deployment
 ## Production Install helm chart
