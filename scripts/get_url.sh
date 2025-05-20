@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set namespace and service variables
-NAMESPACE="fast-api-app"
-SERVICE="fast-api-kube"
+NAMESPACE="ingress-nginx"
+SERVICE="ingress-nginx-controller"
 
 # Fetch the NodePort and handle any potential errors
 NODE_PORT=$(kubectl get --namespace $NAMESPACE -o jsonpath="{.spec.ports[0].nodePort}" services $SERVICE 2>/dev/null)

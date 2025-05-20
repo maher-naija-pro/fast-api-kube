@@ -73,9 +73,14 @@ sh ./scripts/get_url.sh  # It will return URL to access application
 ```
 curl "URL"
 
+<<<<<<< Updated upstream
 {"version":"0.1.0","date":1747742908,"kubernetes":true} 
+=======
+{"version":"0.1.0","date":1747742908,"kubernetes":true}
+>>>>>>> Stashed changes
 
 ```
+
 NB: Should be changed to ingress depend on cluster architecture
 
 ## Values
