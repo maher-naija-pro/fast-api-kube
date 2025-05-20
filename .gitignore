@@ -1,6 +1,6 @@
 # helm chart values
 fast-api-kube-helm/values.yaml
-
+ .vscode/
  .vimrc
 # Byte-compiled / optimized / DLL files
 __pycache__/

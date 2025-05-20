@@ -72,6 +72,9 @@ sh ./scripts/get_url.sh  # It will return URL to access application
 ## Test app in prod
 ```
 curl "URL"
+
+{"version":"0.1.0","date":1747742908,"kubernetes":true} 
+
 ```
 NB: Should be changed to ingress depend on cluster architecture
 
