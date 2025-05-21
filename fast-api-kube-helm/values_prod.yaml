@@ -180,3 +180,11 @@ imageCredentials:
     username: mahernaija
     password: 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
     email: maher.naija@gmail.com
+
+certManager:
+  enabled: true
+  clusterIssuerName: letsencrypt-prod
+  email: you@example.com
+  server: https://acme-v02.api.letsencrypt.org/directory  # or use staging for testing
+  privateKeySecretName: letsencrypt-prod-key
+     

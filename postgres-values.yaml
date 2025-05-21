@@ -1,0 +1,22 @@
+nameOverride: postgres
+fullnameOverride: postgres
+
+auth:
+  postgresPassword: your_secret_password
+  username: appuser
+  password: your_secret_password
+  database: your_db_name
+
+global:
+  postgresql:
+    auth:
+      postgresPassword: your_secret_password
+primary:
+  service:
+    type: NodePort
+    nodePorts:
+      postgresql: 30432
+  initdb:
+    scripts:
+      init.sql: |
+        CREATE DATABASE your_db_name;

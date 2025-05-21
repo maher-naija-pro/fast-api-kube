@@ -164,13 +164,8 @@ configmaps:
 
   - name: prod
     data:
-<<<<<<< Updated upstream
-      POSTGRES_USER: appuser
-      POSTGRES_DB: your_db_name
-=======
       POSTGRES_USER: postgres 
       POSTGRES_DB: postgres
->>>>>>> Stashed changes
       POSTGRES_HOST: postgres-postgresql.postgres.svc.cluster.local
       POSTGRES_PORT: 5432
       RATE_LIMIT_REQUESTS: 1000 # Max global requests allowed
@@ -179,20 +174,17 @@ configmaps:
       LOG_LEVEL: info
       APP_PORT: 3000
 
-secrets:
-<<<<<<< Updated upstream
-  postgres_password: your_secret_password
-
-imageCredentials:
-  registry: ghcr.io
-  username: mahernaija
-  password: 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
-  email: maher.naija@gmail.com
-=======
     postgres_password: mysecretpassword
 imageCredentials:
     registry: ghcr.io
     username: mahernaija
     password: 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
     email: maher.naija@gmail.com
->>>>>>> Stashed changes
+
+certManager:
+  enabled: true
+  clusterIssuerName: letsencrypt-prod
+  email: you@example.com
+  server: https://acme-v02.api.letsencrypt.org/directory  # or use staging for testing
+  privateKeySecretName: letsencrypt-prod-key
+    
