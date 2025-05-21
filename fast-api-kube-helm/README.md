@@ -66,13 +66,14 @@ helm install cert-manager jetstack/cert-manager \
 ```  
 helm install metrics-server metrics-server/metrics-server   --namespace kube-system   --set "args={--kubelet-insecure-tls,--kubelet-preferred-address-types=InternalIP}"
 ```    
-### Pod HPA                                                                 
+### prometheus monitoring                                                        
                                                                                    - Installing Pod hpa
 
 ``` 
-git clone https://github.com/kubernetes/autoscaler.git
-cd autoscaler/charts 
-helm install autoscaler ./cluster-autoscaler    --set 'autoDiscovery.clusterName'=test
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install monitoring prometheus-community/kube-prometheus-stack
+
 ``` 
 # Production deployment
 

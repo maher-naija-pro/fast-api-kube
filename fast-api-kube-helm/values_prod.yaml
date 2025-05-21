@@ -188,3 +188,10 @@ certManager:
   server: https://acme-v02.api.letsencrypt.org/directory  # or use staging for testing
   privateKeySecretName: letsencrypt-prod-key
      
+hpa:
+  enabled: true
+  minReplicas: 1 
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: null  # You can set this to a number if you want memory-based scaling
+ 
