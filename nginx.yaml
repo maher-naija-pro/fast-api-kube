@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-backend-ingress
+  namespace: fast-api-app  
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - hello-world.example 
+    secretName: nginx-backend-tls
+  rules:
+  - host: hello-world.example # replace with actual
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: fast-api-kube
+            port:
+              number: 3000  

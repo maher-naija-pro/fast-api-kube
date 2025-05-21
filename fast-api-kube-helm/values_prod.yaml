@@ -41,12 +41,10 @@ podAnnotations: {}
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-podSecurityContext:
-  {}
+podSecurityContext: {}
   # fsGroup: 2000
 
-securityContext:
-  {}
+securityContext: {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -65,8 +63,7 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -91,26 +88,27 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+
 # This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 
 livenessProbe:
   httpGet:
     path: /health
     port: 3000
-  initialDelaySeconds: 45 # Delay before the liveness probe starts
-  periodSeconds: 1 # How often to perform the probe
-  timeoutSeconds: 5 # How long to wait for a probe response
-  failureThreshold: 10 # Number of failed probes before restarting the container
+  initialDelaySeconds: 45    # Delay before the liveness probe starts
+  periodSeconds: 1          # How often to perform the probe
+  timeoutSeconds: 5          # How long to wait for a probe response
+  failureThreshold: 10        # Number of failed probes before restarting the container
 
 readinessProbe:
   httpGet:
     path: /health
     port: 3000
-  initialDelaySeconds: 45 # Delay before the readiness probe starts
-  periodSeconds: 1 # How often to perform the probe
-  timeoutSeconds: 3 # How long to wait for a probe response
-  successThreshold: 1 # Minimum consecutive successes to be considered ready
-  failureThreshold: 10 # Number of failed probes before marking the container as unready
+  initialDelaySeconds: 45     # Delay before the readiness probe starts
+  periodSeconds: 1          # How often to perform the probe
+  timeoutSeconds: 3          # How long to wait for a probe response
+  successThreshold: 1        # Minimum consecutive successes to be considered ready
+  failureThreshold: 10        # Number of failed probes before marking the container as unready
 #This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
 autoscaling:
   enabled: false
@@ -138,14 +136,15 @@ tolerations: []
 
 affinity: {}
 
+
 configmaps:
   - name: dev
     data:
       POSTGRES_USER: appuser
       POSTGRES_DB: your_db_name
-      POSTGRES_HOST: postgres-postgresql.postgres.svc.cluster.local
+      POSTGRES_HOST: postgres.postgres.svc.cluster.local
       POSTGRES_PORT: 5432
-      RATE_LIMIT_REQUESTS: 1000 # Max global requests allowed
+      RATE_LIMIT_REQUESTS: 1000    # Max global requests allowed
       RATE_LIMIT_WINDOW: 60
       APP_VERSION: 0.0.1
       LOG_LEVEL: debug
@@ -154,9 +153,9 @@ configmaps:
     data:
       POSTGRES_USER: appuser
       POSTGRES_DB: your_db_name
-      POSTGRES_HOST: postgres-postgresql.postgres.svc.cluster.local
+      POSTGRES_HOST: postgres.postgres.svc.cluster.local
       POSTGRES_PORT: 5432
-      RATE_LIMIT_REQUESTS: 1000 # Max global requests allowed
+      RATE_LIMIT_REQUESTS: 1000    # Max global requests allowed
       RATE_LIMIT_WINDOW: 60
       APP_VERSION: 0.0.1
       LOG_LEVEL: debug
@@ -164,35 +163,20 @@ configmaps:
 
   - name: prod
     data:
-<<<<<<< Updated upstream
-      POSTGRES_USER: appuser
-      POSTGRES_DB: your_db_name
-=======
       POSTGRES_USER: postgres 
       POSTGRES_DB: postgres
->>>>>>> Stashed changes
       POSTGRES_HOST: postgres-postgresql.postgres.svc.cluster.local
       POSTGRES_PORT: 5432
-      RATE_LIMIT_REQUESTS: 1000 # Max global requests allowed
+      RATE_LIMIT_REQUESTS: 1000    # Max global requests allowed
       RATE_LIMIT_WINDOW: 60
       APP_VERSION: 0.0.1
       LOG_LEVEL: info
       APP_PORT: 3000
 
 secrets:
-<<<<<<< Updated upstream
-  postgres_password: your_secret_password
-
-imageCredentials:
-  registry: ghcr.io
-  username: mahernaija
-  password: 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
-  email: maher.naija@gmail.com
-=======
     postgres_password: mysecretpassword
 imageCredentials:
     registry: ghcr.io
     username: mahernaija
     password: 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
     email: maher.naija@gmail.com
->>>>>>> Stashed changes
