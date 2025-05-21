@@ -66,7 +66,14 @@ helm install cert-manager jetstack/cert-manager \
 ```  
 helm install metrics-server metrics-server/metrics-server   --namespace kube-system   --set "args={--kubelet-insecure-tls,--kubelet-preferred-address-types=InternalIP}"
 ```    
+### Pod HPA                                                                 
+                                                                                   - Installing Pod hpa
 
+``` 
+git clone https://github.com/kubernetes/autoscaler.git
+cd autoscaler/charts 
+helm install autoscaler ./cluster-autoscaler    --set 'autoDiscovery.clusterName'=test
+``` 
 # Production deployment
 
 ## Production Install helm chart
