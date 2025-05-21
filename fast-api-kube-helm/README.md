@@ -59,6 +59,14 @@ helm install cert-manager jetstack/cert-manager \
 
 ```
 
+### Metric server
+
+- Installing Metric Server with Helm in Kubernetes 
+
+```  
+helm install metrics-server metrics-server/metrics-server   --namespace kube-system   --set "args={--kubelet-insecure-tls,--kubelet-preferred-address-types=InternalIP}"
+```    
+
 # Production deployment
 
 ## Production Install helm chart
