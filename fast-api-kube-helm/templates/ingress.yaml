@@ -1,6 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
-metadata:                                                                                                               name: nginx-backend-ingress
+metadata:
+  name: nginx-backend-ingress
   namespace: fast-api-app
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-staging
